@@ -1,10 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { defineConfig } from 'vite';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	// eslint-disable-next-line no-tabs
-	plugins: [react()],
+  plugins: [react()]
 });

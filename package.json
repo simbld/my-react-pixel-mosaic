@@ -1,40 +1,64 @@
 {
-	"name": "myreactpixelmosaic",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "vite build",
-		"lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-		"preview": "vite preview"
-	},
-	"dependencies": {
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
-	},
-	"devDependencies": {
-		"@types/react": "^18.2.43",
-		"@types/react-dom": "^18.2.17",
-		"@vitejs/plugin-react": "^4.2.1",
-		"eslint": "^8.2.0",
-		"eslint-config-airbnb": "19.0.4",
-		"eslint-plugin-import": "^2.25.3",
-		"eslint-plugin-jsx-a11y": "^6.5.1",
-		"eslint-plugin-react": "^7.28.0",
-		"eslint-plugin-react-hooks": "^4.3.0",
-		"eslint-plugin-react-refresh": "^0.4.5",
-		"vite": "^5.0.8"
-	},
-	"eslintConfig": {
-		"extends": [
-			"airbnb",
-			"eslint:recommended",
-			"plugin:react/recommended",
-			"plugin:react-hooks/recommended"
-		],
-		"rules": {
-			"import/no-extraneous-dependencies": "off"
-		}
-	}
+  "name": "myreactpixelmosaic",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "vite": "^5.0.8"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended"
+    ],
+    "rules": {
+      "no-tabs": "off",
+      "indent": [
+        "error",
+        2
+      ],
+      "quotes": [
+        "error",
+        "double",
+        {
+          "allowTemplateLiterals": true
+        }
+      ],
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": [
+            "**/*.test.js",
+            "**/*.spec.js",
+            "**/vite.config.js",
+            "**/vite.config.ts",
+            "**/node_modules/vite/**",
+            "**/node_modules/@vitejs/plugin-react/**"
+          ]
+        }
+      ]
+    }
+  }
 }
