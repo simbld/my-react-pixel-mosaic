@@ -1,11 +1,15 @@
-html, body {
-  margin: 0;
-  padding: 0;
-}
-
 .asciiArt {
   text-align: center; 
   display: flex;
   justify-content: center;
   align-items: center;
+  white-space: pre;
+  line-height: 1;
+  letter-spacing: 2px;
 }
+
+.Picture-container {
+  display: flex;
+  justify-content: center;
+}
+

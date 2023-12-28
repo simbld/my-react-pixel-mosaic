@@ -1,15 +1,16 @@
 :root {
-  font-family: "monospace";
-  white-space: "pre";  
-  line-height: 1;
+  --main-text-color: rgba(255, 255, 255, 0.87);
+  --main-bg-color: #242424;
+}
 
-  
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+html, body {
+  margin: 0;
+  padding: 0;
   font-synthesis: none;
+  font-family: monospace;
+  color: var(--main-text-color);
+  color-scheme: light dark;
+  background-color: var(--main-bg-color);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
