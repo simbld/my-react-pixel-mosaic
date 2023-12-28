@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import profilImage from "../assets/profil.png";
+import romeo from "../assets/romeo.jpg";
 
 function Picture() {
   const [asciiArt, setAsciiArt] = useState("");
@@ -7,7 +7,7 @@ function Picture() {
 
   useEffect(() => {
     const image = new Image();
-    image.src = profilImage;
+    image.src = romeo;
     image.onload = () => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");

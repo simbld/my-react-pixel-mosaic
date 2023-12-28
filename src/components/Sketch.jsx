@@ -3,7 +3,7 @@ import Picture from "../components/Picture";
 
 function Sketch() {
   return (
-    <div>
+    <div className="Picture-container">
       <Picture />
     </div>
   );
