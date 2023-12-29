@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import romeo from "../assets/romeo.jpg";
-import { TARGET_WIDTH, TARGET_HEIGHT } from "../config";
+import { TARGET_WIDTH, TARGET_HEIGHT, density } from "../config";
 
 function Picture() {
   const [asciiArt, setAsciiArt] = useState("");
-  const density = "Ñ@#W$9876543210?!abc;:+=-,._ ";
 
   useEffect(() => {
     const image = new Image();
@@ -43,3 +42,4 @@ function Picture() {
 }
 
 export default Picture;
+
