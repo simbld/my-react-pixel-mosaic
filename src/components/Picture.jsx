@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import romeo from "../assets/romeo.jpg";
+import { TARGET_WIDTH, TARGET_HEIGHT, density } from "../config";
 
 function Picture() {
   const [asciiArt, setAsciiArt] = useState("");
-  const density = "Ñ@#W$9876543210?!abc;:+=-,._ ";
 
   useEffect(() => {
     const image = new Image();
@@ -11,10 +11,10 @@ function Picture() {
     image.onload = () => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      canvas.width = TARGET_WIDTH;
+      canvas.height = TARGET_HEIGHT;
+      ctx.drawImage(image, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+      const imageData = ctx.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
       let ascii = "";
       for (let j = 0; j < imageData.height; j++) {
         for (let i = 0; i < imageData.width; i++) {
@@ -42,3 +42,4 @@ function Picture() {
 }
 
 export default Picture;
+
