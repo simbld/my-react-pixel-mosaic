@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import romeo from "../assets/romeo.jpg";
-import { TARGET_WIDTH, TARGET_HEIGHT, density } from "../config";
+import { TARGET_WIDTH, TARGET_HEIGHT } from "../config";
+import { getAsciiCharacter } from "../utils/getAsciiCharacter";
 
 function Picture() {
   const [asciiArt, setAsciiArt] = useState("");
@@ -19,14 +20,10 @@ function Picture() {
       for (let j = 0; j < imageData.height; j++) {
         for (let i = 0; i < imageData.width; i++) {
           const pixelIndex = (i + j * imageData.width) * 4;
-          const r = imageData.data[pixelIndex + 0];
+          const r = imageData.data[pixelIndex];
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
-          const avg = (r + g + b) / 3;
-          const charIndex = Math.floor(
-            mapValue(avg, 0, 255, density.length, 0)
-          );
-          ascii += density.charAt(charIndex);
+          ascii += getAsciiCharacter(r, g, b);
         }
         ascii += "\n";
       }
@@ -34,12 +31,7 @@ function Picture() {
     };
   }, []);
 
-  const mapValue = (value, start1, stop1, start2, stop2) => {
-    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
-  };
-
   return <div className="asciiArt">{asciiArt}</div>;
 }
 
 export default Picture;
-
