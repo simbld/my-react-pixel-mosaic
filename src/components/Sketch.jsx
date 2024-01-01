@@ -3,9 +3,16 @@ import Picture from "../components/Picture";
 
 function Sketch() {
   return (
-    <div className="Picture-container">
-      <Picture />
-    </div>
+    <>
+      <div className="tablet-container">
+        <div class="tablet">
+          <div class="monitor"></div>
+          <div className="picture-container">
+            <Picture />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

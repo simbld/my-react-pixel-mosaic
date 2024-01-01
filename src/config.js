@@ -1,3 +1,3 @@
-export const TARGET_WIDTH = 200;
-export const TARGET_HEIGHT = 200;
-export const density = "Ñ@&W#$€£987654321?!/abc;:+=~-,._        ";
+export const TARGET_WIDTH = 80;
+export const TARGET_HEIGHT = 80;
+export const density = "\u2591" + "\u2592" + "\u2593" + "\u2588";

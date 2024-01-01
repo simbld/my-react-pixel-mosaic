@@ -5,9 +5,12 @@ import "./assets/profil.png";
 
 function App() {
   return (
-    <div>
-      <Sketch />
-    </div>
+    <>
+      <div className="title">PixelMosaic</div>
+      <div>
+        <Sketch />
+      </div>
+    </>
   );
 }
 

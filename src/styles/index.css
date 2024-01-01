@@ -1,6 +1,6 @@
 :root {
   --main-text-color: #ffffffde;
-  --main-bg-color: #242424;
+  --main-bg-color: linear-gradient(to bottom, #959595 0%,#636161 15%,#464343 30%,#222121 45%,#464343 60%,#636161 75%,#959595 100%);
 }
 
 html, body {
@@ -10,7 +10,7 @@ html, body {
   font-family: monospace;
   color: var(--main-text-color);
   color-scheme: light dark;
-  background-color: var(--main-bg-color);
+  background: var(--main-bg-color);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
