@@ -1,3 +1,14 @@
+/**
+ * Generates ASCII art from the provided image data.
+ *
+ * Goes through image data pixel by pixel, converts each pixel into
+ * ASCII character based on its brightness and assembles these characters
+ * to a string representing the ASCII art of the full image.
+ *
+ * @param {ImageData} imageData - Image data extracted from a canvas.
+ * @returns {string} A string representing the ASCII art of the image.
+ */
+
 import { getAsciiCharacter } from "./getAsciiCharacter";
 import { getPixelColor } from "./getPixelColor";
 
