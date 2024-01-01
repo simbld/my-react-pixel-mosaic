@@ -1,15 +1,88 @@
+@font-face {
+  font-family: 'MorePerfectDOSVGA';
+  src: url('./src/fonts/MorePerfectDOSVGA.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Tangerine';
+  src: url('./src/fonts/Tangerine-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .asciiArt {
   text-align: center; 
   display: flex;
   justify-content: center;
   align-items: center;
   white-space: pre;
+  font-size: 7px;
   line-height: 1;
-  letter-spacing: 5px;
+  letter-spacing: 0.5px;
+  transform: scaleX(1.6); 
+  width: 370px;
+  height: 610px;
+  padding: 12px;
+  font-family: 'MorePerfectDOSVGA', sans-serif;
+  background-color: #bdae58;
+  color: black;
+  border: 0.5px solid #4b4949;
+  border-radius: 5%;
+  box-shadow: 
+    0px 0px 15px rgba(0, 0, 0, 0.6),
+    inset 5px 5px 10px rgba(0, 0, 0, 0.6),
+    inset -5px -5px 10px rgba(0, 0, 0, 0.6),
+    inset 5px -5px 10px rgba(255, 255, 255, 0.1),
+    inset -5px 5px 10px rgba(255, 255, 255, 0.1);
 }
 
-.Picture-container {
+.picture-container {
   display: flex;
   justify-content: center;
+  padding-bottom: 80px;
+
 }
 
+.tablet-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tablet {
+  margin-top: 50px;
+  height: 70rem;
+  width: 60rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #333;
+  padding: 40px;
+  border-radius: 45px;
+  box-shadow: 
+  inset 5px 5px 10px rgba(0, 0, 0, 0.6), 
+  inset -5px -5px 10px rgba(255, 255, 255, 0.1);
+}
+
+.monitor {
+  background-color: #0a0a0a;
+  padding: 10px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 
+    0 0 10px rgba(0, 0, 0, 0.6),
+    inset 0 0 10px rgba(0, 0, 0, 0.3); 
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15rem;
+  font-family: tangerine;
+  padding: 10px;
+  margin: 20px;
+}
