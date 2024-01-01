@@ -3,6 +3,7 @@ import romeo from "../assets/romeo.jpg";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "../config";
 import { getPixelColor } from "../utils/getPixelColor";
 import { getAsciiCharacter } from "../utils/getAsciiCharacter";
+import { createCanvas } from "../utils/createCanvas";
 
 function Picture() {
   const [asciiArt, setAsciiArt] = useState("");
@@ -11,13 +12,7 @@ function Picture() {
     const image = new Image();
     image.src = romeo;
     image.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = TARGET_WIDTH;
-      canvas.height = TARGET_HEIGHT;
-      ctx.drawImage(image, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
-      const imageData = ctx.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
-
+      const { imageData } = createCanvas(image, TARGET_HEIGHT, TARGET_WIDTH);
       let ascii = "";
       for (let j = 0; j < imageData.height; j++) {
         for (let i = 0; i < imageData.width; i++) {
