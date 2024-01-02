@@ -1,9 +1,29 @@
+@font-face {
+  font-family: 'MorePerfectDOSVGA';
+  src: url('./src/fonts/MorePerfectDOSVGA.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Tangerine';
+  src: url('./src/fonts/Tangerine-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
 :root {
-  --main-text-color: #ffffffde;
-  --main-bg-color: linear-gradient(to bottom, #959595 0%,#636161 15%,#464343 30%,#222121 45%,#464343 60%,#636161 75%,#959595 100%);
+  --main-text-color: #1f1d02;
+    --main-bg-color: linear-gradient(to right, #BDC3C7 10%, #2c3e50d0 100%);
+  }
+  
+  * {
+    box-sizing: border-box;
 }
 
 html, body {
+  height: 100vh;
+    width: 100vw;
+    overflow: hidden;
   margin: 0;
   padding: 0;
   font-synthesis: none;
@@ -14,4 +34,19 @@ html, body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  background: -webkit-linear-gradient(to right, #524a23, #f3e2aa);
+  background: linear-gradient(to right, #524a23, #f3e2aa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: 'Tangerine', cursive;
+  font-weight: bold;
+  font-size: 70px;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  padding: 0;
+  text-align: center;
 }

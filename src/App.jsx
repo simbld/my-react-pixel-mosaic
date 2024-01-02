@@ -1,4 +1,3 @@
-import React from "react";
 import Sketch from "./components/Sketch";
 import "./styles/App.css";
 import "./assets/profil.png";
@@ -6,7 +5,7 @@ import "./assets/profil.png";
 function App() {
   return (
     <>
-      <div className="title">PixelMosaic</div>
+      <h1>PixelMosaic</h1>
       <div>
         <Sketch />
       </div>
