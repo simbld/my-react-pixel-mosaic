@@ -6,7 +6,7 @@ import "./assets/profil.png";
 function App() {
   return (
     <>
-      <div className="title">PixelMosaic</div>
+      <h1>PixelMosaic</h1>
       <div>
         <Sketch />
       </div>

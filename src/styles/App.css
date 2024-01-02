@@ -1,30 +1,17 @@
-@font-face {
-  font-family: 'MorePerfectDOSVGA';
-  src: url('./src/fonts/MorePerfectDOSVGA.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Tangerine';
-  src: url('./src/fonts/Tangerine-Bold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 .asciiArt {
+  overflow: hidden;
   text-align: center; 
   display: flex;
   justify-content: center;
   align-items: center;
   white-space: pre;
-  font-size: 7px;
+  font-size: 4px;
   line-height: 1;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.1px;
   transform: scaleX(1.6); 
-  width: 370px;
-  height: 610px;
-  padding: 12px;
+  width: 185px;
+    height: 315px;
+    padding: 1px;
   font-family: 'MorePerfectDOSVGA', sans-serif;
   background-color: #bdae58;
   color: black;
@@ -53,14 +40,14 @@
 
 .tablet {
   margin-top: 50px;
-  height: 70rem;
-  width: 60rem;
+  height: 500px;
+    width: 360px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   background-color: #333;
-  padding: 40px;
+  padding-bottom: 40px;
   border-radius: 45px;
   box-shadow: 
   inset 5px 5px 10px rgba(0, 0, 0, 0.6), 
@@ -81,8 +68,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 15rem;
+  font-size: 2px;
   font-family: tangerine;
-  padding: 10px;
-  margin: 20px;
+  padding-top: 10px;
 }
