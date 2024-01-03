@@ -1,29 +1,30 @@
 @font-face {
-  font-family: 'MorePerfectDOSVGA';
-  src: url('./src/fonts/MorePerfectDOSVGA.ttf') format('truetype');
+  font-family: "MorePerfectDOSVGA";
+  src: url("./src/fonts/MorePerfectDOSVGA.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Tangerine';
-  src: url('./src/fonts/Tangerine-Bold.ttf') format('truetype');
+  font-family: "Tangerine";
+  src: url("./src/fonts/Tangerine-Bold.ttf") format("truetype");
   font-weight: bold;
   font-style: normal;
 }
 :root {
   --main-text-color: #1f1d02;
-    --main-bg-color: linear-gradient(to right, #BDC3C7 10%, #2c3e50d0 100%);
-  }
-  
-  * {
-    box-sizing: border-box;
+  --main-bg-color: linear-gradient(to right, #bdc3c7 10%, #2c3e50d0 100%);
 }
 
-html, body {
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
   height: 100vh;
-    width: 100vw;
-    overflow: hidden;
+  width: 100vw;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   font-synthesis: none;
@@ -42,7 +43,7 @@ h1 {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-family: 'Tangerine', cursive;
+  font-family: "Tangerine", cursive;
   font-weight: bold;
   font-size: 70px;
   margin-top: 50px;

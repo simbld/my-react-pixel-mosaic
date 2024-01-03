@@ -1,6 +1,6 @@
 .asciiArt {
   overflow: hidden;
-  text-align: center; 
+  text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,16 +8,16 @@
   font-size: 4px;
   line-height: 1;
   letter-spacing: 0.1px;
-  transform: scaleX(1.6); 
+  transform: scaleX(1.6);
   width: 185px;
-    height: 315px;
-    padding: 1px;
-  font-family: 'MorePerfectDOSVGA', sans-serif;
+  height: 315px;
+  padding: 1px;
+  font-family: "MorePerfectDOSVGA", sans-serif;
   background-color: #bdae58;
   color: black;
   border: 0.5px solid #4b4949;
   border-radius: 5%;
-  box-shadow: 
+  box-shadow:
     0px 0px 15px rgba(0, 0, 0, 0.6),
     inset 5px 5px 10px rgba(0, 0, 0, 0.6),
     inset -5px -5px 10px rgba(0, 0, 0, 0.6),
@@ -29,7 +29,6 @@
   display: flex;
   justify-content: center;
   padding-bottom: 80px;
-
 }
 
 .tablet-container {
@@ -41,7 +40,7 @@
 .tablet {
   margin-top: 50px;
   height: 500px;
-    width: 360px;
+  width: 360px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -49,9 +48,9 @@
   background-color: #333;
   padding-bottom: 40px;
   border-radius: 45px;
-  box-shadow: 
-  inset 5px 5px 10px rgba(0, 0, 0, 0.6), 
-  inset -5px -5px 10px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 5px 5px 10px rgba(0, 0, 0, 0.6),
+    inset -5px -5px 10px rgba(255, 255, 255, 0.1);
 }
 
 .monitor {
@@ -59,9 +58,9 @@
   padding: 10px;
   border-radius: 10px;
   position: relative;
-  box-shadow: 
+  box-shadow:
     0 0 10px rgba(0, 0, 0, 0.6),
-    inset 0 0 10px rgba(0, 0, 0, 0.3); 
+    inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .title {
