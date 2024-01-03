@@ -1,5 +1,5 @@
 import Sketch from "./components/Sketch";
-import "./styles/App.css";
+import "./less/Sketch.less";
 import "./assets/profil.png";
 
 function App() {

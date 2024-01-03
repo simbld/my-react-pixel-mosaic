@@ -1,4 +1,5 @@
 import Picture from "./Picture";
+import "../less/Sketch.less";
 
 function Sketch() {
   return (
