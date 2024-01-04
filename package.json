@@ -44,11 +44,12 @@
       "plugin:react-hooks/recommended"
     ],
     "rules": {
+      "implicit-arrow-linebreak": 1,
       "no-tabs": "off",
       "tabWidth": 4,
       "indent": [
         "error",
-        4
+        2
       ],
       "quotes": [
         "error",
@@ -70,8 +71,14 @@
             "**/node_modules/@vitejs/plugin-react/**"
           ]
         }
-      ],
-      "arrowParens": "avoid"
-    }
+      ]
+    },
+    "eslint.workingDirectories": [
+      "./src",
+      "./gulpfile.js",
+      "./index.html",
+      "./vite.config.js",
+      "./package.json"
+    ]
   }
 }

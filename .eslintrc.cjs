@@ -16,7 +16,7 @@ module.exports = {
     "no-tabs": "off",
     indent: ["error", 2],
     "comma-dangle": ["error", "never"],
-
+    "implicit-arrow-linebreak": 1,
     quotes: ["error", "double", { allowTemplateLiterals: true }],
     "import/no-extraneous-dependencies": [
       "error",
@@ -32,6 +32,5 @@ module.exports = {
         ],
       },
     ],
-    arrowParens: "avoid",
   },
 };
