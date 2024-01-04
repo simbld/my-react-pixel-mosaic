@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"gulp\" \"vite\"",
     "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext .js,.jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,7 +23,7 @@
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
     "concurrently": "^8.2.2",
-    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint": "^8.0.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.25.3",
@@ -44,9 +44,11 @@
       "plugin:react-hooks/recommended"
     ],
     "rules": {
-      "implicit-arrow-linebreak": 1,
+      "implicit-arrow-linebreak": [
+        "error",
+        "beside"
+      ],
       "no-tabs": "off",
-      "tabWidth": 4,
       "indent": [
         "error",
         2
@@ -73,12 +75,22 @@
         }
       ]
     },
-    "eslint.workingDirectories": [
-      "./src",
-      "./gulpfile.js",
-      "./index.html",
-      "./vite.config.js",
-      "./package.json"
-    ]
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   }
 }
