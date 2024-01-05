@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import romeo from "../assets/romeo.jpg";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "../config";
-import { createCanvas } from "../utils/createCanvas";
-import { generateAsciiArt } from "../utils/generateAsciiArt";
+import createCanvas from "../utils/createCanvas";
+import generateAsciiArt from "../utils/generateAsciiArt";
 
 function Picture() {
   const [asciiArt, setAsciiArt] = useState("");

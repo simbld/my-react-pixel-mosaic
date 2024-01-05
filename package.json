@@ -4,12 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"gulp\" \"vite\"",
     "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "lint": "eslint . --ext .js,.jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-less": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -17,13 +22,18 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.2.0",
-    "eslint-config-airbnb": "19.0.4",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.0.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^5.1.2",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "gulp-watch": "^5.0.1",
+    "prettier": "^2.4.1",
     "vite": "^5.0.8"
   },
   "eslintConfig": {
@@ -34,6 +44,10 @@
       "plugin:react-hooks/recommended"
     ],
     "rules": {
+      "implicit-arrow-linebreak": [
+        "error",
+        "beside"
+      ],
       "no-tabs": "off",
       "indent": [
         "error",
@@ -50,6 +64,7 @@
         "error",
         {
           "devDependencies": [
+            "gulpfile.js",
             "**/*.test.js",
             "**/*.spec.js",
             "**/vite.config.js",
@@ -59,6 +74,23 @@
           ]
         }
       ]
+    },
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
     }
   }
 }

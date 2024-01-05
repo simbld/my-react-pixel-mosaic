@@ -9,13 +9,13 @@
  * @returns {string} A string representing the ASCII art of the image.
  */
 
-import { getAsciiCharacter } from "./getAsciiCharacter";
-import { getPixelColor } from "./getPixelColor";
+import getAsciiCharacter from "./getAsciiCharacter";
+import getPixelColor from "./getPixelColor";
 
-export function generateAsciiArt(imageData) {
+export default function generateAsciiArt(imageData) {
   let ascii = "";
-  for (let j = 0; j < imageData.height; j++) {
-    for (let i = 0; i < imageData.width; i++) {
+  for (let j = 0; j < imageData.height; j += 1) {
+    for (let i = 0; i < imageData.width; i += 1) {
       const pixelIndex = (i + j * imageData.width) * 4;
       const { r, g, b } = getPixelColor(imageData.data, pixelIndex);
       ascii += getAsciiCharacter(r, g, b);

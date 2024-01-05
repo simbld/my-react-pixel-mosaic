@@ -6,7 +6,7 @@
  * @param {number} height - Height of the canvas.
  * @returns {object} Drawing context and image data.
  */
-export function createCanvas(image, width, height) {
+export default function createCanvas(image, width, height) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
   canvas.width = width;

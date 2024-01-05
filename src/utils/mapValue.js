@@ -8,8 +8,9 @@
  * @param {number} stop2 - End of output value range.
  * @returns {number} The mapped value.
  */
-const mapValue = (value, start1, stop1, start2, stop2) => {
+
+function mapValue(value, start1, stop1, start2, stop2) {
   return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
-};
+}
 
 export default mapValue;

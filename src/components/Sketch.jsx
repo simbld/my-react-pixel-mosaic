@@ -1,18 +1,16 @@
-import React from "react";
-import Picture from "../components/Picture";
+import Picture from "./Picture";
+import "../less/Sketch.less";
 
 function Sketch() {
   return (
-    <>
-      <div className="tablet-container">
-        <div class="tablet">
-          <div class="monitor"></div>
-          <div className="picture-container">
-            <Picture />
-          </div>
+    <div className="tablet-container">
+      <div className="tablet">
+        <div className="monitor" />
+        <div className="picture-container">
+          <Picture />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

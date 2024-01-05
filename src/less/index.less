@@ -1,0 +1,99 @@
+@font-face {
+  font-family: "MorePerfectDOSVGA";
+  src: url("./src/fonts/MorePerfectDOSVGA.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Tangerine";
+  src: url("./src/fonts/Tangerine-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@main-text-color: #1f1d02;
+@main-bg-color: radial-gradient(
+    ellipse 590px 440px at 69% 35%,
+    rgba(104, 126, 141, 0.2) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    ellipse 350px 200px at 40% 40%,
+    rgba(104, 126, 141, 0.2) 0%,
+    transparent 120%
+  ),
+  radial-gradient(
+    ellipse 350px 200px at 50% 30%,
+    rgba(104, 126, 141, 0.2) 0%,
+    transparent 120%
+  ),
+  radial-gradient(
+    ellipse 380px 200px at 34% 60%,
+    rgba(104, 126, 141, 0.2) 20%,
+    transparent 100%
+  ),
+  radial-gradient(
+    ellipse 380px 200px at 48% 50%,
+    rgba(104, 126, 141, 0.2) 20%,
+    transparent 100%
+  ),
+  radial-gradient(
+    ellipse 380px 200px at 58% 70%,
+    rgba(104, 126, 141, 0.2) 20%,
+    transparent 100%
+  ),
+  radial-gradient(
+    ellipse at center,
+    rgba(189, 195, 199, 0.2) -10%,
+    rgba(44, 62, 80, 0.5) 40%,
+    transparent 95%
+  );
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-synthesis: none;
+  font-family: monospace;
+  color: @main-text-color;
+  color-scheme: light dark;
+  background: @main-bg-color;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  background: -webkit-linear-gradient(to right, #524a23, #f3e2aa);
+  background: linear-gradient(to right, #524a23, #f3e2aa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: "Tangerine", "Arial", cursive;
+  font-weight: bold;
+  font-size: 70px;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  padding: 0;
+  text-align: center;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .my-element {
+    font-size: 1.5em;
+  }
+}
+
+@media (min-width: 1025px) {
+  .my-element {
+    font-size: 2em;
+  }
+}
