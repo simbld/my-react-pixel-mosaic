@@ -1,3 +1,6 @@
+@import "./mixins.less";
+@import "./variables.less";
+
 @font-face {
   font-family: "MorePerfectDOSVGA";
   src: url("./src/fonts/MorePerfectDOSVGA.ttf") format("truetype");
@@ -12,50 +15,13 @@
   font-style: normal;
 }
 
-@main-text-color: #1f1d02;
-@main-bg-color: radial-gradient(
-    ellipse 590px 440px at 69% 35%,
-    rgba(104, 126, 141, 0.2) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    ellipse 350px 200px at 40% 40%,
-    rgba(104, 126, 141, 0.2) 0%,
-    transparent 120%
-  ),
-  radial-gradient(
-    ellipse 350px 200px at 50% 30%,
-    rgba(104, 126, 141, 0.2) 0%,
-    transparent 120%
-  ),
-  radial-gradient(
-    ellipse 380px 200px at 34% 60%,
-    rgba(104, 126, 141, 0.2) 20%,
-    transparent 100%
-  ),
-  radial-gradient(
-    ellipse 380px 200px at 48% 50%,
-    rgba(104, 126, 141, 0.2) 20%,
-    transparent 100%
-  ),
-  radial-gradient(
-    ellipse 380px 200px at 58% 70%,
-    rgba(104, 126, 141, 0.2) 20%,
-    transparent 100%
-  ),
-  radial-gradient(
-    ellipse at center,
-    rgba(189, 195, 199, 0.2) -10%,
-    rgba(44, 62, 80, 0.5) 40%,
-    transparent 95%
-  );
-
 * {
   box-sizing: border-box;
 }
 
 html,
 body {
+  .grid-center();
   height: 100vh;
   width: 100vw;
   overflow: hidden;
@@ -79,21 +45,156 @@ h1 {
   color: transparent;
   font-family: "Tangerine", "Arial", cursive;
   font-weight: bold;
-  font-size: 70px;
-  margin-top: 50px;
+  font-size: 500%;
+  margin-top: -10px;
   margin-bottom: 10px;
   padding: 0;
   text-align: center;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
-  .my-element {
-    font-size: 1.5em;
+@media (max-height: 320px) and (orientation: landscape) {
+  .asciiArt {
+    width: 190px;
+    height: 260px;
+    font-size: 4px;
+    margin: auto;
+    position: absolute;
+    translate: 0% -7%;
+  }
+  h1,
+  .monitor {
+    display: none;
+  }
+  .picture-container {
+    width: 100%;
+    position: absolute;
+    translate: 0% 9%;
+  }
+  .tablet {
+    overflow: hidden;
+    height: 500px;
+    width: 425px;
+    .grid-center();
+    flex-direction: column;
+    background-color: @secondary-color;
+    border-radius: 45px;
+    .box-shadow(@black-color);
+    position: absolute;
   }
 }
 
-@media (min-width: 1025px) {
-  .my-element {
-    font-size: 2em;
+@media (max-width: 320px) and (orientation: portrait) {
+  .picture-container {
+    width: 75%;
+    height: 100%;
+    position: absolute;
+    translate: 0% 9%;
+  }
+  .monitor {
+    background-color: #0a0a0a;
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    translate: 0% -1000%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.6);
+  }
+  h1 {
+    position: absolute;
+    translate: -51% -410%;
+    z-index: 10;
+    font-size: 270%;
+  }
+  .tablet-container {
+    margin-top: -115px;
+  }
+  .tablet {
+    overflow: hidden;
+    height: 450px;
+    width: 320px;
+    display: grid;
+    place-items: center;
+    flex-direction: column;
+    background-color: #333;
+    border-radius: 45px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.6),
+      inset 5px 5px 10px rgba(0, 0, 0, 0.6),
+      inset -5px -5px 10px rgba(0, 0, 0, 0.6),
+      inset 5px -5px 10px rgba(255, 255, 255, 0.1),
+      inset -5px 5px 10px rgba(255, 255, 255, 0.1);
+    position: absolute;
+    translate: 0% 19%;
+    z-index: 1;
+  }
+  .asciiArt {
+    width: 190px;
+    height: 260px;
+    font-size: 4px;
+    margin: auto;
+    position: absolute;
+    translate: 0% -15%;
+  }
+}
+// TODO: Fix this media query
+@media (min-width: 768px) and (max-width: 1024px) {
+  .picture-container {
+    background-color: red;
+  }
+  h1 {
+    font-size: 1000%;
+  }
+  .tablet-container {
+    margin-top: -115px;
+  }
+}
+
+@media (min-height: 768px) and (max-height: 1024px) {
+  .picture-container {
+    background-color: red;
+  }
+  h1 {
+    font-size: 1000%;
+  }
+  .tablet-container {
+    margin-top: -115px;
+  }
+  .tablet-container {
+    .grid-center();
+    margin-top: -50px;
+  }
+  .tablet {
+    margin-top: 50px;
+    height: 500px;
+    width: 360px;
+    .grid-center();
+    flex-direction: column;
+    background-color: @secondary-color;
+    padding-bottom: 40px;
+    border-radius: 45px;
+    .box-shadow(@black-color);
+  }
+}
+@media (min-width: 1025px) and (max-width: 769px) {
+  .picture-container {
+    margin-top: 50px;
+    background-color: rgb(0, 4, 255);
+  }
+  h1 {
+    font-size: 1000%;
+  }
+  .tablet-container {
+    margin-top: -115px;
+  }
+}
+
+@media (min-height: 1025px) and (max-height: 769px) {
+  .picture-container {
+    margin-top: 50px;
+    background-color: rgb(0, 4, 255);
+  }
+  h1 {
+    font-size: 1000%;
+  }
+  .tablet-container {
+    margin-top: -115px;
   }
 }
