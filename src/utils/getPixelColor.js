@@ -9,6 +9,6 @@ export default function getPixelColor(data, index) {
   return {
     r: data[index],
     g: data[index + 1],
-    b: data[index + 2],
+    b: data[index + 2]
   };
 }

@@ -14,26 +14,38 @@ function Picture() {
     image.src = romeo;
     image.onload = () => {
       const { imageData } = createCanvas(image, TARGET_HEIGHT, TARGET_WIDTH);
-      if (filterType === "ascii") {
-        const ascii = generateAsciiArt(imageData);
-        setFilterOutput(ascii);
-      } else if (filterType === "stippling") {
-        const stippling = generateStipplingEffect(imageData);
-        setFilterOutput(stippling);
+      switch (filterType) {
+        case "ascii": {
+          const ascii = generateAsciiArt(imageData);
+          setFilterOutput(ascii);
+          break;
+        }
+        case "stippling":
+          generateStipplingEffect(imageData).then((stippling) => {
+            setFilterOutput(stippling);
+          });
+          break;
+        default:
+          setFilterOutput("");
       }
     };
   }, [filterType]);
 
   return (
     <div>
-      <select
-        onChange={(e) => setFilterType(e.target.value)}
-        value={filterType}
-      >
-        <option value="ascii">Art ASCII</option>
-        <option value="stippling">Effet de Stippling</option>
-      </select>
-      <div className="filterOutput">{filterOutput}</div>
+      <button type="button" onClick={() => setFilterType("ascii")}>
+        ASCII Art
+      </button>
+      <button type="button" onClick={() => setFilterType("stippling")}>
+        Stippling Effect
+      </button>
+      <div className="effectOutput">
+        {typeof filterOutput === "string" ? (
+          filterOutput
+        ) : (
+          <img src={filterOutput} alt="Stippling Effect" />
+        )}
+      </div>
     </div>
   );
 }
