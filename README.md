@@ -15,3 +15,4 @@ Pour déterminer quel caractère utiliser, nous appliquons une fonction map qui 
 
 4. En répétant ce processus pour chaque pixel de l'image et en plaçant les caractères ASCII correspondants dans un format qui respecte les dimensions de l'image originale, nous créons une représentation de l'image en art ASCII.
 
+5. Créer plusieurs filtres qui possèdent chacun leur bouton et qui donne un aspect entièrement différent de la même image en changeant la logique de conversion.
