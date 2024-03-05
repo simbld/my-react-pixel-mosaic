@@ -1,0 +1,26 @@
+{
+  "presets": ["@babel/preset-typescript"],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "assets": "./src/assets",
+          "common": "./src/common",
+          "components": "./src/components",
+          "config": "./src/config",
+          "constants": "./src/constants",
+          "containers": "./src/containers",
+          "contexts": "./src/contexts",
+          "fonts": "./src/fonts",
+          "hooks": "./src/hooks",
+          "layouts": "./src/layouts",
+          "less": "./src/less",
+          "styles": "./src/styles",
+          "types": "./src/types",
+          "utils": "./src/utils"
+        }
+      }
+    ]
+  ]
+}
