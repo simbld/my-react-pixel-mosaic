@@ -2,47 +2,51 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
+    node: true
   },
-  extends: [
-    "airbnb",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:react-hooks/recommended",
-    "eslint-config-prettier",
-    "prettier/prettier"
-  ],
-  ignorePatterns: ["dist", ".eslintrc.cjs"],
   parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module"
-  },
-  settings: {
-    react: {
-      version: "18.2"
+    tsconfigRootDir: "src",
+    project: "./tsconfig.json",
+    ecmaVersion: 6,
+    sourceType: "module",
+    ecmaFeatures: {
+      jsx: true,
+      tsx: true
     }
   },
-  plugins: ["react-refresh"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint", "import"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier/prettier"
+  ],
+  settings: {
+    react: {
+      version: "detect"
+    }
+  },
   rules: {
+    "react/react-in-jsx-scope": "off",
     "no-tabs": "off",
+    "no-underscore-dangle": ["error", { allow: ["__dirname", "__filename"] }],
     indent: ["error", 2, { SwitchCase: 1 }],
     "comma-dangle": ["error", "never"],
     "implicit-arrow-linebreak": ["error", "beside"],
     quotes: ["error", "double", { allowTemplateLiterals: true }],
-    "import/no-extraneous-dependencies": [
+    "import/extensions": [
       "error",
+      "ignorePackages",
       {
-        devDependencies: [
-          "webpack.config.js",
-          "**/*.test.js",
-          "**/*.spec.js",
-          "**/vite.config.js",
-          "**/vite.config.ts",
-          "**/node_modules/vite/**",
-          "**/node_modules/@vitejs/plugin-react/**"
-        ]
+        js: "never",
+        jsx: "never"
       }
-    ]
+    ],
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }]
   }
 };

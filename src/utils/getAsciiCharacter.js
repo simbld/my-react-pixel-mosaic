@@ -14,7 +14,7 @@
  */
 
 import mapValue from "./mapValue";
-import { density } from "../config";
+import { density } from "../config/config";
 
 // The density string is a string of characters ordered from light to dark.
 function getAsciiCharacter(r, g, b) {

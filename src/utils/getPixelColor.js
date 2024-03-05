@@ -5,10 +5,12 @@
  * @param {number} index - Index of the pixel in the image data.
  * @returns {object} The RGB components of the pixel.
  */
-export default function getPixelColor(data, index) {
+function getPixelColor(data, index) {
   return {
     r: data[index],
     g: data[index + 1],
     b: data[index + 2]
   };
 }
+
+export default getPixelColor;

@@ -9,10 +9,10 @@
  * @returns {string} A string representing the ASCII art of the image.
  */
 
-import getAsciiCharacter from "./getAsciiCharacter";
-import getPixelColor from "./getPixelColor";
+import getAsciiCharacter from "@getAsciiCharacter";
+import getPixelColor from "@getPixelColor";
 
-export default function generateAsciiArt(imageData) {
+function generateAsciiArt(imageData) {
   let ascii = "";
   for (let j = 0; j < imageData.height; j += 1) {
     for (let i = 0; i < imageData.width; i += 1) {
@@ -24,3 +24,5 @@ export default function generateAsciiArt(imageData) {
   }
   return ascii;
 }
+
+export default generateAsciiArt;
