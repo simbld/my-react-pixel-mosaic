@@ -3,14 +3,14 @@
 
 @font-face {
   font-family: "MorePerfectDOSVGA";
-  src: url("./src/fonts/MorePerfectDOSVGA.ttf") format("truetype");
+  src: url("../fonts/MorePerfectDOSVGA.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Tangerine";
-  src: url("./src/fonts/Tangerine-Bold.ttf") format("truetype");
+  src: url("../fonts/Tangerine-Bold.ttf") format("truetype");
   font-weight: bold;
   font-style: normal;
 }
@@ -52,7 +52,7 @@ h1 {
   text-align: center;
 }
 
-@media (max-height: 320px) and (orientation: landscape) {
+@media (max-width: 896px) and (max-height: 414px) and (orientation: landscape) {
   .asciiArt {
     width: 190px;
     height: 260px;
@@ -83,7 +83,7 @@ h1 {
   }
 }
 
-@media (max-width: 320px) and (orientation: portrait) {
+@media (max-width: 414px) and (max-height: 896px) and (orientation: portrait) {
   .picture-container {
     width: 75%;
     height: 100%;
@@ -96,7 +96,9 @@ h1 {
     border-radius: 10px;
     position: absolute;
     translate: 0% -1000%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.6);
+    box-shadow:
+      0 0 10px rgba(0, 0, 0, 0.6),
+      inset 0 0 10px rgba(0, 0, 0, 0.6);
   }
   h1 {
     position: absolute;
@@ -116,7 +118,8 @@ h1 {
     flex-direction: column;
     background-color: #333;
     border-radius: 45px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.6),
+    box-shadow:
+      0px 0px 15px rgba(0, 0, 0, 0.6),
       inset 5px 5px 10px rgba(0, 0, 0, 0.6),
       inset -5px -5px 10px rgba(0, 0, 0, 0.6),
       inset 5px -5px 10px rgba(255, 255, 255, 0.1),
@@ -134,8 +137,8 @@ h1 {
     translate: 0% -15%;
   }
 }
-// TODO: Fix this media query
-@media (min-width: 768px) and (max-width: 1024px) {
+
+@media (max-width: 768px) and (max-height: 1024px) and (orientation: portrait) {
   .picture-container {
     background-color: red;
   }
@@ -147,7 +150,7 @@ h1 {
   }
 }
 
-@media (min-height: 768px) and (max-height: 1024px) {
+@media (max-width: 1024px) and (max-height: 768px) and (orientation: landscape) {
   .picture-container {
     background-color: red;
   }
@@ -173,7 +176,7 @@ h1 {
     .box-shadow(@black-color);
   }
 }
-@media (min-width: 1025px) and (max-width: 769px) {
+@media (max-width: 1080px) and (max-height: 1920px) and (orientation: portrait) {
   .picture-container {
     margin-top: 50px;
     background-color: rgb(0, 4, 255);
@@ -186,7 +189,33 @@ h1 {
   }
 }
 
-@media (min-height: 1025px) and (max-height: 769px) {
+@media (max-width: 1920px) and (max-height: 1080px) and (orientation: landscape) {
+  .picture-container {
+    margin-top: 50px;
+    background-color: rgb(0, 4, 255);
+  }
+  h1 {
+    font-size: 1000%;
+  }
+  .tablet-container {
+    margin-top: -115px;
+  }
+}
+
+@media (max-width: 1152px) and (max-height: 2048px) and (orientation: portrait) {
+  .picture-container {
+    margin-top: 50px;
+    background-color: rgb(0, 4, 255);
+  }
+  h1 {
+    font-size: 1000%;
+  }
+  .tablet-container {
+    margin-top: -115px;
+  }
+}
+
+@media (max-width: 2048px) and (max-height: 1152px) and (orientation: landscape) {
   .picture-container {
     margin-top: 50px;
     background-color: rgb(0, 4, 255);
