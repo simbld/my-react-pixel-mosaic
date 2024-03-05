@@ -11,16 +11,27 @@
  * @param {number} g - The green component of the pixel, between 0 and 255.
  * @param {number} b - The blue component of the pixel, between 0 and 255.
  * @returns {string} The ASCII character corresponding to the brightness of the pixel.
+ * 
+ *  @example
+      function MyComponent({ r, g, b }) {
+      const representation = usePixelRepresentation(255, 255, 255);
+      return <p>{representation}</p>;
  */
 
+import { useState, useEffect } from "react";
 import mapValue from "./mapValue";
 import { density } from "../config/config";
 
-// The density string is a string of characters ordered from light to dark.
-function getAsciiCharacter(r, g, b) {
-  const avg = (r + g + b) / 3;
-  const charIndex = Math.floor(mapValue(avg, 0, 255, density.length, 0));
-  return density.charAt(charIndex);
+function usePixelRepresentation(r, g, b) {
+  const [representation, setRepresentation] = useState("");
+
+  useEffect(() => {
+    const avg = (r + g + b) / 3;
+    const charIndex = Math.floor(mapValue(avg, 0, 255, density.length, 0));
+    setRepresentation(density.charAt(charIndex));
+  }, [r, g, b]);
+
+  return representation;
 }
 
-export default getAsciiCharacter;
+export default usePixelRepresentation;
