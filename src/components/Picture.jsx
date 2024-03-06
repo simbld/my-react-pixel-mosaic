@@ -1,28 +1,28 @@
 /**
- * @file Picture.jsx
+ *
  * @description A component that displays an image with various filters.
  *
  */
 
-import { useState, useEffect } from "react";
-import AsciiFilter from "../utils/AsciiFilter";
-import StipplingFilter from "../utils/StipplingFilter";
-import romeo from "../assets/romeo.jpg";
+import { useCallback, useState } from "react";
+import AsciiArtCanvas from "../components/AsciiArtCanvas";
+import StipplingCanvas from "../components/StipplingCanvas";
 
 function Picture() {
-  const [filterType, setFilterType] = useState("ascii");
+  const [filterType, setFilterType] = useState("none");
+  const [imageData, setImageData] = useState(null);
 
-  let FilterComponent;
-  switch (filterType) {
-    case "ascii":
-      FilterComponent = AsciiFilter;
-      break;
-    case "stippling":
-      FilterComponent = StipplingFilter;
-      break;
-    default:
-      FilterComponent = null;
-  }
+  const renderFilterComponent = useCallback(() => {
+    if (!imageData) return null;
+    switch (filterType) {
+      case "ascii":
+        return <AsciiArtCanvas imageSrc={imageData} />;
+      case "stippling":
+        return <StipplingCanvas imageSrc={imageData} />;
+      default:
+        return null;
+    }
+  }, [filterType, imageData]);
 
   return (
     <div>
@@ -32,10 +32,7 @@ function Picture() {
       <button type="button" onClick={() => setFilterType("stippling")}>
         Stippling Effect
       </button>
-      {FilterComponent && <FilterComponent />}
-      <div>
-        <img src={romeo} alt="Romeo" />
-      </div>
+      <div className="filter-output">{renderFilterComponent()}</div>
     </div>
   );
 }
