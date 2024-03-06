@@ -23,7 +23,7 @@
 
 .picture-container {
   .grid-center();
-  padding-bottom: 80px;
+  margin: 20px;
   width: 100%;
   height: 100%;
 }
@@ -35,8 +35,8 @@
 
 .tablet {
   margin-top: 50px;
-  height: 500px;
-  width: 360px;
+  height: 1500px;
+  width: 1600px;
   .grid-center();
   flex-direction: column;
   background-color: @secondary-color;
@@ -50,7 +50,9 @@
   padding: 10px;
   border-radius: 10px;
   position: relative;
-  box-shadow: 0 0 10px @black-color, inset 0 0 10px darken(@black-color, 50%);
+  box-shadow:
+    0 0 10px @black-color,
+    inset 0 0 10px darken(@black-color, 50%);
 }
 
 .title {
