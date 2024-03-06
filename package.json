@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"webpack --watch\" \"vite\"",
-    "build": "webpack --mode production && vite build",
+    "dev": "vite",
+    "build": "vite build",
     "lint": "eslint . --ext .js,.jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "antd": "^5.15.0",
     "html-webpack-plugin": "^5.6.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -53,7 +54,7 @@
     "style-loader": "^3.3.4",
     "typescript": "^5.3.3",
     "vite": "^5.1.5",
-    "webpack": "^5.90.3",
+    "vite-plugin-imp": "^2.4.0",
     "webpack-cli": "^5.1.4"
   },
   "eslintConfig": {
