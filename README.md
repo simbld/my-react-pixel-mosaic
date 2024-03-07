@@ -23,5 +23,6 @@ Pour déterminer quel caractère utiliser, nous appliquons une fonction map qui 
 
 5. Créer plusieurs filtres qui possèdent chacun leur bouton et qui donne un aspect entièrement différent de la même image en changeant la logique de conversion.
 <p align="center">
-<img width="137" height="137" src="https://img.icons8.com/color/37/vite.png" alt="vite"/> 
+<img width="137" height="137" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" /> <img width="137" height="137" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/less/less-plain-wordmark.svg" />
 </p>
+
