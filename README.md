@@ -1,3 +1,9 @@
+<p align="center">
+
+![using-react-redux-connect-with-typescript-tn2](https://github.com/simbld/my-react-pixel-mosaic/assets/102648783/39814e7e-e6c7-4547-bf93-4e0456a43834)
+
+</p>
+<br>
 Logique du Convertisseur de pixel
 ---------------------------------------------
 
@@ -16,3 +22,6 @@ Pour déterminer quel caractère utiliser, nous appliquons une fonction map qui 
 4. En répétant ce processus pour chaque pixel de l'image et en plaçant les caractères ASCII correspondants dans un format qui respecte les dimensions de l'image originale, nous créons une représentation de l'image en art ASCII.
 
 5. Créer plusieurs filtres qui possèdent chacun leur bouton et qui donne un aspect entièrement différent de la même image en changeant la logique de conversion.
+<p align="center">
+<img width="137" height="137" src="https://img.icons8.com/color/37/vite.png" alt="vite"/> 
+</p>
