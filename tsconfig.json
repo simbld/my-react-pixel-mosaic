@@ -7,7 +7,7 @@
     "isolatedModules": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "baseUrl": "./",
-    "types": ["vite/client"],
+    "types": ["node"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -40,6 +40,7 @@
       "@utils/*": ["src/utils/*"]
     }
   },
-  "include": ["src", "types", "tsconfig.node.json", "vite.config.ts"],
+  "files": [],
+  "include": ["**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
