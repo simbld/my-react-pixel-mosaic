@@ -4,5 +4,5 @@
     "module": "ESNext",
     "moduleResolution": "Node"
   },
-  "include": ["vite.config.ts", "tsconfig.json", "src/**/*"]
+  "include": ["**/*"]
 }
