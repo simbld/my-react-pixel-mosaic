@@ -20,21 +20,23 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
-      "@components": path.resolve(__dirname, "src/components"),
-      "@pages": path.resolve(__dirname, "src/pages"),
-      "@utils": path.resolve(__dirname, "src/utils"),
-      "@config": path.resolve(__dirname, "src/config"),
       "@assets": path.resolve(__dirname, "src/assets"),
+      "@common": path.resolve(__dirname, "src/common"),
+      "@components": path.resolve(__dirname, "src/components"),
+      "@config": path.resolve(__dirname, "src/config"),
       "@constants": path.resolve(__dirname, "src/constants"),
       "@containers": path.resolve(__dirname, "src/containers"),
+      "@features": path.resolve(__dirname, "src/features"),
       "@fonts": path.resolve(__dirname, "src/fonts"),
       "@hooks": path.resolve(__dirname, "src/hooks"),
       "@layouts": path.resolve(__dirname, "src/layouts"),
+      "@less": path.resolve(__dirname, "src/less"),
+      "@pages": path.resolve(__dirname, "src/pages"),
       "@services": path.resolve(__dirname, "src/services"),
+      "@store": path.resolve(__dirname, "src/store"),
       "@styles": path.resolve(__dirname, "src/styles"),
       "@types": path.resolve(__dirname, "src/types"),
-      "@common": path.resolve(__dirname, "src/common"),
-      "@less": path.resolve(__dirname, "src/less")
+      "@utils": path.resolve(__dirname, "src/utils")
     }
   },
   css: {
