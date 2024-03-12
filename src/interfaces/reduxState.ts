@@ -6,3 +6,7 @@ export interface ImageProcessingState {
   };
   error: string | null;
 }
+
+export interface ImageData {
+  imageSrc: string;
+}
