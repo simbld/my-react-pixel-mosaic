@@ -1,17 +1,17 @@
-import { useState } from "react"; // Assurez-vous d'importer React en TypeScript
-import Sketch from "./components/Sketch";
+import ErrorMessage from "./common/ErrorMessage";
+import { ErrorProvider } from "./contexts/ErrorContext";
+import MainLayout from "./layouts/MainLayout";
 
-function App() {
-  const [image, setImage] = useState<string>();
-
+const App: React.FC = () => {
   return (
     <>
-      <h1>PixelMosaic</h1>
-      <div>
-        <Sketch image={image} />
-      </div>
+      <ErrorProvider>
+        <h1>RePixelAct</h1>
+        <MainLayout />
+        <ErrorMessage />
+      </ErrorProvider>
     </>
   );
-}
+};
 
 export default App;

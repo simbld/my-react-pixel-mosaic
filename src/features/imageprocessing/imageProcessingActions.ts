@@ -1,0 +1,1 @@
+// pour accéder à l'état de manière plus optimisée, définir ici et organiser vos actions asynchrones comme le chargement d'images à partir d'un serveur ou l'application de filtres qui nécessitent des appels API, en utilisant createAsyncThunk.

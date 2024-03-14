@@ -1,0 +1,1 @@
+// Composants connectés à Redux : Un composant qui gère l'affichage et la logique derrière la sélection de filtres (FilterSelector.tsx), s'il interagit directement avec l'état Redux pour obtenir ou définir l'état des filtres.
