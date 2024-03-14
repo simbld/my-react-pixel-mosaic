@@ -21,3 +21,5 @@ const useLoadAndProcessImage = (imageSrc: string) => {
 
   return canvasRef;
 };
+
+export default useLoadAndProcessImage;
