@@ -19,19 +19,21 @@
  */
 
 import { useState, useEffect } from "react";
-import mapValue from "./mapValue";
+import mapValue from "../hooks/useMapValue";
 import { density } from "../config/config";
 
-function usePixelRepresentation(r, g, b) {
-  const [representation, setRepresentation] = useState("");
+const usePixelRepresentation = (r: number, g: number, b: number): string => {
+  const [representation, setRepresentation] = useState<string>("");
 
   useEffect(() => {
-    const avg = (r + g + b) / 3;
-    const charIndex = Math.floor(mapValue(avg, 0, 255, density.length, 0));
+    const avg: number = (r + g + b) / 3;
+    const charIndex: number = Math.floor(
+      mapValue(avg, 0, 255, 0, density.length - 1)
+    );
     setRepresentation(density.charAt(charIndex));
   }, [r, g, b]);
 
   return representation;
-}
+};
 
 export default usePixelRepresentation;

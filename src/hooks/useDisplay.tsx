@@ -25,10 +25,10 @@ type DisplayHook = [
   boolean
 ];
 
-function useDisplay(initialValue: string = ""): DisplayHook {
-  const [display, setDisplay] = useState(initialValue);
+const useDisplay = (initialValue: string = ""): DisplayHook => {
+  const [display, setDisplay] = useState<string>(initialValue);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof initialValue !== "string") {
@@ -38,19 +38,19 @@ function useDisplay(initialValue: string = ""): DisplayHook {
     }
   }, [initialValue]);
 
-  const setDisplayAsync = async (value: string) => {
+  const setDisplayAsync = async (value: string): Promise<void> => {
     setLoading(true);
     try {
       setDisplay(value);
       setError(null);
     } catch (error: any) {
-      setError(error instanceof Error ? error.message : error);
+      setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
     }
   };
 
   return [display, setDisplayAsync, error, loading];
-}
+};
 
 export default useDisplay;

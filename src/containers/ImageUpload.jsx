@@ -1,34 +1,34 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-function ImageUpload() {
+function ImageUpload({ onImageReady }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const uploadImage = async (event) => {
+  const handleImageChange = async (event) => {
     const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
+    if (!file) {
+      setError("No file selected.");
+      return;
+    }
 
     setLoading(true);
-    try {
-      const response = await fetch("https://your-backend-url.com/upload", {
-        method: "POST",
-        body: formData
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      // Handle successful upload here, e.g. by updating state or navigating to another page
-    } catch (error) {
-      setError(error.message);
-    } finally {
+    setError(null);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
       setLoading(false);
-    }
+      onImageReady(event.target.result);
+    };
+    reader.onerror = (error) => {
+      setLoading(false);
+      setError("Failed to read file.");
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
     <div>
-      <input type="file" onChange={uploadImage} />
+      <input type="file" onChange={handleImageChange} accept="image/*" />
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
     </div>
