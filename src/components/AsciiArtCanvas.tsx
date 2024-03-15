@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { AsciiArtCanvasProps } from "../interfaces/prop-types";
+import { MAX_CANVAS_SIZE } from "../config/config";
 
 const AsciiArtCanvas: React.FC<AsciiArtCanvasProps> = ({
   imageProcessingState
@@ -14,9 +15,15 @@ const AsciiArtCanvas: React.FC<AsciiArtCanvasProps> = ({
 
     const image = new Image();
     image.onload = () => {
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image, 0, 0);
+      const ratio = Math.min(
+        MAX_CANVAS_SIZE / image.width,
+        MAX_CANVAS_SIZE / image.height
+      );
+      const width = image.width * ratio;
+      const height = image.height * ratio;
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(image, 0, 0, width, height);
     };
     image.onerror = (error) => {
       console.error("Erreur lors du chargement de l'image:", error);
