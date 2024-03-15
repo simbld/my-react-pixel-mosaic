@@ -16,25 +16,35 @@ const MainLayout: React.FC<MainLayoutProps> = ({ imageSrc }) => {
     const context = canvas.getContext("2d")!;
     const image = imageRef.current!;
 
-    image.onload = () => {
-      // Définir la taille du canevas
-      canvas.width = TARGET_WIDTH;
-      canvas.height = TARGET_HEIGHT;
+    // Définir la source de l'image
+    image.src = imageSrc;
 
-      // Dessiner l'image sur le canevas à la taille du canevas
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    image.onload = () => {
+      // Redimensionner l'image
+      const aspectRatio = image.width / image.height;
+      let newWidth = TARGET_WIDTH;
+      let newHeight = TARGET_HEIGHT;
+
+      if (newWidth / newHeight > aspectRatio) {
+        newWidth = newHeight * aspectRatio;
+      } else {
+        newHeight = newWidth / aspectRatio;
+      }
+
+      // Dessiner l'image redimensionnée sur le canevas
+      context.drawImage(image, 0, 0, newWidth, newHeight);
 
       // Récupérer les données de l'image
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      const imageData = context.getImageData(0, 0, newWidth, newHeight);
       const data = imageData.data;
 
       // Effacer le canevas avant de dessiner l'image ASCII
       context.clearRect(0, 0, canvas.width, canvas.height);
 
       // Ajuster la résolution de l'image
-      for (let i = 0; i < canvas.width; i += 9) {
-        for (let j = 0; j < canvas.height; j += 9) {
-          const pixelIndex = (i + j * canvas.width) * 4;
+      for (let i = 0; i < newWidth; i += 9) {
+        for (let j = 0; j < newHeight; j += 9) {
+          const pixelIndex = (i + j * newWidth) * 4;
           let r = data[pixelIndex + 0];
           let g = data[pixelIndex + 1];
           let b = data[pixelIndex + 2];

@@ -9,9 +9,11 @@ function Tablet({ imageSrc }: TabletProps) {
     <div className="tablet-container">
       <div className="tablet">
         <h1>RePixelAct</h1>
-        <div className="monitor" />
-        <div className="picture-container">
-          <MainLayout imageSrc={imageSrc} />
+
+        <div className="canvas-container">
+          <div className="canvas">
+            <MainLayout imageSrc={imageSrc} />
+          </div>
         </div>
       </div>
     </div>
