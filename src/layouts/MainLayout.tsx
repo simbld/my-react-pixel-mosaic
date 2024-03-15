@@ -1,26 +1,37 @@
 import { useState } from "react";
-import AsciiArtCanvas from "../components/AsciiArtCanvas";
-import ImageUpload from "../containers/ImageUpload";
+import ArtCanvas from "../components/ArtCanvas";
+import HomeFilters from "../components/HomeFilters";
+import { defaultImage } from "../config/config";
 
 const MainLayout = () => {
-  const [imageSrc, setImageSrc] = useState<string>("/src/assets/default.png");
+  const [imageSrc, setImageSrc] = useState(defaultImage);
+  const [applyAscii, setApplyAscii] = useState(false);
+  const [imageData, setImageData] = useState<string | null>(null);
 
   const handleImageReady = (newImageSrc: string) => {
     setImageSrc(newImageSrc);
+    setImageData(newImageSrc);
+  };
+
+  const handleApplyAsciiEffect = () => {
+    setApplyAscii(true);
+  };
+
+  const imageProcessingState = {
+    url: imageSrc,
+    filters: { ascii: applyAscii },
+    error: null
   };
 
   return (
-    <>
-      <AsciiArtCanvas
-        asciiArtCanvas={imageSrc}
-        imageProcessingState={{
-          url: imageSrc,
-          filters: { ascii: true },
-          error: null
-        }}
+    <div>
+      <button onClick={handleApplyAsciiEffect}>Appliquer l'effet ASCII</button>
+      <HomeFilters onImageReady={handleImageReady} />
+      <ArtCanvas
+        imageProcessingState={imageProcessingState}
+        artCanvas={imageData || defaultImage}
       />
-      <ImageUpload onImageReady={handleImageReady} />
-    </>
+    </div>
   );
 };
 

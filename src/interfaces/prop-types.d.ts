@@ -31,17 +31,61 @@ export interface UseLoadAndProcessImageProps {
   ) => void;
 }
 
-export interface AsciiArtCanvasProps {
-  asciiArtCanvas: string;
+export interface ArtCanvasProps {
+  artCanvas: string;
   imageProcessingState: {
     url: string;
     filters: {
       ascii: boolean;
     };
-    error: null;
+    error: string | null;
   };
 }
 
 export interface TabletProps {
   image: string;
+}
+
+export interface HomeFiltersProps {
+  onImageReady: (data: string) => void;
+}
+export interface ImageProcessingStateProps {
+  url: string | null;
+  filters: {
+    ascii: boolean;
+  };
+  error: string | null;
+}
+
+export interface AppImageDataProps {
+  appImageData: string;
+}
+
+export interface RootStateProps {
+  imageProcessing: ImageProcessingStateProps;
+}
+
+export interface UseImageLoaderReturnProps {
+  imageLoader: ImageData | null;
+  loading: boolean;
+}
+
+export interface UseErrorReturnProps {
+  error: Error | null;
+  setError: (error: Error | null) => void;
+  displayError: () => void;
+  clearError: () => void;
+}
+
+export interface AsciiArtHookResultProps {
+  asciiArt: string;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface ErrorContextTypeProps {
+  error: Error | null;
+  setError: (error: Error | null) => void;
+  displayError: () => void;
+  clearError: () => void;
 }

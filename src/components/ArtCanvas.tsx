@@ -1,18 +1,14 @@
-import { useEffect, useRef } from "react";
-import { AsciiArtCanvasProps } from "../interfaces/prop-types";
+import { useRef, useEffect } from "react";
 import { MAX_CANVAS_SIZE } from "../config/config";
+import { ArtCanvasProps } from "../interfaces/prop-types";
 
-const AsciiArtCanvas: React.FC<AsciiArtCanvasProps> = ({
-  imageProcessingState
-}) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
+const ArtCanvas: React.FC<ArtCanvasProps> = ({ imageProcessingState }) => {
+  const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
     const image = new Image();
     image.onload = () => {
       const ratio = Math.min(
@@ -31,8 +27,7 @@ const AsciiArtCanvas: React.FC<AsciiArtCanvasProps> = ({
     image.src = imageProcessingState.url;
     image.crossOrigin = "Anonymous";
   }, [imageProcessingState.url]);
-
   return <canvas ref={canvasRef} />;
 };
 
-export default AsciiArtCanvas;
+export default ArtCanvas;
