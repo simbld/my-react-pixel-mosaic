@@ -33,6 +33,13 @@ export interface UseLoadAndProcessImageProps {
 
 export interface AsciiArtCanvasProps {
   asciiArtCanvas: string;
+  imageProcessingState: {
+    url: string;
+    filters: {
+      ascii: boolean;
+    };
+    error: null;
+  };
 }
 
 export interface TabletProps {

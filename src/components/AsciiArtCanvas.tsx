@@ -1,17 +1,31 @@
-import { useEffect, useState, useRef } from "react";
-import useAsciiArt from "../hooks/useAsciiArt"; // Assurez-vous que ce chemin est correct
-import useLoadAndProcessImage from "../hooks/useLoadAndProcessImage"; // Et celui-ci aussi
+import { useEffect, useRef } from "react";
 import { AsciiArtCanvasProps } from "../interfaces/prop-types";
 
-const AsciiArtCanvas = ({ asciiArtCanvas }: AsciiArtCanvasProps) => {
-  const canvasRef = useLoadAndProcessImage(asciiArtCanvas);
-  const { asciiArt, loading, error } = useAsciiArt(canvasRef, asciiArtCanvas);
+const AsciiArtCanvas: React.FC<AsciiArtCanvasProps> = ({
+  imageProcessingState
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Logique supplémentaire pour gérer l'affichage de l'art ASCII
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-  if (loading) return <div>Chargement...</div>;
-  if (error) return <div>Erreur : {error}</div>;
-  return <pre>{asciiArt}</pre>;
+    const image = new Image();
+    image.onload = () => {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      ctx.drawImage(image, 0, 0);
+    };
+    image.onerror = (error) => {
+      console.error("Erreur lors du chargement de l'image:", error);
+    };
+    image.src = imageProcessingState.url;
+    image.crossOrigin = "Anonymous";
+  }, [imageProcessingState.url]);
+
+  return <canvas ref={canvasRef} />;
 };
 
 export default AsciiArtCanvas;
