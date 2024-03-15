@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import getAsciiCharacter from "../helpers/getAsciiCharacter";
-import { AsciiArtHookResult } from "../interfaces/reduxState";
+import { AsciiArtHookResultProps } from "../interfaces/prop-types";
 
 const useAsciiArt = (
   canvasRef: React.RefObject<HTMLCanvasElement>,
-  imageUrl: string
-): AsciiArtHookResult => {
+  imageUrl: string,
+  applyAscii: boolean
+): AsciiArtHookResultProps => {
   const [asciiArt, setAsciiArt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!canvasRef.current || !imageUrl) {
+    if (!canvasRef.current || !imageUrl || !applyAscii) {
       setError("Aucune image fournie ou canvas non disponible.");
       return;
     }
@@ -50,7 +51,7 @@ const useAsciiArt = (
       setError("Erreur lors du chargement de l'image.");
       setLoading(false);
     };
-  }, [canvasRef, imageUrl]);
+  }, [canvasRef, imageUrl, applyAscii]);
 
   return { asciiArt, loading, error };
 };
