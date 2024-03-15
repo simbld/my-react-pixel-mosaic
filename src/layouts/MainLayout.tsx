@@ -30,12 +30,25 @@ const MainLayout: React.FC = () => {
       // Effacer le canevas avant de dessiner l'image ASCII
       context.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (let i = 0; i < canvas.width; i += 10) {
-        for (let j = 0; j < canvas.height; j += 10) {
+      // Ajuster la résolution de l'image
+      for (let i = 0; i < canvas.width; i += 9) {
+        for (let j = 0; j < canvas.height; j += 9) {
           const pixelIndex = (i + j * canvas.width) * 4;
-          const r = data[pixelIndex + 0];
-          const g = data[pixelIndex + 1];
-          const b = data[pixelIndex + 2];
+          let r = data[pixelIndex + 0];
+          let g = data[pixelIndex + 1];
+          let b = data[pixelIndex + 2];
+
+          // Modifier la luminosité
+          const brightness = 0.7; // Augmenter ou diminuer cette valeur pour ajuster la luminosité
+          r *= brightness;
+          g *= brightness;
+          b *= brightness;
+
+          // Assurer que les valeurs restent entre 0 et 255
+          r = Math.min(255, Math.max(0, r));
+          g = Math.min(255, Math.max(0, g));
+          b = Math.min(255, Math.max(0, b));
+
           const avg = (r + g + b) / 3;
 
           const len = densityDot.length;
