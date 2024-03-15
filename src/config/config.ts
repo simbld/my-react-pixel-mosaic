@@ -1,6 +1,6 @@
 // export const density = `${"\u2591"}${"\u2592"}${"\u2593"}${"\u2588"}`;
 
-export const defaultImage: string = "/src/assets/default.png";
+export const defaultImage: string = "/src/assets/romeo.jpg";
 export const densityExtended: string = "Ñ@#W$9876543210?!abc;:+=-,._          ";
 export const densitySimple: string = " .:-i|=+╦%O#@";
 export const densityDot: string = " .:░▒▓█";

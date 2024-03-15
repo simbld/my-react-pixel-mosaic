@@ -1,58 +1,55 @@
 import { useEffect, useRef } from "react";
 import {
-  TARGET_HEIGHT,
-  TARGET_WIDTH,
   defaultImage,
-  densityDot
+  densityDot,
+  TARGET_WIDTH,
+  TARGET_HEIGHT
 } from "../config/config";
+import { MainLayoutProps } from "../interfaces/prop-types";
 
-const MainLayout: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const imageRef = useRef<HTMLImageElement | null>(null);
+const MainLayout: React.FC<MainLayoutProps> = ({ imageSrc }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const image = imageRef.current;
-    if (!canvas || !image) return;
-
-    const context = canvas.getContext("2d");
-    if (!context) return;
+    const canvas = canvasRef.current!;
+    const context = canvas.getContext("2d")!;
+    const image = imageRef.current!;
 
     image.onload = () => {
-      const scaleFactor = 0.1;
-      const scaledWidth = image.width * scaleFactor;
-      const scaledHeight = image.height * scaleFactor;
-
+      // Définir la taille du canevas
       canvas.width = TARGET_WIDTH;
       canvas.height = TARGET_HEIGHT;
 
-      context.clearRect(0, 0, canvas.width, canvas.height);
+      // Dessiner l'image sur le canevas à la taille du canevas
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+      // Récupérer les données de l'image
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
 
-      for (let i = 0; i < canvas.width; i++) {
-        for (let j = 0; j < canvas.height; j++) {
+      // Effacer le canevas avant de dessiner l'image ASCII
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Ajuster la résolution de l'image
+      for (let i = 0; i < canvas.width; i += 9) {
+        for (let j = 0; j < canvas.height; j += 9) {
           const pixelIndex = (i + j * canvas.width) * 4;
-          const r = data[pixelIndex + 0];
-          const g = data[pixelIndex + 1];
-          const b = data[pixelIndex + 2];
-          const avg = (r + g + b) / 3;
+          let r = data[pixelIndex + 0];
+          let g = data[pixelIndex + 1];
+          let b = data[pixelIndex + 2];
 
-          data[pixelIndex + 0] = avg;
-          data[pixelIndex + 1] = avg;
-          data[pixelIndex + 2] = avg;
-        }
-      }
+          // Modifier la luminosité
+          const brightness = 0.7; // Augmenter ou diminuer cette valeur pour ajuster la luminosité
+          r *= brightness;
+          g *= brightness;
+          b *= brightness;
 
-      context.putImageData(imageData, 0, 0);
+          // Assurer que les valeurs restent entre 0 et 255
+          r = Math.min(255, Math.max(0, r));
+          g = Math.min(255, Math.max(0, g));
+          b = Math.min(255, Math.max(0, b));
 
-      for (let i = 0; i < canvas.width; i += 10) {
-        for (let j = 0; j < canvas.height; j += 10) {
-          const pixelIndex = (i + j * canvas.width) * 4;
-          const r = data[pixelIndex + 0];
-          const g = data[pixelIndex + 1];
-          const b = data[pixelIndex + 2];
           const avg = (r + g + b) / 3;
 
           const len = densityDot.length;
@@ -64,8 +61,8 @@ const MainLayout: React.FC = () => {
       }
     };
 
-    image.src = defaultImage;
-  }, []);
+    imageRef.current!.src = imageSrc;
+  }, [imageSrc]);
 
   const map = (
     value: number,
