@@ -15,11 +15,15 @@ const AsciiArtCanvas: React.FC<AsciiArtCanvasProps> = ({
 
     const image = new Image();
     image.onload = () => {
-      const width = Math.min(image.width, MAX_CANVAS_SIZE);
-      const height = Math.min(image.height, MAX_CANVAS_SIZE);
+      const ratio = Math.min(
+        MAX_CANVAS_SIZE / image.width,
+        MAX_CANVAS_SIZE / image.height
+      );
+      const width = image.width * ratio;
+      const height = image.height * ratio;
       canvas.width = width;
       canvas.height = height;
-      ctx.drawImage(image, 0, 0);
+      ctx.drawImage(image, 0, 0, width, height);
     };
     image.onerror = (error) => {
       console.error("Erreur lors du chargement de l'image:", error);
