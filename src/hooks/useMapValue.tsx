@@ -12,28 +12,18 @@
  * 
  *  @example
       function MyComponent({ value }) {
-      const mappedValue = useMapValue(value, 0, 100, 0, 1);
+      const mappedValue = mapValue(value, 0, 100, 0, 1);
       return <p>{mappedValue}</p>;
  */
 
-import { useState, useEffect } from "react";
-
-const useMapValue = (
+const mapValue = (
   value: number,
   start1: number,
   stop1: number,
   start2: number,
   stop2: number
 ): number => {
-  const [mappedValue, setMappedValue] = useState<number>(0);
-
-  useEffect(() => {
-    const newValue: number =
-      start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
-    setMappedValue(newValue);
-  }, [value, start1, stop1, start2, stop2]);
-
-  return mappedValue;
+  return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 };
 
-export default useMapValue;
+export default mapValue;

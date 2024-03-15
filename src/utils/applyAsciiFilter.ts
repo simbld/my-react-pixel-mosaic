@@ -1,4 +1,10 @@
-const applyAsciiFilter = (context, canvas) => {
+import getAsciiCharacter from "../helpers/getAsciiCharacter";
+import getPixelColor from "../helpers/getPixelColor";
+
+const applyAsciiFilter = (
+  context: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement
+): string => {
   const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
   let asciiArt = "";
 
@@ -12,6 +18,8 @@ const applyAsciiFilter = (context, canvas) => {
     }
     asciiArt += "\n";
   }
+
+  return asciiArt;
 };
 
 export default applyAsciiFilter;

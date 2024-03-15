@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import ArtCanvas from "./ArtCanvas";
 import { HomeFiltersProps } from "../interfaces/prop-types";
 import { defaultImage } from "../config/config";
+import applyAsciiFilter from "../utils/applyAsciiArt";
 
 const HomeFilters: React.FC<HomeFiltersProps> = ({ onImageReady }) => {
   const [filterType, setFilterType] = useState("none");
   const [imageData, setImageData] = useState<string | null>(null);
+  const [applyAscii, setApplyAscii] = useState(false);
 
   useEffect(() => {
     if (imageData) {
@@ -14,6 +16,12 @@ const HomeFilters: React.FC<HomeFiltersProps> = ({ onImageReady }) => {
       onImageReady(defaultImage);
     }
   }, [imageData, onImageReady]);
+
+  useEffect(() => {
+    if (filterType === "ascii") {
+      setApplyAscii(true);
+    }
+  }, [filterType]);
 
   const renderFilter = () => {
     if (!imageData) return null;
@@ -24,9 +32,10 @@ const HomeFilters: React.FC<HomeFiltersProps> = ({ onImageReady }) => {
             artCanvas={imageData || defaultImage}
             imageProcessingState={{
               url: imageData || defaultImage,
-              filters: { ascii: true },
+              filters: { ascii: applyAscii },
               error: null
             }}
+            filter={applyAsciiFilter}
           />
         );
       default:
@@ -39,7 +48,12 @@ const HomeFilters: React.FC<HomeFiltersProps> = ({ onImageReady }) => {
       <button type="button" onClick={() => setFilterType("none")}>
         No Filter
       </button>
-      <button type="button" onClick={() => setFilterType("ascii")}>
+      <button
+        type="button"
+        onClick={() => {
+          setFilterType("ascii");
+        }}
+      >
         ASCII Art
       </button>
       <div className="filter-output">{renderFilter()}</div>

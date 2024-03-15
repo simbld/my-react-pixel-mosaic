@@ -7,11 +7,11 @@
  */
 
 import { densityDot } from "../config/config";
-import useMapValue from "../hooks/useMapValue";
+import mapValue from "../hooks/useMapValue";
 
 function getAsciiCharacter(brightness: number): string {
   const chars = densityDot.split("");
-  const index = useMapValue(brightness, 0, 255, 0, chars.length - 1);
+  const index = mapValue(brightness, 0, 255, 0, chars.length - 1);
 
   return chars[Math.floor(index)];
 }
