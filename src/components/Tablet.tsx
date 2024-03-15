@@ -1,21 +1,17 @@
 import { TabletProps } from "../interfaces/prop-types";
 import { useState } from "react";
-import HomeFilters from "./HomeFilters";
+import MainLayout from "../layouts/MainLayout";
 
-function Tablet({ image }: TabletProps) {
+function Tablet({ imageSrc }: TabletProps) {
   const [imageData, setImageData] = useState<string | null>(null);
 
   return (
     <div className="tablet-container">
       <div className="tablet">
+        <h1>RePixelAct</h1>
         <div className="monitor" />
         <div className="picture-container">
-          <HomeFilters onImageReady={setImageData} />{" "}
-          {/* // update imageData */}
-        </div>
-
-        <div className="image-display">
-          {imageData ? <img src={imageData} alt="Uploaded" /> : "No image"}
+          <MainLayout imageSrc={imageSrc} />
         </div>
       </div>
     </div>

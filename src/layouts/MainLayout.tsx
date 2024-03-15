@@ -5,8 +5,9 @@ import {
   TARGET_WIDTH,
   TARGET_HEIGHT
 } from "../config/config";
+import { MainLayoutProps } from "../interfaces/prop-types";
 
-const MainLayout: React.FC = () => {
+const MainLayout: React.FC<MainLayoutProps> = ({ imageSrc }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -60,8 +61,8 @@ const MainLayout: React.FC = () => {
       }
     };
 
-    image.src = defaultImage;
-  }, []);
+    imageRef.current!.src = imageSrc;
+  }, [imageSrc]);
 
   const map = (
     value: number,

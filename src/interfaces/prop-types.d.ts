@@ -47,7 +47,7 @@ export interface ArtCanvasPropsWithFilter extends ArtCanvasProps {
 }
 
 export interface TabletProps {
-  image: string;
+  imageSrc: string;
 }
 
 export interface HomeFiltersProps {
@@ -93,4 +93,8 @@ export interface ErrorContextTypeProps {
   setError: (error: Error | null) => void;
   displayError: () => void;
   clearError: () => void;
+}
+
+export interface MainLayoutProps {
+  imageSrc: string;
 }

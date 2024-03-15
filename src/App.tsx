@@ -1,13 +1,13 @@
 import ErrorMessage from "./common/ErrorMessage";
+import Tablet from "./components/Tablet";
+import { defaultImage } from "./config/config";
 import { ErrorProvider } from "./contexts/ErrorContext";
-import MainLayout from "./layouts/MainLayout";
 
 const App: React.FC = () => {
   return (
     <>
       <ErrorProvider>
-        <h1>RePixelAct</h1>
-        <MainLayout />
+        <Tablet imageSrc={defaultImage} />
         <ErrorMessage />
       </ErrorProvider>
     </>
