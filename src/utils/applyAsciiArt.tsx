@@ -1,32 +1,28 @@
 import { useEffect, useRef } from "react";
+import getAsciiCharacter from "../helpers/getAsciiCharacter";
+import getPixelColor from "../helpers/getPixelColor";
 
-const AsciiArtCanvas = ({ imageSrc }) => {
-  const canvasRef = useRef(null);
+const applyAsciiArt = (
+  context: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement
+): void => {
+  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  context.font = "10px monospace";
+  context.fillStyle = "black";
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
-    img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+  for (let j = 0; j < imageData.height; j += 1) {
+    for (let i = 0; i < imageData.width; i += 1) {
+      console.log("Inside the loop", i, j);
+      const pixelIndex = (i + j * imageData.width) * 4;
+      const { r, g, b } = getPixelColor(imageData.data, pixelIndex);
+      console.log(r, g, b);
+      const brightness = 0.3 * r + 0.59 * g + 0.11 * b;
+      const asciiCharacter = getAsciiCharacter(brightness);
+      console.log(asciiCharacter);
 
-      // Après avoir dessiné l'image, appliquer l'effet ASCII
-      applyAsciiEffect(canvas, ctx);
-    };
-    img.src = imageSrc;
-  }, [imageSrc]);
-
-  return <canvas ref={canvasRef} />;
+      context.fillText(asciiCharacter, i * 10, j * 10);
+    }
+  }
 };
 
-function applyAsciiEffect(canvas, ctx) {
-  // Cette fonction doit implémenter la logique pour convertir l'image en ASCII
-  // Exemple simplifié :
-  ctx.font = "10px MorePerfectDOSVGA"; // Assurez-vous que cette police est chargée via CSS
-  ctx.fillStyle = "black";
-  ctx.fillText("Exemple ASCII", 10, 10); // Remplacer par votre logique de dessin ASCII
-}
-
-export default AsciiArtCanvas;
+export default applyAsciiArt;

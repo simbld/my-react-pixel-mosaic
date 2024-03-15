@@ -1,18 +1,35 @@
-// Assurez-vous d'importer ces fonctions si elles se trouvent dans d'autres fichiers
+import { densityDot } from "../config/config";
+
 function getAsciiCharacter(brightness: number): string {
-  const chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", ".", " "];
-  return chars[Math.floor(map(brightness, 0, 255, 0, chars.length - 1))];
+  const chars = densityDot.split("");
+  const index = Math.floor(((brightness - 0) * (chars.length - 1)) / (255 - 0));
+
+  return chars[index];
 }
 
-function map(
+export default getAsciiCharacter;
+
+import { useState, useEffect } from "react";
+
+const useMapValue = (
   value: number,
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number
-): number {
-  return ((value - x1) * (y2 - x2)) / (y1 - x1) + x2;
-}
+  start1: number,
+  stop1: number,
+  start2: number,
+  stop2: number
+): number => {
+  const [mappedValue, setMappedValue] = useState<number>(0);
+
+  useEffect(() => {
+    const newValue: number =
+      start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+    setMappedValue(newValue);
+  }, [value, start1, stop1, start2, stop2]);
+
+  return mappedValue;
+};
+
+export default useMapValue;
 
 const applyAsciiEffect = (
   ctx: CanvasRenderingContext2D,

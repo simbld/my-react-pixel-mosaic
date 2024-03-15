@@ -1,8 +1,8 @@
-export interface PixelColorProps {
+export type PixelColorProps = {
   r: number;
   g: number;
   b: number;
-}
+};
 
 export interface ImageURLProps {
   imageUrl: string;
@@ -42,12 +42,17 @@ export interface ArtCanvasProps {
   };
 }
 
+export interface ArtCanvasPropsWithFilter extends ArtCanvasProps {
+  filter: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => void;
+}
+
 export interface TabletProps {
   image: string;
 }
 
 export interface HomeFiltersProps {
   onImageReady: (data: string) => void;
+  onApplyAscii: () => void;
 }
 export interface ImageProcessingStateProps {
   url: string | null;
