@@ -1,5 +1,7 @@
 /**
- * Maps a value from one range to another.
+ * Maps a value from one range to another. This is done using a linear mapping formula
+ * that takes into account the start and end of the input range (start1 and stop1) and
+ * the start and end of the output range (start2 and stop2).
  *
  * @param {number} value - The value to map.
  * @param {number} start1 - Start of value range.
@@ -12,7 +14,6 @@
       function MyComponent({ value }) {
       const mappedValue = useMapValue(value, 0, 100, 0, 1);
       return <p>{mappedValue}</p>;
-
  */
 
 import { useState, useEffect } from "react";
