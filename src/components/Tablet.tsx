@@ -8,8 +8,9 @@ function Tablet({ imageSrc }: TabletProps) {
   return (
     <div className="tablet-container">
       <div className="tablet">
-        <h1>RePixelAct</h1>
-
+        <div className="title-container">
+          <h1 className="title">RePixelAct</h1>
+        </div>
         <div className="canvas-container">
           <div className="canvas">
             <MainLayout imageSrc={imageSrc} />
