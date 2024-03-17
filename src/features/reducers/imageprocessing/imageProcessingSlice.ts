@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, Reducer } from "@reduxjs/toolkit";
-import { ImageProcessingState } from "../../interfaces/reduxState";
+import { ImageProcessingStateProps } from "../../../interfaces/prop-types";
 import defaultImage from "../../assets/default.png";
 
-const initialState: ImageProcessingState = {
+const initialState: ImageProcessingStateProps = {
   url: defaultImage,
   filters: {
     ascii: false
@@ -16,7 +16,7 @@ export const imageProcessingSlice = createSlice({
   reducers: {
     toggleFilter: (
       state,
-      action: PayloadAction<keyof ImageProcessingState["filters"]>
+      action: PayloadAction<keyof ImageProcessingStateProps["filters"]>
     ) => {
       const filter = action.payload;
       state.filters[filter] = !state.filters[filter];
@@ -35,5 +35,5 @@ export const imageProcessingSlice = createSlice({
 
 export const { toggleFilter, setError, resetImage } =
   imageProcessingSlice.actions;
-export const imageProcessingReducer: Reducer<ImageProcessingState> =
+export const imageProcessingReducer: Reducer<ImageProcessingStateProps> =
   imageProcessingSlice.reducer;
