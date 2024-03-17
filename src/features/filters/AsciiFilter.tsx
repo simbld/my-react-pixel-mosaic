@@ -9,7 +9,7 @@
 import { useEffect, useRef } from "react";
 import useAsciiArt from "../../hooks/useAsciiArt";
 import useLoading from "../../hooks/useLoading";
-import { AsciiFilterProps } from "../../interfaces/prop-types";
+import { AsciiFilterProps } from "../../interfaces/types";
 
 const AsciiFilter: React.FC<AsciiFilterProps> = ({ asciiFilter }) => {
   const { loading: asciiLoading, startLoading, endLoading } = useLoading();

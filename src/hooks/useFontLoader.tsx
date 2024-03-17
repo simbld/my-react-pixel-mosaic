@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { FontFaceSet } from "../interfaces/font-loading";
 
 const useFontLoader = (fontName: string, fontUrl: string): boolean => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);

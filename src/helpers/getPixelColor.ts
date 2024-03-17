@@ -6,7 +6,7 @@
  * @returns The RGB components of the pixel as a PixelColor object.
  */
 
-import { PixelColorProps } from "../interfaces/prop-types";
+import { PixelColorProps } from "../interfaces/types";
 
 function getPixelColor(
   data: Uint8ClampedArray,

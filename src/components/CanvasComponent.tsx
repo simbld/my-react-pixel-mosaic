@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { CanvasComponentProps } from "../interfaces/prop-types";
+import { CanvasComponentProps } from "../interfaces/types";
 
 function CanvasComponent({ image, width, height }: CanvasComponentProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);

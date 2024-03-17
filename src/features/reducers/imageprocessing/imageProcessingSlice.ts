@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, Reducer } from "@reduxjs/toolkit";
-import { ImageProcessingStateProps } from "../../../interfaces/prop-types";
-import defaultImage from "../../assets/default.png";
+import defaultImage from "@assets/default.png";
+import { ImageProcessingStateProps } from "../../../interfaces/types";
 
 const initialState: ImageProcessingStateProps = {
   url: defaultImage,

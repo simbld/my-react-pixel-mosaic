@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import { MAX_CANVAS_SIZE } from "../config/config";
-import { ArtCanvasPropsWithFilter } from "../interfaces/prop-types";
+import { ArtCanvasPropsWithFilter } from "../interfaces/types";
 
 const ArtCanvas: React.FC<ArtCanvasPropsWithFilter> = ({
   imageProcessingState,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ArtCanvas from "./ArtCanvas";
-import { HomeFiltersProps } from "../interfaces/prop-types";
+import { HomeFiltersProps } from "../interfaces/types";
 import { defaultImage } from "../config/config";
 import applyAsciiFilter from "../utils/applyAsciiArt";
 
