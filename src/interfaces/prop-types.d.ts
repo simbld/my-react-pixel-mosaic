@@ -1,3 +1,21 @@
+// redux persist store
+export interface RootStateProps {
+  imageProcessing: ImageProcessingStateProps;
+}
+
+export interface ImageProcessingStateProps {
+  url: string | null;
+  filters: {
+    ascii: boolean;
+  };
+  error: string | null;
+}
+
+export interface GameboyState {
+  powerOn: boolean;
+}
+
+// helpers
 export type PixelColorProps = {
   r: number;
   g: number;
@@ -8,19 +26,15 @@ export interface ImageURLProps {
   imageUrl: string;
 }
 
+// custom hooks
 export interface UseImageLoaderReturnProps {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  imageLoader: ImageData | null;
   loading: boolean;
 }
 
-export interface AsciiFilterProps {
-  asciiFilter: ImageData;
-}
-
-export interface CanvasComponentProps {
-  image: string;
-  width: number;
-  height: number;
+export interface UseImageLoaderReturnProps {
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  loading: boolean;
 }
 
 export interface UseLoadAndProcessImageProps {
@@ -31,17 +45,37 @@ export interface UseLoadAndProcessImageProps {
   ) => void;
 }
 
-export interface ArtCanvasProps {
-  artCanvas: string;
-  imageProcessingState: {
-    url: string;
-    filters: {
-      ascii: boolean;
-    };
-    error: string | null;
-  };
+export interface UseErrorReturnProps {
+  error: Error | null;
+  setError: (error: Error | null) => void;
+  displayError: () => void;
+  clearError: () => void;
 }
 
+// utils
+export interface AsciiArtHookResultProps {
+  asciiArt: string;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface AsciiCharacterProps {
+  brightness: number;
+}
+
+export interface AsciiFilterProps {
+  asciiFilter: ImageData;
+}
+
+// context providers
+export interface ErrorContextTypeProps {
+  error: Error | null;
+  setError: (error: Error | null) => void;
+  displayError: () => void;
+  clearError: () => void;
+}
+
+// components
 export interface ArtCanvasPropsWithFilter extends ArtCanvasProps {
   filter: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => void;
 }
@@ -54,47 +88,28 @@ export interface HomeFiltersProps {
   onImageReady: (data: string) => void;
   onApplyAscii: () => void;
 }
-export interface ImageProcessingStateProps {
-  url: string | null;
-  filters: {
-    ascii: boolean;
-  };
-  error: string | null;
-}
 
 export interface AppImageDataProps {
   appImageData: string;
 }
 
-export interface RootStateProps {
-  imageProcessing: ImageProcessingStateProps;
-}
-
-export interface UseImageLoaderReturnProps {
-  imageLoader: ImageData | null;
-  loading: boolean;
-}
-
-export interface UseErrorReturnProps {
-  error: Error | null;
-  setError: (error: Error | null) => void;
-  displayError: () => void;
-  clearError: () => void;
-}
-
-export interface AsciiArtHookResultProps {
-  asciiArt: string;
-  loading: boolean;
-  error: string | null;
-}
-
-export interface ErrorContextTypeProps {
-  error: Error | null;
-  setError: (error: Error | null) => void;
-  displayError: () => void;
-  clearError: () => void;
-}
-
 export interface MainLayoutProps {
   imageSrc: string;
+}
+
+export interface CanvasComponentProps {
+  image: string;
+  width: number;
+  height: number;
+}
+
+export interface ArtCanvasProps {
+  artCanvas: string;
+  imageProcessingState: {
+    url: string;
+    filters: {
+      ascii: boolean;
+    };
+    error: string | null;
+  };
 }
