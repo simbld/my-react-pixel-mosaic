@@ -61,3 +61,15 @@ export const {
 
 // Exporter le reducer
 export default gameboySlice.reducer;
+
+// Exporter le type de l'état
+export const selectPower = (state: { gameboy: GameboyState }) =>
+  state.gameboy.power;
+export const selectCartridge = (state: { gameboy: GameboyState }) =>
+  state.gameboy.cartridge;
+export const selectScreen = (state: { gameboy: GameboyState }) =>
+  state.gameboy.screen;
+export const selectScreenColor = (state: { gameboy: GameboyState }) =>
+  state.gameboy.screenColorOn;
+export const selectGameboy = (state: { gameboy: GameboyState }) =>
+  state.gameboy;
