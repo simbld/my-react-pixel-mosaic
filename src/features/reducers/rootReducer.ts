@@ -1,9 +1,10 @@
+import gameboyReducer from "./gameboy/gameboySlice";
 import { combineReducers, Reducer } from "redux";
-import { imageProcessingReducer } from "../imageprocessing/imageProcessingSlice";
+import { imageProcessingReducer } from "./imageprocessing/imageProcessingSlice";
 
 const rootReducer: Reducer = combineReducers({
-  imageProcessing: imageProcessingReducer
-  // autres reducers
+  imageProcessing: imageProcessingReducer,
+  gameboy: gameboyReducer
 });
 
 export default rootReducer;
