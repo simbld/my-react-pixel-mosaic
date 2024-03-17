@@ -12,15 +12,18 @@ export interface ImageProcessingStateProps {
 }
 
 export interface GameboyState {
-  powerOn: boolean;
+  power: boolean;
+  cartridge: string | null;
+  screen: string | null;
+  screenColorOn: "green" | "darkgreen";
 }
 
 // helpers
-export type PixelColorProps = {
+export interface PixelColorProps {
   r: number;
   g: number;
   b: number;
-};
+}
 
 export interface ImageURLProps {
   imageUrl: string;
