@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, Reducer } from "@reduxjs/toolkit";
-import { GameboyState } from "../../../interfaces/prop-types";
+import { GameboyState } from "../../../interfaces/types";
 
 // Définition des types d'actions
 export type TogglePowerAction = PayloadAction<void>;

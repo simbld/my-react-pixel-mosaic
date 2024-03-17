@@ -8,7 +8,7 @@
 
 import { densityDot } from "../config/config";
 import mapValue from "../hooks/useMapValue";
-import { AsciiCharacterProps } from "../interfaces/prop-types";
+import { AsciiCharacterProps } from "../interfaces/types";
 
 const getAsciiCharacter: (AsciiCharacterProps) => string = (
   brightness: number

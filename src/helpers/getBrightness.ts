@@ -1,4 +1,4 @@
-import { PixelColorProps } from "../interfaces/prop-types";
+import { PixelColorProps } from "../interfaces/types";
 
 const getBrightness = (color: PixelColorProps): number => {
   const { r, g, b } = color;

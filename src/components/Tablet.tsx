@@ -1,4 +1,4 @@
-import { TabletProps } from "../interfaces/prop-types";
+import { TabletProps } from "../interfaces/types";
 import { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 

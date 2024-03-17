@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import getAsciiCharacter from "../helpers/getAsciiCharacter";
-import { AsciiArtHookResultProps } from "../interfaces/prop-types";
+import { AsciiArtHookResultProps } from "../interfaces/types";
 
 const useAsciiArt = (
   canvasRef: React.RefObject<HTMLCanvasElement>,

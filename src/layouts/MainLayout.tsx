@@ -5,7 +5,7 @@ import {
   TARGET_WIDTH,
   TARGET_HEIGHT
 } from "../config/config";
-import { MainLayoutProps } from "../interfaces/prop-types";
+import { MainLayoutProps } from "../interfaces/types";
 
 const MainLayout: React.FC<MainLayoutProps> = ({ imageSrc }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
