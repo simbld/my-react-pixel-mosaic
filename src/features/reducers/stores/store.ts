@@ -1,15 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "../../reducers/rootReducer";
 import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist";
 import {
   FLUSH,
   PAUSE,
   PERSIST,
   PURGE,
   REGISTER,
-  REHYDRATE
-} from "redux-persist/es/constants";
+  REHYDRATE,
+  persistReducer,
+  persistStore
+} from "redux-persist";
+import { logger } from "redux-logger";
 
 const persistConfig = {
   key: "root",
@@ -22,13 +24,8 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-      }
-    })
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
 });
 
 // Initialisation de redux-persist avec le store configuré
