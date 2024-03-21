@@ -1,18 +1,18 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Store } from "@reduxjs/toolkit";
+import { thunk } from "redux-thunk";
 import rootReducer from "../../reducers/rootReducer";
 import storage from "redux-persist/lib/storage";
+import { persistReducer, persistStore } from "redux-persist";
 import {
   FLUSH,
   PAUSE,
   PERSIST,
   PURGE,
   REGISTER,
-  REHYDRATE,
-  persistReducer,
-  persistStore
-} from "redux-persist";
-import { logger } from "redux-logger";
+  REHYDRATE
+} from "redux-persist/lib/constants";
 
+// Configuration de redux-persist
 const persistConfig = {
   key: "root",
   version: 1,
@@ -23,9 +23,14 @@ const persistConfig = {
 // Création du store redux avec redux-persist
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
+export const store: Store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+      }
+    }).concat(thunk) // thunk est un middleware supplémentaire
 });
 
 // Initialisation de redux-persist avec le store configuré
