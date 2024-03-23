@@ -25,6 +25,10 @@ export interface PixelColorProps {
   b: number;
 }
 
+export interface GameboyProps {
+  imageSrc: string;
+}
+
 export interface ImageURLProps {
   imageUrl: string;
 }
