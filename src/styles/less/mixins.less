@@ -1,10 +1,10 @@
 .box-shadow(@color) {
   box-shadow:
     0px 0px 15px @color,
-    inset 5px 5px 10px @color,
-    inset -5px -5px 10px @color,
-    inset 5px -5px 10px @white-color,
-    inset -5px 5px 10px @white-color;
+    inset 5px 5px 10px darken(@color, 10%),
+    inset -5px -5px 10px lighten(@color, 10%),
+    inset 5px -5px 10px lighten(@color, 10%),
+    inset -5px 5px 10px darken(@color, 10%);
 }
 
 .grid-center(@justify: center, @align: center) {
@@ -13,18 +13,14 @@
   align-items: @align;
 }
 
-.transition() {
-  -webkit-transition: @arguments;
-  -moz-transition: @arguments;
-  -ms-transition: @arguments;
-  -o-transition: @arguments;
-  transition: @arguments;
+.rotation(@deg) {
+  transform: rotate(@deg);
 }
 
-.rotation(@deg) {
-  -webkit-transform: rotate(@deg);
-  -moz-transform: rotate(@deg);
-  -ms-transform: rotate(@deg);
-  -o-transform: rotate(@deg);
-  transform: rotate(@deg);
+.transition(@property, @duration: 300ms, @ease: ease) {
+  transition: @property @duration @ease;
+}
+
+.box-shadow(@x, @y, @blur, @spread, @color) {
+  box-shadow: @x @y @blur @spread @color;
 }

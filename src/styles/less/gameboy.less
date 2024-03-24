@@ -1,0 +1,543 @@
+@import url("https://fonts.googleapis.com/css2?family=Gidugu&family=Merriweather+Sans:ital,wght@0,300;1,300&family=Orbitron&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Orbitron", sans-serif;
+  background: @mainColorLight;
+}
+
+.gameboy {
+  position: relative;
+  .switch {
+    width: 14px;
+    height: 6px;
+    background: @switch;
+    border-radius: 20px 20px 0 0;
+    position: absolute;
+    top: -5px;
+    left: 35px;
+    background-image: linear-gradient(
+      0deg,
+      @switchDark,
+      @switchLight 95% 99%,
+      transparent
+    );
+
+    animation: switchOn;
+    animation-duration: 1s;
+    animation-delay: 1s;
+  }
+  .console {
+    width: @allW;
+    height: 437px;
+    border-radius: 10px 10px 60px 10px;
+    background: @mainColor;
+    overflow: hidden;
+    position: relative;
+    background-image: linear-gradient(
+        90deg,
+        @lineDark,
+        transparent 6% 95%,
+        @lineLight 98% 99%,
+        transparent
+      ),
+      linear-gradient(
+        0deg,
+        @mainColor,
+        transparent 1% 97%,
+        @lineLight 99% 99%,
+        transparent,
+        @lineDark
+      );
+    box-shadow:
+      -3px 0px 5px 0px @mainColorLight inset,
+      6px 0 6px 1px @mainColorDark inset,
+      0 3px 3px @mainColorLight inset,
+      0 35px 20px -2px rgba(0, 0, 0, 0.08),
+      0 55px 50px -5px rgba(0, 0, 0, 0.05);
+
+    .big-horizontal-line {
+      width: @allW;
+      height: 5px;
+      top: 22px;
+      position: absolute;
+      background: @line;
+      background-image: linear-gradient(
+        90deg,
+        @lineDark,
+        transparent 8% 95%,
+        @lineLight 97% 98%,
+        transparent
+      );
+    }
+
+    .small-R-vertical-line,
+    .small-L-vertical-line {
+      width: 5px;
+      height: 24px;
+      position: absolute;
+      background: @line;
+      background-image: linear-gradient(
+        90deg,
+        @lineLight,
+        transparent 10% 40%,
+        @lineDark
+      );
+    }
+
+    .small-R-vertical-line {
+      left: 20px;
+    }
+
+    .small-L-vertical-line {
+      right: 20px;
+    }
+
+    .on-off {
+      &-btn {
+        width: 50px;
+        height: 10px;
+        background: #000;
+        position: absolute;
+        left: 30px;
+        top: 9px;
+        border-radius: 50px;
+        background: @reliefColor;
+        box-shadow:
+          1px 1px 1px 1px @lineLight inset,
+          -1px -1px 1px 1px @lineDark inset;
+        color: @mainColorLight;
+        text-align: center;
+        font-size: 6px;
+      }
+
+      &-line {
+        width: 3px;
+        height: 12px;
+        background: @mainColor;
+        position: absolute;
+        left: 35px;
+        background-image: linear-gradient(
+          0deg,
+          @mainColor,
+          transparent 35% 60%,
+          @mainColorLight 60% 80%,
+          @mainColor 90% 100%
+        );
+
+        &:nth-child(2) {
+          left: 40px;
+        }
+
+        &:nth-child(3) {
+          left: 45px;
+        }
+      }
+    }
+
+    .glass-screen {
+      width: 224px;
+      height: 171px;
+      background: @des;
+      margin: 38px auto;
+      position: relative;
+      border-radius: 10px 10px 36px 10px;
+      box-shadow:
+        -1px 0px 1px @desDark inset,
+        1px 0 1px @desDark inset,
+        0 1px 1px @desLight inset;
+
+      .battery {
+        position: absolute;
+        top: 62px;
+        left: 13px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50px;
+        background: #f74f2f;
+
+        animation: batteryOn 5s;
+        animation-duration: 1s;
+        animation-delay: 1s;
+
+        &::after {
+          content: "BATTERY";
+          color: @textGColor;
+          font-size: 5px;
+          font-family: "Merriweather Sans", sans-serif;
+          font-weight: 300;
+          margin-left: -6px;
+        }
+      }
+
+      .dot-matrix {
+        position: absolute;
+        top: 10px;
+        left: 59%;
+        transform: translate(-50%, -50%);
+        width: 118px;
+        height: 10px;
+        background: @des;
+        color: @textGColor;
+        font-size: 6px;
+        font-family: "Merriweather Sans", sans-serif;
+        font-weight: 300;
+        text-align: center;
+      }
+
+      &-line {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        &-l {
+          width: 200px;
+          height: 3px;
+          background: @textPColor;
+          margin-bottom: 2px;
+          &:nth-child(2) {
+            background: @textBColor;
+          }
+        }
+      }
+
+      &-inner {
+        position: relative;
+        width: 142px;
+        height: 129px;
+        background: @screenLight;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 2px;
+        box-shadow:
+          -10px 0px 5px -1px @screen inset,
+          5px 0 10px @screen inset,
+          -5px 0px 2px @screenDark inset;
+        overflow: hidden;
+
+        .falling-title-L,
+        .falling-title-R,
+        .rising-title {
+          position: absolute;
+          color: #1a6770;
+          font-family: "Gidugu", sans-serif;
+          font-size: 18px;
+          text-align: center;
+        }
+
+        .falling-title-L {
+          top: 50%;
+          left: 0;
+          animation: fall-left 3s ease-out forwards;
+        }
+
+        .falling-title-R {
+          top: 50%;
+          left: 125px;
+          animation: fall-right 3s ease-out forwards;
+        }
+
+        .rising-title {
+          top: 50%;
+          left: 43%;
+          bottom: 0;
+          animation: rise 3s ease-out forwards;
+        }
+      }
+    }
+    .cross {
+      &-v {
+        width: 24px;
+        height: 67px;
+        background: @leftKeyShadow;
+        position: absolute;
+        left: 43px;
+        top: 265px;
+        border-radius: 3px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      &-h {
+        width: 67px;
+        height: 24px;
+        background: @leftKeyShadow;
+        position: absolute;
+        left: 21px;
+        top: 286px;
+        border-radius: 3px;
+      }
+
+      &-v-inner {
+        position: absolute;
+        left: 45px;
+        top: 268px;
+        width: 20px;
+        height: 61px;
+        border-radius: 3px;
+        background: @leftKey;
+        box-shadow:
+          -1px 0px 2px 0px @leftKeyLight inset,
+          2px -4px 2px @leftKeyDark inset,
+          -9px 0px 3px 0px rgba(0, 0, 0, 0.08),
+          -9px 0px 5px 0px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+        &-grips {
+          width: 70%;
+          height: 5px;
+          background: @leftKey;
+          box-shadow:
+            -1px 0px 2px 0px @leftKeyLight inset,
+            2px -2px 2px @leftKeyDark inset;
+        }
+      }
+
+      &-h-inner {
+        width: 61px;
+        height: 20px;
+        position: absolute;
+        left: 24px;
+        top: 288px;
+        border-radius: 3px;
+        background: @leftKey;
+        box-shadow:
+          -1px 0px 2px 0px @leftKeyLight inset,
+          2px -4px 2px @leftKeyDark inset,
+          -9px 0px 3px 0px rgba(0, 0, 0, 0.08),
+          -9px 0px 5px 0px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        &-grips {
+          width: 5px;
+          height: 65%;
+          background: @leftKey;
+          box-shadow:
+            -1px 1px 1px @leftKeyLight inset,
+            1px -1px 1px @leftKeyDark inset;
+        }
+      }
+
+      &-center {
+        width: 20px;
+        height: 20px;
+        background: @leftKey;
+        position: absolute;
+        left: 45px;
+        top: 288px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &-cir {
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          box-shadow:
+            -2px 2px 5px @leftKeyDark inset,
+            2px -4px 5px @leftKeyLight inset;
+        }
+      }
+    }
+
+    .nintendo {
+      position: absolute;
+      top: 208px;
+      left: 20px;
+      color: @textBrand;
+      font-family: "Gidugu", sans-serif;
+      font-size: 18px;
+      .name {
+        font-style: italic;
+        font-weight: 300;
+        font-family: "Merriweather Sans", sans-serif;
+        margin-left: 2px;
+        .tm {
+          font-size: 6px;
+        }
+      }
+    }
+
+    .right-key {
+      position: absolute;
+      left: 168px;
+      top: 280px;
+      transform: rotate(@rotate);
+
+      .right-key-btn {
+        width: 94px;
+        height: 43px;
+        border-radius: 50px;
+        background: @mainColor;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow:
+          10px 2px 30px 3px @BtnLight inset,
+          -30px -20px 40px 0px @BtnDark inset;
+        &-R,
+        &-L {
+          width: 33px;
+          height: 33px;
+          background: @rightBtn;
+          border-radius: 50px;
+          box-shadow:
+            -1px 0px 3px 0px @rightBtnLight inset,
+            2px -4px 5px @rightBtnDark inset,
+            -9px -2px 3px -1px rgba(0, 0, 0, 0.08),
+            -9px -2px 5px -1px rgba(0, 0, 0, 0.05);
+        }
+      }
+
+      .right-key-label {
+        margin-top: 0px;
+        width: 94px;
+        display: flex;
+        justify-content: space-around;
+        color: @textBrand;
+        .a,
+        .b {
+          font-size: 10px;
+        }
+      }
+    }
+
+    .selectStart {
+      width: 90px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: absolute;
+      left: 77px;
+      bottom: 50px;
+
+      .selectStart-select,
+      .selectStart-start {
+        transform: rotate(@rotate);
+        text-align: center;
+
+        .start,
+        .select {
+          font-size: 7px;
+          color: @textBrand;
+        }
+      }
+      &-btn {
+        width: 40px;
+        height: 17px;
+        background: @mainColor;
+        border-radius: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        box-shadow:
+          -3px 3px 2px 3px @BtnLight inset,
+          0px -4px 2px @BtnDark inset;
+
+        &-inner {
+          width: 32px;
+          height: 9px;
+          border-radius: 50px;
+          background: @selectStart;
+          box-shadow:
+            -1px 0px 2px 2px @selectStartLight inset,
+            0px 4px 2px @selectStartDark inset;
+        }
+      }
+    }
+
+    .speaker {
+      width: 80px;
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      right: 10px;
+      bottom: 23px;
+      transform: rotate(@rotate);
+
+      &-Light {
+        width: 150px;
+        height: 50px;
+        position: absolute;
+        background: @speakerLight;
+        top: 38px;
+        left: -30px;
+        opacity: 0.7;
+      }
+
+      &-line {
+        width: 5px;
+        height: 44px;
+        border-radius: 50px;
+        background: @speaker;
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+          position: absolute;
+          content: "";
+          width: 5px;
+          height: 30px;
+          background: @speakerDark;
+          border-radius: 50px;
+          top: 0px;
+          left: -3px;
+        }
+      }
+    }
+
+    .phones {
+      width: 40px;
+      height: 17px;
+      position: absolute;
+      bottom: 0;
+      left: 98px;
+      color: @mainColorLight;
+      text-align: center;
+      font-size: 6px;
+      &-top {
+        width: 40px;
+        height: 10px;
+        border-radius: 50px;
+        background: @reliefColor;
+        box-shadow:
+          1px 1px 1px 1px @lineLight inset,
+          -1px -1px 1px 1px @lineDark inset;
+      }
+      &-line {
+        width: 15px;
+        height: 120%;
+        background: @mainColorDark;
+        position: absolute;
+        right: 5px;
+        display: flex;
+        justify-content: space-around;
+        z-index: 10;
+        background-image: linear-gradient(
+          0deg,
+          @lineLight,
+          transparent 10% 40%
+        );
+
+        &-inner {
+          width: 3px;
+          height: 100%;
+          background: @mainColor;
+          border-radius: 0 0 25px 25px / 0 0 25px 25px;
+        }
+      }
+    }
+  }
+}

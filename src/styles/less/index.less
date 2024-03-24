@@ -1,6 +1,10 @@
-@import "./mixins.less";
 @import "./variables.less";
-@import "./Glitch.less";
+@import "./mixins.less";
+@import "./gameboy.less";
+@import "../Glitch.less";
+@import "../Glitch.less";
+@import "https://fonts.googleapis.com/css2?family=Gidugu&family=Merriweather+Sans:ital,wght@0,300;1,300&family=Orbitron&display=swap";
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 @font-face {
   font-family: "MorePerfectDOSVGA";
@@ -30,14 +34,22 @@
 html,
 body {
   .grid-center();
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 255, 0.3),
+      rgba(128, 0, 128, 0.3)
+    ),
+    @bg-image;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
   margin: 0;
   padding: 0;
   font-family: monospace;
-  color-scheme: light dark;
-  background: @main-bg-color;
+  color-scheme: default;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -45,121 +57,115 @@ body {
   font-family: monospace;
 }
 
-.tablet-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 0;
-  margin: 0;
-}
-
-.tablet {
-  border-radius: 45px;
-  box-shadow: @box-shadow;
-  overflow: hidden;
-  .grid-center();
-  background-color: @secondary-color;
-  border-radius: 45px;
-  width: 900px;
-  height: calc(900px * (16 / 9));
-  padding: @tablet-padding;
-  margin: @tablet-margin;
-}
-
-.canvas-container {
+.title-btn {
   position: relative;
-  margin-top: 5%;
-  overflow: hidden;
-  border-radius: 25px;
-  position: relative;
-  width: 100%;
-  height: 107%;
-  margin-top: -120%;
-}
-
-.canvas {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  margin: @canvas-padding;
-  padding: @canvas-padding;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  font-size: 4px;
-  font-family: "MorePerfectDOSVGA", sans-serif;
-  line-height: 1;
-  letter-spacing: 0.1px;
-  border: 10px solid @gris-gameboy;
-  border-radius: 25px;
-  background-color: @bg-base64;
-  color: @color-base64;
-}
-
-.title-container {
-  background-color: @title-bg-color;
-  height: 120px;
-  margin-top: -350px;
+  height: 160px;
   padding: 0px 30px;
-  text-align: center;
+  background: @title-bg-color;
+  font-weight: bold;
   border-radius: 25px;
   box-shadow: @box-shadow;
-  transform: translateY(-80%);
+  font-family: "Tangerine", "Arial", cursive;
+  font-size: 7em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  overflow: hidden; // S'assurer que le pseudo-élément ne déborde pas du bouton
+
+  &:hover::before {
+    background-color: darken(rgba(190, 31, 23, 0.255), 10%);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 25px;
+    background: transparent;
+    z-index: 0;
+  }
+
+  .title-text {
+    background-image: @text-btn;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    position: relative;
+    z-index: 1;
+    text-shadow: -1.5px -1.5px 1.5px #695a13;
+  }
 }
 
-.title {
-  font-family: "Tangerine", "Arial", cursive;
-  font-weight: bold;
-  font-size: 5em;
-  text-align: center;
-  background: -webkit-linear-gradient(to right, #524a23, #f3e2aa, #524a23);
-  background: linear-gradient(to right, #524a23, #f3e2aa, #524a23);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.gameboy-container {
+  background-image: @bg-image;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center center;
+  padding: 10vh 0;
 }
 
 .gameboy {
   position: relative;
-  display: block;
-  margin: 20px auto;
-  width: @gameboy-width;
-  height: @gameboy-height;
-  background: @gameboy-body;
-  border-radius: 10px 10px 60px 10px;
-  box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+  width: @allW;
+  height: calc(@allW * 1.65);
+  background: linear-gradient(145deg, @mainColorLight, @mainColorDark);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-  // Top Lines
-  &:before,
-  &:after {
-    content: "";
+  // Bouton de mise en marche
+  .switch {
+    width: 14px;
+    height: 6px;
+    background: @switch;
+    border-radius: 20px 20px 0 0;
     position: absolute;
-    height: 31px;
-    border-bottom: 4px solid darken(@gameboy-body, 5%);
+    top: -5px;
+    left: 35px;
+    background-image: linear-gradient(
+      0deg,
+      @switchDark,
+      @switchLight 95% 99%,
+      transparent
+    );
+    // Animation du switch ici si nécessaire
   }
-  &:before {
-    width: 100%;
-  }
-  &:after {
-    top: 0;
-    width: 334px;
-    border-left: 4px solid darken(@gameboy-body, 5%);
-    border-right: 4px solid darken(@gameboy-body, 5%);
-    margin-left: 40px;
-    margin-right: 40px;
+
+  // La base de la gameboy
+  .console {
+    width: 100%; // la largeur du parent .gameboy
+    height: calc(@allW * 1.65);
+    background: @mainColor;
+    border-radius: 20px;
+    position: relative;
+    box-shadow: inset 0px 0px 5px @mainColorDark;
+    overflow: hidden;
   }
 }
+
+.canvas {
+  position: absolute;
+  top: 15%; /* écran soit au bon endroit */
+  left: 50%;
+  transform: translateX(-50%); /* Centre l'écran horizontalement */
+  width: 50%; /* Largeur de l'écran par rapport à la Gameboy */
+  height: 30%; /* Hauteur de l'écran par rapport à la Gameboy */
+  background-color: @screen;
+  border: 2px solid @lineDark;
+  box-shadow: inset 0 0 10px @lineDark;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
 @media (max-width: 896px) and (max-height: 414px) and (orientation: landscape) {
 }
 

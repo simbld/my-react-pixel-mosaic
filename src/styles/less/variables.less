@@ -1,57 +1,121 @@
-// Sizes
-@gameboy-width: 420px;
-@gameboy-height: 697px;
-@screen-width: 340px;
-@screen-height: 272px;
+@title-bg-color: rgba(241, 239, 232, 0.255);
+@text-btn: linear-gradient(90deg, #e0a735, #f7e062, #876624);
 
-@canvas-margin: 470px;
-@tablet-container-padding: 50px;
-@tablet-container-margin: 50px;
-@tablet-margin: 18px;
-@canvas-padding: 0px;
-@canvas-margin: 20px;
-@tablet-padding: 18px;
-@tablet-margin: auto;
-
-// Color Palette
-@gameboy-body: #eee;
-@screen-border: #777;
-@screen-bg: #bdae58;
-@button-default: #353535;
-@button-active: #444;
-@button-AB: #a93671;
-@speakers-bg: #ddd;
-@text-color: #b3b3b3;
-@led-off-bg: #b98181;
-@led-on-bg: red;
-
-@primary-color: #bdae58;
-@secondary-color: #333;
-@tertiary-color: #0a0a0a;
-@black-color: rgba(0, 0, 0, 0.6);
-@white-color: rgba(255, 255, 255, 0.1);
-@main-text-color: #1f1d02;
-@canvas-container-bg-color: #8c8d4b;
-@canvas-bg-color: #f5f5f5;
-@title-bg-color: #732a2a;
-@gris-gameboy: #777;
-@button-gameboy: #999;
-@onoff-gameboy: #dadada;
-@color-gameboy: #25656e;
-@color-base64: #562d6f;
-@bg-base64: #1a162a;
-@main-bg-color: radial-gradient(
-    circle at 20% 70%,
-    rgba(54, 25, 7, 0.4) 100%,
-    transparent 100%
-  ),
-  radial-gradient(circle at 20% 20%, #915907 0%, transparent 40%),
-  radial-gradient(circle at 90% 90%, #5b4014 0%, transparent 40%),
-  radial-gradient(circle at 80% 20%, #c37d16 0%, transparent 40%);
-
+@bg-image: url("../../assets/brique-app.png");
 @box-shadow:
-  0px 0px 15px rgba(0, 0, 0, 0.6),
-  inset 5px 5px 10px rgba(0, 0, 0, 0.6),
-  inset -5px -5px 10px rgba(0, 0, 0, 0.6),
-  inset 5px -5px 10px rgba(255, 255, 255, 0.1),
-  inset -5px 5px 10px rgba(255, 255, 255, 0.1);
+  -2px -5px 0px rgba(112, 107, 100, 0.875),
+  inset 20px -20px 10px rgba(36, 3, 44, 0.365),
+  inset -10px 10px 10px rgba(6, 167, 185, 0.792),
+  inset 10px -10px 10px rgba(210, 4, 142, 0.891),
+  inset -1000px 20px 50px rgba(163, 172, 176, 0.615);
+
+@allW: 263px;
+@rotate: -27deg;
+
+@mainColor: #d3d3d3;
+@mainColorLight: #f6f2ee;
+@mainColorDark: #aaaaaa;
+
+@BtnLight: #eee6e2;
+@BtnDark: #dbd5d0;
+
+@textBrand: #3d3081;
+@reliefColor: #cfcfcf;
+
+@textBColor: #221d30;
+@textPColor: #6f244f;
+@textGColor: #d8d7e1;
+
+@line: #dbd5ce;
+@lineLight: #f6f5f2;
+@lineDark: #d0c8c0;
+
+@des: #736b82;
+@desLight: #b9b8c3;
+@desDark: #939098;
+
+@screen: #7d7e4c;
+@screenLight: #82891a;
+@screenDark: #26260b;
+
+@switch: #c8c4c5;
+@switchLight: #d9d5da;
+@switchDark: #a69999;
+
+@rightBtn: #b34c77;
+@rightBtnLight: #f0c2cf;
+@rightBtnDark: #6e1a37;
+
+@leftKey: #55565b;
+@leftKeyLight: #6f7075;
+@leftKeyDark: #31303a;
+@leftKeyShadow: #0a0a0a;
+
+@speaker: #b8aeaa;
+@speakerLight: #f6f0ed;
+@speakerDark: #1a0b0a;
+
+@selectStart: #a99e9e;
+@selectStartLight: #d2d0d3;
+@selectStartDark: #9e9592;
+
+@keyframes title {
+  0% {
+  }
+  100% {
+    top: 50%;
+  }
+}
+
+@keyframes batteryOn {
+  0% {
+    background: #67534d;
+  }
+  100% {
+    background: #f74f2f;
+  }
+}
+
+@keyframes switchOn {
+  0% {
+    left: 30px;
+  }
+  100% {
+    left: 35px;
+  }
+}
+
+@keyframes fall-left {
+  0% {
+    transform: translateY(-300%) translateX(57px);
+  }
+  30%,
+  60% {
+    transform: translateY(-51%) translateX(57px);
+  }
+  100% {
+    transform: translateY(-51%) translateX(49px);
+  }
+}
+
+@keyframes fall-right {
+  0% {
+    transform: translateY(-300%) translateX(-55px);
+  }
+  30%,
+  60% {
+    transform: translateY(-51%) translateX(-55px);
+  }
+  100% {
+    transform: translateY(-51%) translateX(-39px);
+  }
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(300%);
+  }
+  100% {
+    transform: translateY(-26%);
+  }
+}
