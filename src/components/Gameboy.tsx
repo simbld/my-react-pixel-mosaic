@@ -5,11 +5,11 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
     <div className="gameboy">
       <div className="switch"></div>
       <div className="console">
-        <div className="on-off">
-          <div className="on-off-btn">◀OFF●ON▶</div>
-          <div className="on-off-line"></div>
-          <div className="on-off-line"></div>
-          <div className="on-off-line"></div>
+        <div className="off-on">
+          <div className="off-on-btn">◀OFF●ON▶</div>
+          <div className="off-on-line"></div>
+          <div className="off-on-line"></div>
+          <div className="off-on-line"></div>
         </div>
         <div className="small-R-vertical-line"></div>
         <div className="small-L-vertical-line"></div>
@@ -22,73 +22,75 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
 
           <div className="dot-matrix">DOT MATRIX WITH STEREO SOUND</div>
 
-          <div className="battery"></div>
+          <div className="battery-indicator">
+            <div className="indicator-light"></div>
+            <div className="battery-text">BATTERY</div>
+          </div>
 
-          <div className="glass-screen-inner">
+          <div className="glass-screen-matrix">
             <div className="falling-title-L">RE</div>
             <div className="falling-title-R">ACT</div>
             <div className="rising-title"> pixel </div>
           </div>
         </div>
 
-        <div className="nintendo">
-          Nintendo
-          <span className="name">
-            GAME BOY<span className="tm">TM</span>
-          </span>
+        <div className="brand">
+          <div className="nintendo">Nintendo</div>
+          <div className="GAME_BOY">GAME BOY</div>
+          <div className="TM">TM</div>
         </div>
 
         <div className="cross">
           <div className="cross-v"></div>
           <div className="cross-h"></div>
-          <div className="cross-v-inner">
-            <div className="cross-v-inner-grips"></div>
-            <div className="cross-v-inner-grips"></div>
-            <div className="cross-v-inner-grips"></div>
-            <div className="cross-v-inner-grips"></div>
-            <div className="cross-v-inner-grips"></div>
-            <div className="cross-v-inner-grips"></div>
-            <div className="cross-v-inner-grips"></div>
-            <div className="cross-v-inner-grips"></div>
-            <div className="cross-v-inner-grips"></div>
+          <div className="cross-v-btn">
+            <div className="cross-v-btn-grips"></div>
+            <div className="cross-v-btn-grips"></div>
+            <div className="cross-v-btn-grips"></div>
+            <div className="cross-v-btn-grips"></div>
+            <div className="cross-v-btn-grips"></div>
+            <div className="cross-v-btn-grips"></div>
+            <div className="cross-v-btn-grips"></div>
+            <div className="cross-v-btn-grips"></div>
+            <div className="cross-v-btn-grips"></div>
           </div>
-          <div className="cross-h-inner">
-            <div className="cross-h-inner-grips"></div>
-            <div className="cross-h-inner-grips"></div>
-            <div className="cross-h-inner-grips"></div>
-            <div className="cross-h-inner-grips"></div>
-            <div className="cross-h-inner-grips"></div>
-            <div className="cross-h-inner-grips"></div>
-            <div className="cross-h-inner-grips"></div>
-            <div className="cross-h-inner-grips"></div>
-            <div className="cross-h-inner-grips"></div>
+          <div className="cross-h-btn">
+            <div className="cross-h-btn-grips"></div>
+            <div className="cross-h-btn-grips"></div>
+            <div className="cross-h-btn-grips"></div>
+            <div className="cross-h-btn-grips"></div>
+            <div className="cross-h-btn-grips"></div>
+            <div className="cross-h-btn-grips"></div>
+            <div className="cross-h-btn-grips"></div>
+            <div className="cross-h-btn-grips"></div>
+            <div className="cross-h-btn-grips"></div>
           </div>
           <div className="cross-center">
             <div className="cross-center-cir"></div>
           </div>
         </div>
 
-        <div className="right-key">
-          <div className="right-key-btn">
-            <div className="right-key-btn-R"></div>
-            <div className="right-key-btn-L"></div>
+        <div className="BA-btn-container">
+          <div className="pink-btn">
+            <div className="pink-btn-B"></div>
+            <div className="pink-btn-A"></div>
           </div>
-          <div className="right-key-label">
+          <div className="BA-btn-container-label">
             <div className="b">B</div>
             <div className="a">A</div>
           </div>
         </div>
 
-        <div className="selectStart">
-          <div className="selectStart-select">
-            <div className="selectStart-btn">
-              <div className="selectStart-btn-inner"></div>
+        <div className="menu">
+          <div className="menu-select">
+            <div className="menu-container">
+              <div className="menu-container-btn"></div>
             </div>
             <div className="select">SELECT</div>
           </div>
-          <div className="selectStart-start">
-            <div className="selectStart-btn">
-              <div className="selectStart-btn-inner"></div>
+          <div className="menu-start">
+            <div className="menu-container">
+              <div className="menu-container-btn"></div>
             </div>
             <div className="start">START</div>
           </div>
@@ -96,8 +98,8 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
         <div className="phones">
           <div className="phones-top">ΩPHONES</div>
           <div className="phones-line">
-            <div className="phones-line-inner"></div>
-            <div className="phones-line-inner"></div>
+            <div className="phones-line-btn"></div>
+            <div className="phones-line-btn"></div>
           </div>
         </div>
         <div className="speaker">

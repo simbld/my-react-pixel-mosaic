@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Gidugu&family=Merriweather+Sans:ital,wght@0,300;1,300&family=Orbitron&display=swap");
-
 body {
   margin: 0;
   padding: 0;
@@ -9,11 +7,31 @@ body {
   justify-content: center;
   align-items: center;
   font-family: "Orbitron", sans-serif;
-  background: @mainColorLight;
+}
+
+.gameboy-container {
+  background-image: @bg-image;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center center;
+  padding: 10vh 0;
 }
 
 .gameboy {
+  border-radius: 0 0 20px 0;
   position: relative;
+  width: @allW;
+  height: calc(@allW * 1.65);
+  background: linear-gradient(145deg, @reflectLight, @reflectDark, #fff0);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   .switch {
     width: 14px;
     height: 6px;
@@ -28,16 +46,17 @@ body {
       @switchLight 95% 99%,
       transparent
     );
-
+    // Animation du switch
     animation: switchOn;
     animation-duration: 1s;
     animation-delay: 1s;
   }
+
   .console {
     width: @allW;
-    height: 437px;
+    height: calc(@allW * 1.65);
     border-radius: 10px 10px 60px 10px;
-    background: @mainColor;
+    background: @gameboyColor;
     overflow: hidden;
     position: relative;
     background-image: linear-gradient(
@@ -49,16 +68,16 @@ body {
       ),
       linear-gradient(
         0deg,
-        @mainColor,
+        @reflect,
         transparent 1% 97%,
         @lineLight 99% 99%,
         transparent,
         @lineDark
       );
     box-shadow:
-      -3px 0px 5px 0px @mainColorLight inset,
-      6px 0 6px 1px @mainColorDark inset,
-      0 3px 3px @mainColorLight inset,
+      -3px 0px 5px 0px @reflectLight inset,
+      6px 0 6px 1px @reflectDark inset,
+      0 3px 3px @reflectLight inset,
       0 35px 20px -2px rgba(0, 0, 0, 0.08),
       0 55px 50px -5px rgba(0, 0, 0, 0.05);
 
@@ -99,7 +118,7 @@ body {
       right: 20px;
     }
 
-    .on-off {
+    .off-on {
       &-btn {
         width: 50px;
         height: 10px;
@@ -112,7 +131,7 @@ body {
         box-shadow:
           1px 1px 1px 1px @lineLight inset,
           -1px -1px 1px 1px @lineDark inset;
-        color: @mainColorLight;
+        color: @reflectLight;
         text-align: center;
         font-size: 6px;
       }
@@ -120,15 +139,15 @@ body {
       &-line {
         width: 3px;
         height: 12px;
-        background: @mainColor;
+        background: @reflect;
         position: absolute;
         left: 35px;
         background-image: linear-gradient(
           0deg,
-          @mainColor,
+          @reflect,
           transparent 35% 60%,
-          @mainColorLight 60% 80%,
-          @mainColor 90% 100%
+          @reflectLight 60% 80%,
+          @reflect 90% 100%
         );
 
         &:nth-child(2) {
@@ -144,35 +163,35 @@ body {
     .glass-screen {
       width: 224px;
       height: 171px;
-      background: @des;
+      background: @glass;
       margin: 38px auto;
       position: relative;
       border-radius: 10px 10px 36px 10px;
       box-shadow:
-        -1px 0px 1px @desDark inset,
-        1px 0 1px @desDark inset,
-        0 1px 1px @desLight inset;
+        -1px 0px 1px @glassDark inset,
+        1px 0 1px @glassDark inset,
+        0 1px 1px @glassLight inset;
 
-      .battery {
-        position: absolute;
-        top: 62px;
-        left: 13px;
-        width: 8px;
-        height: 8px;
-        border-radius: 50px;
-        background: #f74f2f;
+      .battery-indicator {
+        .indicator-light {
+          position: absolute;
+          top: 62px;
+          left: 13px;
+          width: 8px;
+          height: 8px;
+          border-radius: 50px;
+          background: #f74f2f;
 
-        animation: batteryOn 5s;
-        animation-duration: 1s;
-        animation-delay: 1s;
-
-        &::after {
-          content: "BATTERY";
+          animation: batteryOn 5s;
+          animation-duration: 1s;
+          animation-delay: 1s;
+        }
+        .battery-text {
           color: @textGColor;
           font-size: 5px;
-          font-family: "Merriweather Sans", sans-serif;
-          font-weight: 300;
-          margin-left: -6px;
+          font-family: @gill;
+          font-weight: bold;
+          margin-left: -3px;
         }
       }
 
@@ -183,11 +202,11 @@ body {
         transform: translate(-50%, -50%);
         width: 118px;
         height: 10px;
-        background: @des;
+        background: @glass;
         color: @textGColor;
         font-size: 6px;
-        font-family: "Merriweather Sans", sans-serif;
-        font-weight: 300;
+        font-family: @gill;
+        font-weight: bold;
         text-align: center;
       }
 
@@ -199,15 +218,15 @@ body {
         &-l {
           width: 200px;
           height: 3px;
-          background: @textPColor;
+          background: @topLineScreen;
           margin-bottom: 2px;
           &:nth-child(2) {
-            background: @textBColor;
+            background: @bottomLineScreen;
           }
         }
       }
 
-      &-inner {
+      &-matrix {
         position: relative;
         width: 142px;
         height: 129px;
@@ -245,7 +264,7 @@ body {
         }
 
         .rising-title {
-          top: 50%;
+          top: 49.9%;
           left: 43%;
           bottom: 0;
           animation: rise 3s ease-out forwards;
@@ -256,7 +275,7 @@ body {
       &-v {
         width: 24px;
         height: 67px;
-        background: @leftKeyShadow;
+        background: @menuBtnShadow;
         position: absolute;
         left: 43px;
         top: 265px;
@@ -268,24 +287,24 @@ body {
       &-h {
         width: 67px;
         height: 24px;
-        background: @leftKeyShadow;
+        background: @menuBtnShadow;
         position: absolute;
         left: 21px;
         top: 286px;
         border-radius: 3px;
       }
 
-      &-v-inner {
+      &-v-btn {
         position: absolute;
         left: 45px;
         top: 268px;
         width: 20px;
         height: 61px;
         border-radius: 3px;
-        background: @leftKey;
+        background: @menuBtn;
         box-shadow:
-          -1px 0px 2px 0px @leftKeyLight inset,
-          2px -4px 2px @leftKeyDark inset,
+          -1px 0px 2px 0px @menuBtnLight inset,
+          2px -4px 2px @menuBtnDark inset,
           -9px 0px 3px 0px rgba(0, 0, 0, 0.08),
           -9px 0px 5px 0px rgba(0, 0, 0, 0.05);
         display: flex;
@@ -296,24 +315,24 @@ body {
         &-grips {
           width: 70%;
           height: 5px;
-          background: @leftKey;
+          background: @menuBtn;
           box-shadow:
-            -1px 0px 2px 0px @leftKeyLight inset,
-            2px -2px 2px @leftKeyDark inset;
+            -1px 0px 2px 0px @menuBtnLight inset,
+            2px -2px 2px @menuBtnDark inset;
         }
       }
 
-      &-h-inner {
+      &-h-btn {
         width: 61px;
         height: 20px;
         position: absolute;
         left: 24px;
         top: 288px;
         border-radius: 3px;
-        background: @leftKey;
+        background: @menuBtn;
         box-shadow:
-          -1px 0px 2px 0px @leftKeyLight inset,
-          2px -4px 2px @leftKeyDark inset,
+          -1px 0px 2px 0px @menuBtnLight inset,
+          2px -4px 2px @menuBtnDark inset,
           -9px 0px 3px 0px rgba(0, 0, 0, 0.08),
           -9px 0px 5px 0px rgba(0, 0, 0, 0.05);
         display: flex;
@@ -322,17 +341,17 @@ body {
         &-grips {
           width: 5px;
           height: 65%;
-          background: @leftKey;
+          background: @menuBtn;
           box-shadow:
-            -1px 1px 1px @leftKeyLight inset,
-            1px -1px 1px @leftKeyDark inset;
+            -1px 1px 1px @menuBtnLight inset,
+            1px -1px 1px @menuBtnDark inset;
         }
       }
 
       &-center {
         width: 20px;
         height: 20px;
-        background: @leftKey;
+        background: @menuBtn;
         position: absolute;
         left: 45px;
         top: 288px;
@@ -345,66 +364,83 @@ body {
           height: 18px;
           border-radius: 50%;
           box-shadow:
-            -2px 2px 5px @leftKeyDark inset,
-            2px -4px 5px @leftKeyLight inset;
+            -2px 2px 5px @menuBtnDark inset,
+            2px -4px 5px @menuBtnLight inset;
         }
       }
     }
 
-    .nintendo {
+    .brand {
+      padding: 7px 0px;
       position: absolute;
       top: 208px;
       left: 20px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      gap: 2px;
       color: @textBrand;
-      font-family: "Gidugu", sans-serif;
-      font-size: 18px;
-      .name {
-        font-style: italic;
-        font-weight: 300;
-        font-family: "Merriweather Sans", sans-serif;
-        margin-left: 2px;
-        .tm {
-          font-size: 6px;
-        }
+      font-weight: bold;
+
+      .nintendo {
+        font-family: @pretendo;
+        font-size: 9.5px;
+        letter-spacing: 0.5px;
+        align-self: center;
+      }
+
+      .GAME_BOY {
+        font-family: @gillItalic;
+        font-size: 17px;
+        margin-top: auto;
+      }
+
+      .TM {
+        font-size: 5.5px;
+        letter-spacing: 1px;
+        align-self: center;
       }
     }
 
-    .right-key {
+    .BA-btn-container {
       position: absolute;
-      left: 168px;
+      left: 160px;
       top: 280px;
       transform: rotate(@rotate);
 
-      .right-key-btn {
+      .pink-btn {
         width: 94px;
         height: 43px;
         border-radius: 50px;
-        background: @mainColor;
+        background: @reflect;
         display: flex;
         justify-content: space-around;
         align-items: center;
         box-shadow:
           10px 2px 30px 3px @BtnLight inset,
           -30px -20px 40px 0px @BtnDark inset;
-        &-R,
-        &-L {
+        &-B,
+        &-A {
           width: 33px;
           height: 33px;
-          background: @rightBtn;
+          background: @pinkBtn;
+          border: black 1px solid;
           border-radius: 50px;
           box-shadow:
-            -1px 0px 3px 0px @rightBtnLight inset,
-            2px -4px 5px @rightBtnDark inset,
+            -1px 0px 3px 0px @pinkBtnLight inset,
+            2px -4px 5px @pinkBtnDark inset,
             -9px -2px 3px -1px rgba(0, 0, 0, 0.08),
             -9px -2px 5px -1px rgba(0, 0, 0, 0.05);
         }
       }
 
-      .right-key-label {
+      .BA-btn-container-label {
         margin-top: 0px;
         width: 94px;
         display: flex;
         justify-content: space-around;
+        font-weight: 6;
+        font-family: @labo;
         color: @textBrand;
         .a,
         .b {
@@ -413,7 +449,7 @@ body {
       }
     }
 
-    .selectStart {
+    .menu {
       width: 90px;
       display: flex;
       justify-content: space-around;
@@ -421,22 +457,24 @@ body {
       position: absolute;
       left: 77px;
       bottom: 50px;
+      font-family: "Labo", sans-serif;
+      letter-spacing: 1px;
 
-      .selectStart-select,
-      .selectStart-start {
+      .menu-select,
+      .menu-start {
         transform: rotate(@rotate);
         text-align: center;
 
-        .start,
-        .select {
+        .select,
+        .start {
           font-size: 7px;
           color: @textBrand;
         }
       }
-      &-btn {
+      &-container {
         width: 40px;
         height: 17px;
-        background: @mainColor;
+        background: @reflect;
         border-radius: 50px;
         display: flex;
         justify-content: center;
@@ -446,14 +484,15 @@ body {
           -3px 3px 2px 3px @BtnLight inset,
           0px -4px 2px @BtnDark inset;
 
-        &-inner {
+        &-btn {
           width: 32px;
           height: 9px;
+          border: #000 0.5px solid;
           border-radius: 50px;
-          background: @selectStart;
+          background: @menu;
           box-shadow:
-            -1px 0px 2px 2px @selectStartLight inset,
-            0px 4px 2px @selectStartDark inset;
+            -1px 0px 2px 2px @menuLight inset,
+            0px 4px 2px @menuDark inset;
         }
       }
     }
@@ -463,7 +502,7 @@ body {
       display: flex;
       justify-content: space-between;
       position: absolute;
-      right: 10px;
+      right: 17px;
       bottom: 23px;
       transform: rotate(@rotate);
 
@@ -504,7 +543,7 @@ body {
       position: absolute;
       bottom: 0;
       left: 98px;
-      color: @mainColorLight;
+      color: @reflectLight;
       text-align: center;
       font-size: 6px;
       &-top {
@@ -519,7 +558,7 @@ body {
       &-line {
         width: 15px;
         height: 120%;
-        background: @mainColorDark;
+        background: @reflectDark;
         position: absolute;
         right: 5px;
         display: flex;
@@ -531,10 +570,10 @@ body {
           transparent 10% 40%
         );
 
-        &-inner {
+        &-btn {
           width: 3px;
           height: 100%;
-          background: @mainColor;
+          background: @reflect;
           border-radius: 0 0 25px 25px / 0 0 25px 25px;
         }
       }

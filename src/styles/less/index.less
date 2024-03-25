@@ -5,24 +5,46 @@
 @import "../Glitch.less";
 @import "https://fonts.googleapis.com/css2?family=Gidugu&family=Merriweather+Sans:ital,wght@0,300;1,300&family=Orbitron&display=swap";
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gidugu&family=Merriweather+Sans:ital,wght@0,300;1,300&family=Orbitron&display=swap");
 
 @font-face {
-  font-family: "MorePerfectDOSVGA";
-  src: url("../fonts/MorePerfectDOSVGA.ttf") format("truetype");
+  font-family: "Early";
+  src: url("../../fonts/EarlyGameboy.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Tangerine";
-  src: url("../fonts/Tangerine-Bold.ttf") format("truetype");
-  font-weight: bold;
+  font-family: "Gill-Sans-Italic";
+  src: url("../../fonts/Gill-Sans-Medium-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Gill-Sans";
+  src: url("../../fonts/Gill-Sans") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DOS";
+  src: url("../../fonts/MorePerfectDOSVGA.ttf") format("truetype");
+  font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Pretendo";
-  src: url("../fonts/Pretendo.ttf") format("truetype");
+  src: url("../../fonts/Pretendo.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Labo";
+  src: url("../../fonts/NintendoLabo.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -34,10 +56,11 @@
 html,
 body {
   .grid-center();
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 0, 255, 0.3),
-      rgba(128, 0, 128, 0.3)
+  background-image: radial-gradient(
+      circle,
+      rgba(0, 0, 255, 0.5) 5%,
+      rgba(128, 0, 128, 0.5),
+      rgb(0, 0, 0)
     ),
     @bg-image;
   background-size: cover;
@@ -98,58 +121,6 @@ body {
   }
 }
 
-.gameboy-container {
-  background-image: @bg-image;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-size: cover;
-  background-position: center center;
-  padding: 10vh 0;
-}
-
-.gameboy {
-  position: relative;
-  width: @allW;
-  height: calc(@allW * 1.65);
-  background: linear-gradient(145deg, @mainColorLight, @mainColorDark);
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  // Bouton de mise en marche
-  .switch {
-    width: 14px;
-    height: 6px;
-    background: @switch;
-    border-radius: 20px 20px 0 0;
-    position: absolute;
-    top: -5px;
-    left: 35px;
-    background-image: linear-gradient(
-      0deg,
-      @switchDark,
-      @switchLight 95% 99%,
-      transparent
-    );
-    // Animation du switch ici si nécessaire
-  }
-
-  // La base de la gameboy
-  .console {
-    width: 100%; // la largeur du parent .gameboy
-    height: calc(@allW * 1.65);
-    background: @mainColor;
-    border-radius: 20px;
-    position: relative;
-    box-shadow: inset 0px 0px 5px @mainColorDark;
-    overflow: hidden;
-  }
-}
-
 .canvas {
   position: absolute;
   top: 15%; /* écran soit au bon endroit */
@@ -166,25 +137,34 @@ body {
   overflow: hidden;
 }
 
+// TODO
 @media (max-width: 896px) and (max-height: 414px) and (orientation: landscape) {
 }
 
+// TODO
 @media (max-width: 414px) and (max-height: 896px) and (orientation: portrait) {
 }
 
+// TODO
 @media (max-width: 768px) and (max-height: 1024px) and (orientation: portrait) {
 }
 
+// TODO
 @media (max-width: 1024px) and (max-height: 768px) and (orientation: landscape) {
 }
+
+// TODO
 @media (max-width: 1080px) and (max-height: 1920px) and (orientation: portrait) {
 }
 
+// TODO
 @media (max-width: 1920px) and (max-height: 1080px) and (orientation: landscape) {
 }
 
+// TODO
 @media (max-width: 1152px) and (max-height: 2048px) and (orientation: portrait) {
 }
 
+// TODO
 @media (max-width: 2048px) and (max-height: 1152px) and (orientation: landscape) {
 }
