@@ -24,3 +24,5 @@ build
 *.njsproj
 *.sln
 *.sw?
+Gameboy2.tsx
+gameboy2.less
