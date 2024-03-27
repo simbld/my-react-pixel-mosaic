@@ -103,13 +103,13 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
           </div>
         </div>
         <div className="speaker">
-          <div className="speaker-Light"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
+          <div className="speaker-corner"></div>
         </div>
       </div>
     </div>

@@ -2,8 +2,6 @@
 @import "./mixins.less";
 @import "./gameboy.less";
 @import "../Glitch.less";
-@import "../Glitch.less";
-@import "https://fonts.googleapis.com/css2?family=Gidugu&family=Merriweather+Sans:ital,wght@0,300;1,300&family=Orbitron&display=swap";
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Gidugu&family=Merriweather+Sans:ital,wght@0,300;1,300&family=Orbitron&display=swap");
 
@@ -49,6 +47,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Lavigne";
+  src: url("../../fonts/Lavigne.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -72,7 +77,6 @@ body {
   margin: 0;
   padding: 0;
   font-family: monospace;
-  color-scheme: default;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -92,7 +96,7 @@ body {
   font-size: 7em;
   cursor: pointer;
   transition: background-color 0.3s;
-  overflow: hidden; // S'assurer que le pseudo-élément ne déborde pas du bouton
+  overflow: hidden;
 
   &:hover::before {
     background-color: darken(rgba(190, 31, 23, 0.255), 10%);
@@ -123,11 +127,11 @@ body {
 
 .canvas {
   position: absolute;
-  top: 15%; /* écran soit au bon endroit */
+  top: 15%;
   left: 50%;
-  transform: translateX(-50%); /* Centre l'écran horizontalement */
-  width: 50%; /* Largeur de l'écran par rapport à la Gameboy */
-  height: 30%; /* Hauteur de l'écran par rapport à la Gameboy */
+  transform: translateX(-50%);
+  width: 50%;
+  height: 30%;
   background-color: @screen;
   border: 2px solid @lineDark;
   box-shadow: inset 0 0 10px @lineDark;
