@@ -156,19 +156,12 @@
       background: @glass;
       margin: 38px auto;
       position: relative;
-      border-style: solid transparent;
-      border-width: 1px;
-      border-color: #000000;
-      border-left-color: transparent;
-      border-bottom-color: transparent;
-      border-top-color: transparent;
       border-radius: 10px 10px 36px 10px;
       box-shadow:
-        -1px -1px 1px #736b82 inset,
-        2px -1px 0px rgba(0, 0, 0, 0.5),
-        inset -2px 1px 6px 0px #d8d5d5,
-        inset 1px 12px 0px -10px #1b1b1b,
-        inset -1px 1px 1px 1px #0b0b0b;
+        inset -3px 3px 2px #544f60,
+        inset -6px 6px 2px -9px #1b1b1b,
+        inset -7px 1px 3px -3px #d8d5d5,
+        1px -1px 1px #858585;
 
       .glass-screen::after {
         content: "";
@@ -198,7 +191,6 @@
           color: @textGColor;
           font-size: 5px;
           font-family: @lavigne;
-          font-weight: bold;
           transform: scaleX(1.5);
           display: inline-block;
           margin-left: 13px;
@@ -219,10 +211,8 @@
         font-size: 8.5px;
         font-family: @lavigne;
         text-align: center;
-        transform: scaleX(1);
         transform: scaleY(0.8);
         display: inline-block;
-        font-weight: bold;
       }
 
       &-line {
@@ -597,13 +587,17 @@
       text-align: center;
       font-size: 6px;
       &-top {
+        .grid-center();
+        font-family: @lavigne;
+        font-size: 6px;
+        letter-spacing: 1px;
         width: 40px;
         height: 10px;
         border-radius: 50px;
         background: @reliefColor;
         box-shadow:
-          1px 1px 1px 1px @lineLight inset,
-          -1px -1px 1px 1px @lineDark inset;
+          0px 1px 3px 1px #b3b3b5 inset,
+          -1px -1px 3px 1px #aba8a8 inset;
       }
       &-line {
         width: 15px;

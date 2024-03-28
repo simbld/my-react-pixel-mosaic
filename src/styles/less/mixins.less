@@ -7,10 +7,11 @@
     inset -5px 5px 10px darken(@color, 10%);
 }
 
-.grid-center(@justify: center, @align: center) {
+.grid-center() {
   display: grid;
-  justify-items: @justify;
-  align-items: @align;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
 }
 
 .rotation(@deg) {
