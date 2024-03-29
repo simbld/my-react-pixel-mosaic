@@ -45,57 +45,76 @@
     width: @allW;
     height: calc(@allW * 1.85);
     border-radius: 10px 10px 65px 10px;
-    background: @gameboyColor;
     overflow: hidden;
     position: relative;
-    background-image: linear-gradient(
-        90deg,
-        @lineDark,
-        transparent 6% 95%,
-        @lineLight 98% 99%,
-        transparent
-      ),
-      linear-gradient(
-        0deg,
-        @reflect,
-        transparent 1% 97%,
-        @lineLight 99% 99%,
-        transparent,
-        @lineDark
-      );
+    background: @gameboyColor;
     box-shadow:
-      -3px 0px 5px 0px @reflectLight inset,
-      -10px 0px 5px 0px @reflectLight inset,
-      6px 0 6px 1px @reflectDark inset,
-      0 3px 3px @reflectLight inset,
+      -3px 0px 5px 0px #fcfef9 inset,
+      -8px 0px 4px 0px #fcfef9 inset,
+      6px 0 3px 1px #969494 inset,
+      0 3px 3px #fcfef9 inset,
       0 35px 20px -2px rgba(0, 0, 0, 0.08),
       0 55px 50px -5px rgba(0, 0, 0, 0.05);
 
     .big-horizontal-line {
-      width: @allW;
+      background-image: linear-gradient(@lineDark, @lineLight, @lineDark);
+      position: relative;
       height: 4px;
-      top: 22px;
+      margin-left: 20px;
+      margin-right: 20px;
+      top: 20px;
+    }
+
+    .big-horizontal-line-bottom {
+      width: 263px; /* Assurez-vous que la largeur correspond à celle de .console */
+      height: 8px; /* Hauteur souhaitée de l'ombre */
+      position: relative;
+      top: 20px; /* Ajustez ceci si nécessaire pour aligner avec .console */
+      margin-left: auto;
+      margin-right: auto;
+      background: transparent;
+      box-shadow:
+        inset 5px 0 5px -5px rgba(0, 0, 0, 0.08),
+        /* Ombre interne à gauche */ inset -5px 0 5px -5px rgba(0, 0, 0, 0.08); /* Ombre interne à droite */
+      border: 1px solid red;
+      border-top-left-radius: 3px; /* Rayon en haut à gauche */
+      border-top-right-radius: 3px; /* Rayon en haut à droite */
+      border-bottom-left-radius: 3px; /* Rayon en bas à gauche */
+      border-bottom-right-radius: 3px; /* Rayon en bas à droite */
+      overflow: hidden;
+    }
+
+    .big-horizontal-line::before,
+    .big-horizontal-line::after {
+      content: "";
       position: absolute;
-      background: @lineDark;
-      background-image: linear-gradient(
-        90deg,
-        @lineDark,
-        transparent 8% 95%,
-        @lineLight 97% 98%,
-        transparent
-      );
+      top: 0;
+      height: 4px;
+      width: 20px;
+      background-image: linear-gradient(@lineDark, @lineLight, @lineDark);
+      overflow: visible;
+    }
+
+    .big-horizontal-line::before {
+      left: -20px;
+      border-top-left-radius: 4px;
+    }
+
+    .big-horizontal-line::after {
+      right: -20px;
+      border-top-right-radius: 4px;
     }
 
     .small-R-vertical-line,
     .small-L-vertical-line {
+      top: 0;
       width: 4px;
       height: 24px;
       position: absolute;
-      background: @lineDark;
       background-image: linear-gradient(
-        90deg,
+        to left,
+        @lineDark,
         @lineLight,
-        transparent 10% 40%,
         @lineDark
       );
     }
@@ -110,20 +129,21 @@
 
     .off-on {
       &-btn {
-        width: 50px;
+        .flex-center();
+        width: 54px;
         height: 10px;
-        background: #000;
         position: absolute;
         left: 30px;
-        top: 9px;
+        top: 7px;
         border-radius: 50px;
-        background: @reliefColor;
+        font-family: @lavigne;
+        font-size: 8px;
+        letter-spacing: 1px;
+        color: @w;
+        background: @gameboyColor;
         box-shadow:
-          1px 1px 1px 1px @lineLight inset,
-          -1px -1px 1px 1px @lineDark inset;
-        color: @reflectLight;
-        text-align: center;
-        font-size: 6px;
+          -1px -2px 3px @BtnDark inset,
+          0px 2px 3px 0px @BtnDark inset;
       }
 
       &-line {
@@ -133,19 +153,18 @@
         position: absolute;
         left: 35px;
         background-image: linear-gradient(
-          0deg,
-          @reflect,
-          transparent 35% 60%,
-          @reflectLight 60% 80%,
-          @reflect 90% 100%
+          to left,
+          @lineDark,
+          @lineLight,
+          @lineDark
         );
 
-        &:nth-child(2) {
-          left: 40px;
-        }
-
-        &:nth-child(3) {
-          left: 45px;
+        &-container {
+          .flex-center();
+          position: relative;
+          width: 30px;
+          height: 3px;
+          left: 5px;
         }
       }
     }
@@ -154,26 +173,28 @@
       width: 224px;
       height: 171px;
       background: @glass;
-      margin: 38px auto;
+      margin: 25px auto;
       position: relative;
       border-radius: 10px 10px 36px 10px;
       box-shadow:
         inset -3px 3px 2px #544f60,
         inset -6px 6px 2px -9px #1b1b1b,
         inset -7px 1px 3px -3px #d8d5d5,
-        1px -1px 1px #858585;
+        0px -2px 1px #858585;
 
-      .glass-screen::after {
-        content: "";
+      .battery-text {
+        color: @textGColor;
+        font-size: 5px;
+        font-family: @lavigne;
+        transform: scaleX(1.5);
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 0;
+        z-index: 10;
+        display: inline-block;
+        margin-left: -100px;
+        margin-top: 75px;
       }
 
-      .battery-indicator {
+      .text-indication {
         .indicator-light {
           position: absolute;
           top: 62px;
@@ -186,17 +207,6 @@
           animation: batteryOn 5s;
           animation-duration: 1s;
           animation-delay: 1s;
-        }
-        .battery-text {
-          color: @textGColor;
-          font-size: 5px;
-          font-family: @lavigne;
-          transform: scaleX(1.5);
-          display: inline-block;
-          margin-left: 13px;
-          margin-top: 75px;
-          transform: scaleX(1.5);
-          display: inline-block;
         }
       }
 
@@ -212,7 +222,6 @@
         font-family: @lavigne;
         text-align: center;
         transform: scaleY(0.8);
-        display: inline-block;
       }
 
       &-line {
@@ -236,16 +245,15 @@
         position: relative;
         width: 142px;
         height: 129px;
-        background: @screenLight;
-        top: 5%;
+        background-color: @screenOff;
+        top: 52%;
         left: 50%;
         transform: translate(-50%, -50%);
-        border: rgb(147, 141, 141) 1px solid;
         border-radius: 2px;
         box-shadow:
-          -10px 0px 5px -1px @screen inset,
-          5px 0 10px @screen inset,
-          -5px 0px 2px @screenDark inset;
+          -8px 2px 4px #212009 inset,
+          -10px 0px 5px -1px #815f0e inset,
+          6px -5px 20px #815f0e inset;
         overflow: hidden;
 
         .falling-title-L,
@@ -266,7 +274,7 @@
 
         .falling-title-R {
           top: 50%;
-          left: 125px;
+          left: 127px;
           animation: fall-right 3s ease-out forwards;
         }
 
@@ -278,6 +286,7 @@
         }
       }
     }
+
     .cross {
       &-v {
         width: 24px;
@@ -380,7 +389,7 @@
     .brand {
       padding: 7px 0px;
       position: absolute;
-      top: 208px;
+      top: 212px;
       left: 20px;
       display: flex;
       flex-direction: row;
@@ -417,19 +426,15 @@
       transform: rotate(@rotate);
 
       .pink-btn {
+        .flex-around();
         width: 94px;
         height: 43px;
         border-radius: 50px;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
         box-shadow:
-          10px 2px 30px 3px @BtnLight inset,
-          -30px -20px 40px 0px @BtnDark inset;
-        background: radial-gradient(circle at center, @b 0%, @g 50%, @b 100%);
+          0px 0px 5px @gameboyColor inset,
+          0px 0px 5px @BtnDark inset;
         overflow: hidden;
-        outline: none;
-        border: none;
+
         &-B,
         &-A {
           width: 33px;
@@ -447,10 +452,9 @@
       }
 
       .BA-btn-container-label {
+        .flex-around();
         margin-top: 0px;
         width: 94px;
-        display: flex;
-        justify-content: space-around;
         font-weight: 6;
         font-family: @labo;
         color: @textBrand;
@@ -462,10 +466,8 @@
     }
 
     .menu {
+      .flex-around();
       width: 90px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
       position: absolute;
       left: 77px;
       bottom: 50px;
@@ -485,18 +487,12 @@
         }
       }
       &-container {
+        .flex-center();
         width: 40px;
         height: 17px;
-        background: radial-gradient(circle at center, @g 100%, @b 50%, @g 100%),
-          @reflect;
         border-radius: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         overflow: hidden;
-        box-shadow:
-          -3px 3px 2px 3px @BtnLight inset,
-          0px -4px 2px @BtnDark inset;
+        background: radial-gradient(circle, @BtnDark, @gameboyColor);
 
         &-btn {
           width: 32px;
@@ -508,7 +504,7 @@
             1px -4px 1px 0px @menuBtn inset,
             0px 8px 1px @menuBtnLight inset,
             0px 8px 0px -16px @menuBtnDark,
-            27px -5px 3px -2px @menuBtnDark,
+            0 0 0 -2px @menuBtnDark,
             0px 0px 1px 1px @menuBtnDark,
             1px 2px 2px -1px @menuBtnShadow;
         }
@@ -516,9 +512,8 @@
     }
 
     .speaker {
+      .flex-between();
       width: 63px;
-      display: flex;
-      justify-content: space-between;
       position: absolute;
       right: 18px;
       bottom: 18px;
@@ -580,40 +575,51 @@
     .phones {
       width: 40px;
       height: 17px;
-      position: absolute;
+      position: relative;
+      top: 163px;
       bottom: 0;
-      left: 98px;
+      left: 102px;
       color: @reflectLight;
       text-align: center;
       font-size: 6px;
-      &-top {
-        .grid-center();
-        font-family: @lavigne;
-        font-size: 6px;
-        letter-spacing: 1px;
+      z-index: 10;
+      &-sound {
+        .flex-center();
+        position: relative;
         width: 40px;
         height: 10px;
         border-radius: 50px;
-        background: @reliefColor;
+        font-family: @lavigne;
+        font-size: 6px;
+        letter-spacing: 1.5px;
+        color: @w;
+        background: @gameboyColor;
         box-shadow:
-          0px 1px 3px 1px #b3b3b5 inset,
-          -1px -1px 3px 1px #aba8a8 inset;
+          -1px -2px 3px @BtnDark inset,
+          0px 2px 3px 0px @BtnDark inset;
+        overflow: hidden;
+        z-index: 9;
       }
       &-line {
-        width: 15px;
-        height: 120%;
-        background: @reflectDark;
-        position: absolute;
-        right: 5px;
-        display: flex;
-        justify-content: space-around;
-        z-index: 3;
-
-        &-btn {
-          width: 3px;
-          height: 3px;
-          height: 100%;
-          background: @lineDark;
+        width: 3px;
+        height: 12px;
+        background: @reflect;
+        left: 35px;
+        background-image: linear-gradient(
+          to left,
+          @lineDark,
+          @lineLight,
+          @lineDark
+        );
+        position: relative;
+        z-index: 1;
+        &-container {
+          .flex-center();
+          position: relative;
+          width: 30px;
+          height: 8px;
+          left: 5px;
+          z-index: 1;
         }
       }
     }
