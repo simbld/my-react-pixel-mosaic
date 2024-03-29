@@ -7,24 +7,27 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
       <div className="console">
         <div className="off-on">
           <div className="off-on-btn">◀OFF●ON▶</div>
-          <div className="off-on-line"></div>
-          <div className="off-on-line"></div>
-          <div className="off-on-line"></div>
+          <div className="off-on-line-container">
+            <div className="off-on-line"></div>
+            <div className="off-on-line"></div>
+            <div className="off-on-line"></div>
+          </div>
         </div>
         <div className="small-R-vertical-line"></div>
         <div className="small-L-vertical-line"></div>
         <div className="big-horizontal-line"></div>
+        <div className="big-horizontal-line-bottom"></div>
         <div className="glass-screen">
           <div className="glass-screen-line">
             <div className="glass-screen-line-l"></div>
             <div className="glass-screen-line-l"></div>
           </div>
 
-          <div className="dot-matrix">DOT MATRIX WITH STEREO SOUND</div>
-
-          <div className="battery-indicator">
-            <div className="indicator-light"></div>
+          <div className="text-indication">
+            <div className="dot-matrix">DOT MATRIX WITH STEREO SOUND</div>
             <div className="battery-text">BATTERY</div>
+
+            <div className="indicator-light"></div>
           </div>
 
           <div className="glass-screen-matrix">
@@ -96,10 +99,11 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
           </div>
         </div>
         <div className="phones">
-          <div className="phones-top">ΩPHONES</div>
-          <div className="phones-line">
-            <div className="phones-line-btn"></div>
-            <div className="phones-line-btn"></div>
+          <div className="phones-sound">ΩPHONES</div>
+          <div className="phones-line-container">
+            <div className="phones-line"></div>
+            <div className="phones-line"></div>
+            <div className="phones-line"></div>
           </div>
         </div>
         <div className="speaker">
