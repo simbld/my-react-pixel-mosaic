@@ -6,12 +6,10 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
       <div className="switch"></div>
       <div className="console">
         <div className="off-on">
-          <div className="off-on-btn">◀OFF●ON▶</div>
-          <div className="off-on-line-container">
-            <div className="off-on-line"></div>
-            <div className="off-on-line"></div>
-            <div className="off-on-line"></div>
-          </div>
+          <div className="off-on-container">◀OFF●ON▶</div>
+          <div className="off-on-container-line"></div>
+          <div className="off-on-container-line"></div>
+          <div className="off-on-container-line"></div>
         </div>
         <div className="small-R-vertical-line"></div>
         <div className="small-L-vertical-line"></div>
@@ -100,11 +98,9 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
         </div>
         <div className="phones">
           <div className="phones-sound">ΩPHONES</div>
-          <div className="phones-line-container">
-            <div className="phones-line"></div>
-            <div className="phones-line"></div>
-            <div className="phones-line"></div>
-          </div>
+          <div className="phones-sound-line"></div>
+          <div className="phones-sound-line"></div>
+          <div className="phones-sound-line"></div>
         </div>
         <div className="speaker">
           <div className="speaker-line"></div>

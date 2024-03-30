@@ -45,9 +45,24 @@
     width: @allW;
     height: calc(@allW * 1.85);
     border-radius: 10px 10px 65px 10px;
+    background: @gameboyColor;
     overflow: hidden;
     position: relative;
-    background: @gameboyColor;
+    background-image: linear-gradient(
+        90deg,
+        @lineDark,
+        transparent 6% 95%,
+        @lineLight 98% 99%,
+        transparent
+      ),
+      linear-gradient(
+        0deg,
+        @reflect,
+        transparent 1% 97%,
+        @lineLight 99% 99%,
+        transparent,
+        @lineDark
+      );
     box-shadow:
       -3px 0px 5px 0px #fcfef9 inset,
       -8px 0px 4px 0px #fcfef9 inset,
@@ -57,31 +72,12 @@
       0 55px 50px -5px rgba(0, 0, 0, 0.05);
 
     .big-horizontal-line {
-      background-image: linear-gradient(@lineDark, @lineLight, @lineDark);
+      background-image: linear-gradient(@lineTop, @lineMiddle, @lineBottom);
       position: relative;
       height: 4px;
       margin-left: 20px;
       margin-right: 20px;
       top: 20px;
-    }
-
-    .big-horizontal-line-bottom {
-      width: 263px; /* Assurez-vous que la largeur correspond à celle de .console */
-      height: 8px; /* Hauteur souhaitée de l'ombre */
-      position: relative;
-      top: 20px; /* Ajustez ceci si nécessaire pour aligner avec .console */
-      margin-left: auto;
-      margin-right: auto;
-      background: transparent;
-      box-shadow:
-        inset 5px 0 5px -5px rgba(0, 0, 0, 0.08),
-        /* Ombre interne à gauche */ inset -5px 0 5px -5px rgba(0, 0, 0, 0.08); /* Ombre interne à droite */
-      border: 1px solid red;
-      border-top-left-radius: 3px; /* Rayon en haut à gauche */
-      border-top-right-radius: 3px; /* Rayon en haut à droite */
-      border-bottom-left-radius: 3px; /* Rayon en bas à gauche */
-      border-bottom-right-radius: 3px; /* Rayon en bas à droite */
-      overflow: hidden;
     }
 
     .big-horizontal-line::before,
@@ -91,18 +87,18 @@
       top: 0;
       height: 4px;
       width: 20px;
-      background-image: linear-gradient(@lineDark, @lineLight, @lineDark);
+      background-image: linear-gradient(@lineTop, @lineMiddle, @lineBottom);
       overflow: visible;
     }
 
     .big-horizontal-line::before {
       left: -20px;
-      border-top-left-radius: 4px;
+      border-top-left-radius: 5px;
     }
 
     .big-horizontal-line::after {
       right: -20px;
-      border-top-right-radius: 4px;
+      border-top-right-radius: 5px;
     }
 
     .small-R-vertical-line,
@@ -128,18 +124,24 @@
     }
 
     .off-on {
-      &-btn {
+      &-container {
         .flex-center();
-        width: 54px;
-        height: 10px;
+        width: 58px;
+        height: 12px;
         position: absolute;
         left: 30px;
-        top: 7px;
+        top: 5px;
         border-radius: 50px;
         font-family: @lavigne;
         font-size: 8px;
         letter-spacing: 1px;
         color: @w;
+        text-shadow:
+          1px -1px 1px @gLight,
+          1px 1px 1px @gLight,
+          1px 1px 1px @gLight,
+          -1px 1px 1px @gLight;
+
         background: @gameboyColor;
         box-shadow:
           -1px -2px 3px @BtnDark inset,
@@ -147,24 +149,25 @@
       }
 
       &-line {
+        position: absolute;
         width: 3px;
         height: 12px;
-        background: @reflect;
-        position: absolute;
         left: 35px;
-        background-image: linear-gradient(
-          to left,
-          @lineDark,
-          @lineLight,
-          @lineDark
-        );
+        background: linear-gradient(to left, @lineDark, @lineLight, @lineDark);
 
-        &-container {
-          .flex-center();
-          position: relative;
-          width: 30px;
-          height: 3px;
-          left: 5px;
+        &:nth-child(1) {
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        &:nth-child(2) {
+          left: calc(50% - 15px);
+          transform: translateY(-50%);
+        }
+
+        &:nth-child(3) {
+          left: calc(50% + 15px);
+          transform: translateY(-50%);
         }
       }
     }
@@ -173,7 +176,7 @@
       width: 224px;
       height: 171px;
       background: @glass;
-      margin: 25px auto;
+      margin: 32px auto;
       position: relative;
       border-radius: 10px 10px 36px 10px;
       box-shadow:
@@ -549,10 +552,10 @@
       &-line {
         width: 5px;
         height: 38px;
-        border: rgba(0, 0, 0, 0.383) 0.5px solid;
+        border-left: 0.5px rgb(162, 159, 159) solid;
+        border-right: 1px rgb(135, 134, 134) solid;
         border-radius: 50px;
-        background: linear-gradient(to left, black 0%, #303030 1%, #c6c6c4 70%),
-          @speaker;
+        background: linear-gradient(to left, #595959, #c6c6c4), @speaker;
         position: relative;
         overflow: hidden;
 
@@ -573,54 +576,33 @@
     }
 
     .phones {
-      width: 40px;
-      height: 17px;
       position: relative;
-      top: 163px;
-      bottom: 0;
+      width: 50px;
+      height: 20px;
+      top: 179px;
       left: 102px;
-      color: @reflectLight;
-      text-align: center;
-      font-size: 6px;
       z-index: 10;
       &-sound {
         .flex-center();
         position: relative;
-        width: 40px;
+        width: 44px;
         height: 10px;
         border-radius: 50px;
         font-family: @lavigne;
+        text-shadow:
+          1px -1px 1px @gLight,
+          1px 1px 1px @gLight,
+          1px 1px 1px @gLight,
+          -1px 1px 1px @gLight;
         font-size: 6px;
         letter-spacing: 1.5px;
         color: @w;
         background: @gameboyColor;
         box-shadow:
-          -1px -2px 3px @BtnDark inset,
+          -1px -2px 3px 0px @BtnDark inset,
           0px 2px 3px 0px @BtnDark inset;
         overflow: hidden;
         z-index: 9;
-      }
-      &-line {
-        width: 3px;
-        height: 12px;
-        background: @reflect;
-        left: 35px;
-        background-image: linear-gradient(
-          to left,
-          @lineDark,
-          @lineLight,
-          @lineDark
-        );
-        position: relative;
-        z-index: 1;
-        &-container {
-          .flex-center();
-          position: relative;
-          width: 30px;
-          height: 8px;
-          left: 5px;
-          z-index: 1;
-        }
       }
     }
   }
