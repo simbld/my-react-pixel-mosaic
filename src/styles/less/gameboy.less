@@ -109,9 +109,9 @@
       position: absolute;
       background-image: linear-gradient(
         to left,
-        @lineDark,
-        @lineLight,
-        @lineDark
+        @lineTop,
+        @lineMiddle,
+        @lineBottom
       );
     }
 
@@ -137,15 +137,13 @@
         letter-spacing: 1px;
         color: @w;
         text-shadow:
-          1px -1px 1px @gLight,
-          1px 1px 1px @gLight,
-          1px 1px 1px @gLight,
-          -1px 1px 1px @gLight;
-
-        background: @gameboyColor;
+          0.5px -0.5px 1px @offOnText,
+          0.5px 0.5px 1px @offOnText,
+          0.5px 0.5px 1px @offOnText,
+          -0.5px 0.5px 1px @offOnText;
         box-shadow:
-          -1px -2px 3px @BtnDark inset,
-          0px 2px 3px 0px @BtnDark inset;
+          -1px -2px 3px @offOnBoxBottom inset,
+          0px 2px 3px 0px @offOnBoxTop inset;
       }
 
       &-line {
@@ -590,17 +588,19 @@
         border-radius: 50px;
         font-family: @lavigne;
         text-shadow:
-          1px -1px 1px @gLight,
-          1px 1px 1px @gLight,
-          1px 1px 1px @gLight,
-          -1px 1px 1px @gLight;
+          0.5px -0.5px 1px @offOnText,
+          0.5px 0.5px 1px @offOnText,
+          0.5px 0.5px 1px @offOnText,
+          -0.5px 0.5px 1px @offOnText;
+        box-shadow:
+          -1px -2px 3px @offOnBoxBottom inset,
+          0px 2px 3px 0px @offOnBoxTop inset;
+
         font-size: 6px;
         letter-spacing: 1.5px;
         color: @w;
         background: @gameboyColor;
-        box-shadow:
-          -1px -2px 3px 0px @BtnDark inset,
-          0px 2px 3px 0px @BtnDark inset;
+
         overflow: hidden;
         z-index: 9;
       }
