@@ -7,9 +7,11 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
       <div className="console">
         <div className="off-on">
           <div className="off-on-container">◀OFF●ON▶</div>
-          <div className="off-on-container-line"></div>
-          <div className="off-on-container-line"></div>
-          <div className="off-on-container-line"></div>
+          <div className="line-container">
+            <div className="line"></div>
+            <div className="line"></div>
+            <div className="line"></div>
+          </div>
         </div>
         <div className="small-R-vertical-line"></div>
         <div className="small-L-vertical-line"></div>
@@ -41,33 +43,37 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
           <div className="TM">TM</div>
         </div>
 
-        <div className="cross">
-          <div className="cross-v"></div>
-          <div className="cross-h"></div>
-          <div className="cross-v-btn">
-            <div className="cross-v-btn-grips"></div>
-            <div className="cross-v-btn-grips"></div>
-            <div className="cross-v-btn-grips"></div>
-            <div className="cross-v-btn-grips"></div>
-            <div className="cross-v-btn-grips"></div>
-            <div className="cross-v-btn-grips"></div>
-            <div className="cross-v-btn-grips"></div>
-            <div className="cross-v-btn-grips"></div>
-            <div className="cross-v-btn-grips"></div>
+        <div className="pad">
+          <div className="pad-up">▲</div>
+          <div className="pad-down">▼</div>
+          <div className="pad-left">◀</div>
+          <div className="pad-right">▶</div>
+          <div className="pad-v"></div>
+          <div className="pad-h"></div>
+          <div className="pad-v-btn">
+            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-grips"></div>
           </div>
-          <div className="cross-h-btn">
-            <div className="cross-h-btn-grips"></div>
-            <div className="cross-h-btn-grips"></div>
-            <div className="cross-h-btn-grips"></div>
-            <div className="cross-h-btn-grips"></div>
-            <div className="cross-h-btn-grips"></div>
-            <div className="cross-h-btn-grips"></div>
-            <div className="cross-h-btn-grips"></div>
-            <div className="cross-h-btn-grips"></div>
-            <div className="cross-h-btn-grips"></div>
+          <div className="pad-h-btn">
+            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-grips"></div>
           </div>
-          <div className="cross-center">
-            <div className="cross-center-cir"></div>
+          <div className="pad-center">
+            <div className="pad-center-cir"></div>
           </div>
         </div>
 
@@ -98,9 +104,11 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
         </div>
         <div className="phones">
           <div className="phones-sound">ΩPHONES</div>
-          <div className="phones-sound-line"></div>
-          <div className="phones-sound-line"></div>
-          <div className="phones-sound-line"></div>
+          <div className="line-container">
+            <div className="line"></div>
+            <div className="line"></div>
+            <div className="line"></div>
+          </div>
         </div>
         <div className="speaker">
           <div className="speaker-line"></div>

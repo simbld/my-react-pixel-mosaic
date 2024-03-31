@@ -7,32 +7,28 @@
     inset -5px 5px 10px darken(@color, 10%);
 }
 
-.grid-center() {
+.container(@display: flex, @justify: center, @align: center, @direction: column, @width: 19px, @height: 9px) {
+  display: @display;
+  justify-content: @justify;
+  align-items: @align;
+  flex-direction: @direction;
+  width: @width;
+  height: @height;
+}
+
+.grid-container(@rows: 3, @cols: 3, @rowGap: 10px, @colGap: 10px) {
   display: grid;
-  justify-items: center;
-  align-items: center;
-  text-align: center;
+  grid-template-rows: repeat(@rows, 1fr);
+  grid-template-columns: repeat(@cols, 1fr);
+  grid-gap: @rowGap @colGap;
 }
 
-.flex-center() {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.flex-around() {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  text-align: center;
-}
-
-.flex-between() {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
+.flex-center(@display: flex, @direction: row, @justifyContent: center, @alignItems: center, @textAlign: center) {
+  display: @display;
+  flex-direction: @direction;
+  justify-content: @justifyContent;
+  align-items: @alignItems;
+  text-align: @textAlign;
 }
 
 .rotation(@deg) {
