@@ -1,8 +1,6 @@
 .gameboy-container {
+  .flex-center();
   background-image: @bg-image;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
   background-size: cover;
   background-position: center center;
@@ -10,16 +8,13 @@
 }
 
 .gameboy {
+  .flex-center(flex, column);
   border-radius: 0 0 20px 0;
   position: relative;
   width: @allW;
   height: calc(@allW * 1.65);
   background: linear-gradient(145deg, @reflectLight, @reflectDark, #fff0);
   border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 
   .switch {
     width: 14px;
@@ -64,14 +59,16 @@
         @lineDark
       );
     box-shadow:
-      -3px 0px 5px 0px #fcfef9 inset,
-      -8px 0px 4px 0px #fcfef9 inset,
-      6px 0 3px 1px #969494 inset,
-      0 3px 3px #fcfef9 inset,
+      -3px 0px 5px 0px @w inset,
+      -8px 0px 4px 0px @w inset,
+      6px 0 3px 1px @g inset,
+      0 3px 3px @w inset,
       0 35px 20px -2px rgba(0, 0, 0, 0.08),
+      0px 20px 20px 0px @b,
       0 55px 50px -5px rgba(0, 0, 0, 0.05);
 
     .big-horizontal-line {
+      filter: blur(0.25px);
       background-image: linear-gradient(@lineTop, @lineMiddle, @lineBottom);
       position: relative;
       height: 4px;
@@ -82,6 +79,7 @@
 
     .big-horizontal-line::before,
     .big-horizontal-line::after {
+      filter: blur(0.25px);
       content: "";
       position: absolute;
       top: 0;
@@ -103,6 +101,7 @@
 
     .small-R-vertical-line,
     .small-L-vertical-line {
+      filter: blur(0.25px);
       top: 0;
       width: 4px;
       height: 24px;
@@ -138,6 +137,7 @@
         color: @w;
         border-top: 1px @offOnBorderTop solid;
         border-bottom: 1px @offOnBorderBottom solid;
+        filter: blur(0.25px);
         text-shadow:
           0.5px -0.5px 1px @offOnText,
           0.5px 0.5px 1px @offOnText,
@@ -146,29 +146,6 @@
         box-shadow:
           -1px -2px 3px @offOnBoxBottom inset,
           0px 2px 3px 0px @offOnBoxTop inset;
-      }
-
-      &-line {
-        position: absolute;
-        width: 3px;
-        height: 12px;
-        left: 35px;
-        background: linear-gradient(to left, @lineDark, @lineLight, @lineDark);
-
-        &:nth-child(1) {
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-
-        &:nth-child(2) {
-          left: calc(50% - 15px);
-          transform: translateY(-50%);
-        }
-
-        &:nth-child(3) {
-          left: calc(50% + 15px);
-          transform: translateY(-50%);
-        }
       }
     }
 
@@ -290,113 +267,180 @@
       }
     }
 
-    .cross {
+    .pad {
+      position: relative;
+      left: 20%;
+      top: 15%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 75px;
+      height: 75px;
+
       &-v {
+        .flex-center();
         width: 24px;
         height: 67px;
-        background: @menuBtnShadow;
+        background: @pad;
         position: absolute;
-        left: 43px;
-        top: 265px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         border-radius: 3px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
       &-h {
         width: 67px;
         height: 24px;
-        background: @menuBtnShadow;
+        background: @pad;
         position: absolute;
-        left: 21px;
-        top: 286px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         border-radius: 3px;
       }
 
       &-v-btn {
+        .flex-center(flex, column, space-around);
         position: absolute;
-        left: 45px;
-        top: 268px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         width: 20px;
         height: 61px;
         border-radius: 3px;
-        background: @menuBtn;
+        background: @pad;
         box-shadow:
-          -1px 0px 2px 0px @menuBtnLight inset,
-          2px -4px 2px @menuBtnDark inset,
-          -9px 0px 3px 0px rgba(0, 0, 0, 0.08),
-          -9px 0px 5px 0px rgba(0, 0, 0, 0.05);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
+          0px 0px 0px 0px @pad inset,
+          -0.5px 1px 1px 0.5px @padReflect inset;
+        filter: blur(0.25px);
 
         &-grips {
-          width: 70%;
+          width: 15px;
           height: 5px;
-          background: @menuBtn;
-          box-shadow:
-            -1px 0px 2px 0px @menuBtnLight inset,
-            2px -2px 2px @menuBtnDark inset;
+          position: relative;
+          background: @pad;
+          border-radius: 50px;
+          border-right: 0.25px @padReflect solid;
+          border-top: 0.25px @padReflect solid;
+          filter: blur(0.25px);
         }
       }
 
       &-h-btn {
+        .flex-center(flex, row, space-around);
         width: 61px;
         height: 20px;
         position: absolute;
-        left: 24px;
-        top: 288px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         border-radius: 3px;
-        background: @menuBtn;
+        background: @pad;
         box-shadow:
-          -1px 0px 2px 0px @menuBtnLight inset,
-          2px -4px 2px @menuBtnDark inset,
-          -9px 0px 3px 0px rgba(0, 0, 0, 0.08),
-          -9px 0px 5px 0px rgba(0, 0, 0, 0.05);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
+          0px -1px 0px 0px @pad inset,
+          -0.5px 0.5px 0.5px 1px @padReflect inset;
+        filter: blur(0.25px);
         &-grips {
           width: 5px;
-          height: 65%;
-          background: @menuBtn;
-          box-shadow:
-            -1px 1px 1px @menuBtnLight inset,
-            1px -1px 1px @menuBtnDark inset;
+          height: 15px;
+          border-radius: 50px;
+          background: @pad;
+          border-right: 0.25px @padReflect solid;
+          border-top: 0.25px @padReflect solid;
+          filter: blur(0.25px);
         }
       }
 
       &-center {
+        .flex-center();
         width: 20px;
         height: 20px;
-        background: @menuBtn;
         position: absolute;
-        left: 45px;
-        top: 288px;
-        border-radius: 6px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 3px;
+        box-shadow:
+          inset 0px 0px 30px 0px @pad,
+          inset 0px 0px 30px 0px @pad;
+
         &-cir {
           width: 18px;
           height: 18px;
           border-radius: 50%;
+          background: @pad;
+          filter: blur(0.25px);
+          position: relative;
           box-shadow:
-            -2px 2px 5px @menuBtnDark inset,
-            2px -4px 5px @menuBtnLight inset;
+            0px 0px 8px 0px @pad inset,
+            0px 0px 1px 0px @reflectDark inset;
+
+          &::after,
+          &::before {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(0.25px);
+          }
+
+          &::before {
+            background: @padReflect;
+            width: 5px;
+            height: 7px;
+            left: 70%;
+            top: 30%;
+            filter: blur(1px);
+          }
+
+          &::after {
+            width: 3px;
+            height: 3px;
+            background: @padReflect;
+            left: 20%;
+            top: 50%;
+            filter: blur(1px);
+          }
         }
+      }
+
+      .pad-up,
+      .pad-down,
+      .pad-left,
+      .pad-right {
+        position: absolute;
+        color: @w;
+        font-size: 6px;
+      }
+
+      &-up {
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%, -50%) scaleX(1.5);
+      }
+      &-down {
+        bottom: -8%;
+        left: 50%;
+        transform: translate(-50%, -50%) scaleX(1.5);
+      }
+      &-left {
+        top: 50%;
+        left: 0%;
+        transform: translate(-50%, -50%) scaleY(1.5);
+      }
+      &-right {
+        top: 50%;
+        right: -4%;
+        transform: translate(-50%, -50%) scaleY(1.5);
       }
     }
 
     .brand {
+      .flex-center(flex, row, flex-end);
       padding: 7px 0px;
       position: absolute;
       top: 212px;
       left: 20px;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-end;
       gap: 2px;
       color: @textBrand;
       font-weight: bold;
@@ -429,7 +473,7 @@
       transform: rotate(@rotate);
 
       .pink-btn {
-        .flex-around();
+        .flex-center(flex, row, space-around);
         width: 94px;
         height: 43px;
         border-radius: 50px;
@@ -455,7 +499,7 @@
       }
 
       .BA-btn-container-label {
-        .flex-around();
+        .flex-center(flex, row, space-around);
         margin-top: 0px;
         width: 94px;
         font-weight: 6;
@@ -469,7 +513,7 @@
     }
 
     .menu {
-      .flex-around();
+      .flex-center(flex, row, space-around);
       width: 90px;
       position: absolute;
       left: 77px;
@@ -495,7 +539,10 @@
         height: 17px;
         border-radius: 50px;
         overflow: hidden;
-        background: radial-gradient(circle, @BtnDark, @gameboyColor);
+        box-shadow:
+          5px -5px 3px @menuBtnLight inset,
+          -8px 7px 3px 0px @padReflect inset;
+        filter: blur(0.25px);
 
         &-btn {
           width: 32px;
@@ -504,18 +551,18 @@
           border-radius: 50px;
           background: @g;
           box-shadow:
-            1px -4px 1px 0px @menuBtn inset,
-            0px 8px 1px @menuBtnLight inset,
-            0px 8px 0px -16px @menuBtnDark,
-            0 0 0 -2px @menuBtnDark,
-            0px 0px 1px 1px @menuBtnDark,
-            1px 2px 2px -1px @menuBtnShadow;
+            1px -4px 1px 0px @menu inset,
+            0px 8px 1px @menuLight inset,
+            0px 8px 0px -16px @menuDark,
+            0 0 0 -2px @menuDark,
+            0px 0px 1px 1px @menuDark,
+            1px 2px 2px -1px @menu;
         }
       }
     }
 
     .speaker {
-      .flex-between();
+      .flex-center(flex, row, space-between);
       width: 63px;
       position: absolute;
       right: 18px;
@@ -554,6 +601,7 @@
         height: 38px;
         border-left: 1px @offOnBorderBottom solid;
         border-right: 1px @offOnBorderTop solid;
+        filter: blur(0.25px);
         border-radius: 50px;
         background: linear-gradient(to left, #595959, #c6c6c4), @speaker;
         position: relative;
@@ -579,8 +627,8 @@
       position: relative;
       width: 50px;
       height: 20px;
-      top: 179px;
-      left: 102px;
+      top: 104px;
+      left: 101px;
       z-index: 10;
       &-sound {
         .flex-center();
@@ -589,8 +637,6 @@
         height: 10px;
         border-radius: 50px;
         font-family: @lavigne;
-        border-top: 1px @offOnBorderTop solid;
-        border-bottom: 1px @offOnBorderBottom solid;
         text-shadow:
           0.5px -0.5px 1px @offOnText,
           0.5px 0.5px 1px @offOnText,
@@ -599,14 +645,44 @@
         box-shadow:
           -1px -2px 3px @offOnBoxBottom inset,
           0px 2px 3px 0px @offOnBoxTop inset;
-
+        border-top: 1px @offOnBorderTop solid;
+        border-bottom: 1px @offOnBorderBottom solid;
+        filter: blur(0.25px);
         font-size: 6px;
         letter-spacing: 1.5px;
         color: @w;
         background: @gameboyColor;
-
         overflow: hidden;
         z-index: 9;
+      }
+
+      .line-container {
+        position: relative;
+        left: 42%;
+        .container();
+
+        .line {
+          position: absolute;
+          width: 3.5px;
+          height: 11px;
+          background: linear-gradient(to left, @lineLight, @lineDark);
+          border-right: 0.25px @g solid;
+          border-left: 0.25px @w solid;
+          border-top: transparent;
+          z-index: 9;
+          filter: blur(0.3px);
+          transform: translate(0, 0);
+
+          &:nth-child(1) {
+            left: 10px;
+          }
+          &:nth-child(2) {
+            left: 5px;
+          }
+          &:nth-child(3) {
+            left: 0px;
+          }
+        }
       }
     }
   }
