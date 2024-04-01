@@ -7,7 +7,7 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
       <div className="console">
         <div className="off-on">
           <div className="off-on-container">◀OFF●ON▶</div>
-          <div className="line-container">
+          <div className="line-container-top">
             <div className="line"></div>
             <div className="line"></div>
             <div className="line"></div>
@@ -104,7 +104,7 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
         </div>
         <div className="phones">
           <div className="phones-sound">ΩPHONES</div>
-          <div className="line-container">
+          <div className="line-container-bottom">
             <div className="line"></div>
             <div className="line"></div>
             <div className="line"></div>
