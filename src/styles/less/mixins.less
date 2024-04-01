@@ -7,13 +7,14 @@
     inset -5px 5px 10px darken(@color, 10%);
 }
 
-.container(@display: flex, @justify: center, @align: center, @direction: column, @width: 19px, @height: 9px) {
+.container(@display: flex, @justify: center, @align: center, @direction: column, @width: 19px, @height: 9px, @transform: translate(0, 0)) {
   display: @display;
   justify-content: @justify;
   align-items: @align;
   flex-direction: @direction;
   width: @width;
   height: @height;
+  transform: @transform;
 }
 
 .grid-container(@rows: 3, @cols: 3, @rowGap: 10px, @colGap: 10px) {

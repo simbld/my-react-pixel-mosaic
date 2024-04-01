@@ -9,40 +9,16 @@
 
 .gameboy {
   .flex-center(flex, column);
-  border-radius: 0 0 20px 0;
   position: relative;
-  width: @allW;
-  height: calc(@allW * 1.65);
-  background: linear-gradient(145deg, @reflectLight, @reflectDark, #fff0);
-  border-radius: 20px;
-
-  .switch {
-    width: 14px;
-    height: 6px;
-    background: @switch;
-    border-radius: 20px 20px 0 0;
-    position: absolute;
-    top: -2px;
-    left: 35px;
-    background-image: linear-gradient(
-      0deg,
-      @switchDark,
-      @switchLight 95% 99%,
-      transparent
-    );
-    // Animation du switch
-    animation: switchOn;
-    animation-duration: 1s;
-    animation-delay: 1s;
-  }
+  top: 110px;
 
   .console {
     width: @allW;
-    height: calc(@allW * 1.85);
-    border-radius: 10px 10px 65px 10px;
+    height: calc(@allW * 1.65);
+    border-radius: 10px 10px 50px 10px;
     background: @gameboyColor;
     overflow: hidden;
-    position: relative;
+    position: absolute;
     background-image: linear-gradient(
         90deg,
         @lineDark,
@@ -68,8 +44,12 @@
       0 55px 50px -5px rgba(0, 0, 0, 0.05);
 
     .big-horizontal-line {
-      filter: blur(0.25px);
-      background-image: linear-gradient(@lineTop, @lineMiddle, @lineBottom);
+      filter: blur(0.3px);
+      background-image: linear-gradient(
+        @offOnBorderTop,
+        @lineMiddle,
+        @lineBottom
+      );
       position: relative;
       height: 4px;
       margin-left: 20px;
@@ -79,24 +59,28 @@
 
     .big-horizontal-line::before,
     .big-horizontal-line::after {
-      filter: blur(0.25px);
+      filter: blur(0.1px);
       content: "";
       position: absolute;
       top: 0;
       height: 4px;
-      width: 20px;
-      background-image: linear-gradient(@lineTop, @lineMiddle, @lineBottom);
+      width: 90px;
+      background-image: linear-gradient(
+        @offOnBorderTop,
+        @lineMiddle,
+        @lineBottom
+      );
       overflow: visible;
     }
 
     .big-horizontal-line::before {
       left: -20px;
-      border-top-left-radius: 5px;
+      border-top-left-radius: 6px;
     }
 
     .big-horizontal-line::after {
       right: -20px;
-      border-top-right-radius: 5px;
+      border-top-right-radius: 6px;
     }
 
     .small-R-vertical-line,
@@ -104,14 +88,16 @@
       filter: blur(0.25px);
       top: 0;
       width: 4px;
-      height: 24px;
+      height: 20.5px;
       position: absolute;
       background-image: linear-gradient(
         to left,
-        @lineTop,
+        @offOnBorderTop,
         @lineMiddle,
         @lineBottom
       );
+      border-bottom: transparent;
+      z-index: 9;
     }
 
     .small-R-vertical-line {
@@ -123,20 +109,23 @@
     }
 
     .off-on {
+      position: relative;
+      left: 12%;
       &-container {
         .flex-center();
+        z-index: 2;
+        transform: translate(0, 0);
+        top: 5px;
         width: 58px;
         height: 12px;
         position: absolute;
-        left: 30px;
-        top: 5px;
         border-radius: 50px;
         font-family: @lavigne;
         font-size: 8px;
         letter-spacing: 1px;
         color: @w;
         border-top: 1px @offOnBorderTop solid;
-        border-bottom: 1px @offOnBorderBottom solid;
+        border-bottom: 1.5px @offOnBorderBottom solid;
         filter: blur(0.25px);
         text-shadow:
           0.5px -0.5px 1px @offOnText,
@@ -146,6 +135,35 @@
         box-shadow:
           -1px -2px 3px @offOnBoxBottom inset,
           0px 2px 3px 0px @offOnBoxTop inset;
+      }
+    }
+
+    .line-container-top {
+      position: relative;
+      left: 2%;
+      z-index: 6;
+
+      .line {
+        position: absolute;
+        width: 3.5px;
+        height: 6px;
+        top: -1px;
+        background: linear-gradient(to top, @gameboyColor, @offOnBoxBottom);
+        border-right: 0.25px @offOnBorderTop solid;
+        border-left: 0.5px @w solid;
+        z-index: 9;
+        filter: blur(0.3px);
+        transform: translate(0, 0);
+
+        &:nth-child(1) {
+          left: 10px;
+        }
+        &:nth-child(2) {
+          left: 5px;
+        }
+        &:nth-child(3) {
+          left: 0px;
+        }
       }
     }
 
@@ -411,6 +429,11 @@
         position: absolute;
         color: @w;
         font-size: 6px;
+        text-shadow:
+          0.5px -0.5px 1px @offOnText,
+          0.5px 0.5px 1px @offOnText,
+          0.5px 0.5px 1px @offOnText,
+          -0.5px 0.5px 1px @offOnText;
       }
 
       &-up {
@@ -563,9 +586,10 @@
 
     .speaker {
       .flex-center(flex, row, space-between);
-      width: 63px;
+      width: 65px;
+      height: 50px;
       position: absolute;
-      right: 18px;
+      right: 20px;
       bottom: 18px;
       transform: rotate(@rotate);
 
@@ -581,15 +605,11 @@
         &::before {
           content: "";
           position: absolute;
-          top: 0;
+          top: 5px;
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(
-            to top,
-            @reflectLight 90%,
-            @gameboyColor 10%
-          );
+          background: linear-gradient(to top, @reflectLight 90%, #cbcbcb82 10%);
 
           filter: blur(2px);
           z-index: -1;
@@ -598,9 +618,9 @@
 
       &-line {
         width: 6px;
-        height: 38px;
-        border-left: 1px @offOnBorderBottom solid;
-        border-right: 1px @offOnBorderTop solid;
+        height: 40px;
+        border-left: 1px @w solid;
+        border-right: 1px @g solid;
         filter: blur(0.25px);
         border-radius: 50px;
         background: linear-gradient(to left, #595959, #c6c6c4), @speaker;
@@ -611,11 +631,11 @@
           position: absolute;
           content: "";
           width: 5px;
-          height: 35px;
+          height: 32px;
           background: @speakerDark;
           border-radius: 50px;
           top: 0px;
-          left: -4px;
+          left: -3.5px;
         }
         &:first-child::after {
           background: none;
@@ -627,7 +647,7 @@
       position: relative;
       width: 50px;
       height: 20px;
-      top: 104px;
+      bottom: -102px;
       left: 101px;
       z-index: 10;
       &-sound {
@@ -656,18 +676,18 @@
         z-index: 9;
       }
 
-      .line-container {
+      .line-container-bottom {
         position: relative;
         left: 42%;
-        .container();
 
         .line {
           position: absolute;
           width: 3.5px;
-          height: 11px;
-          background: linear-gradient(to left, @lineLight, @lineDark);
-          border-right: 0.25px @g solid;
-          border-left: 0.25px @w solid;
+          height: 12px;
+          top: -1px;
+          background: linear-gradient(to top, @gameboyColor, @offOnBoxBottom);
+          border-right: 0.25px @offOnBorderTop solid;
+          border-left: 0.5px @w solid;
           border-top: transparent;
           z-index: 9;
           filter: blur(0.3px);
@@ -685,5 +705,25 @@
         }
       }
     }
+  }
+
+  .switch {
+    width: 14px;
+    height: 6px;
+    background: @switch;
+    border-radius: 20px 20px 0 0;
+    position: absolute;
+    top: -2px;
+    left: 35px;
+    background-image: linear-gradient(
+      0deg,
+      @switchDark,
+      @switchLight 95% 99%,
+      transparent
+    );
+    // Animation du switch
+    animation: switchOn;
+    animation-duration: 1s;
+    animation-delay: 1s;
   }
 }
