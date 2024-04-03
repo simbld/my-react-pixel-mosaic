@@ -3,6 +3,7 @@ import ErrorMessage from "./common/ErrorMessage";
 import Gameboy from "./components/Gameboy";
 import { defaultImage } from "./config/config";
 import { ErrorProvider } from "./contexts/ErrorContext";
+import Button from "./common/Button";
 import "./styles/less/index.less";
 
 const App: React.FC = () => {
@@ -12,13 +13,12 @@ const App: React.FC = () => {
     <>
       <ErrorProvider>
         {!showGameboy ? (
-          <button
+          <Button
             type="button"
             className="title-btn"
+            text="HACK & PAST"
             onClick={() => setShowGameboy(true)}
-          >
-            <span className="title-text">RePixelAct</span>
-          </button>
+          />
         ) : (
           <Gameboy imageSrc={defaultImage} />
         )}

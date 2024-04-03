@@ -54,6 +54,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Back";
+  src: url("../../fonts/BTTF.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -63,9 +70,9 @@ body {
   .flex-center();
   background-image: radial-gradient(
       circle,
-      rgba(255, 255, 255, 0.4),
-      rgba(128, 0, 128, 0.4),
-      rgba(0, 0, 0, 0.1)
+      rgba(255, 255, 255, 0.3),
+      rgba(1, 53, 192, 0.3),
+      rgba(6, 9, 42, 0.6)
     ),
     @bg-image;
   background-size: cover;
@@ -89,17 +96,16 @@ body {
   height: 160px;
   padding: 0px 30px;
   background: @title-bg-color;
-  font-weight: bold;
   border-radius: 25px;
   box-shadow: @box-shadow;
-  font-family: "Tangerine", "Arial", cursive;
-  font-size: 7em;
+  font-family: "Back", monospace;
+  font-size: 2em;
   cursor: pointer;
   transition: background-color 0.3s;
   overflow: hidden;
 
   &:hover::before {
-    background-color: darken(rgba(190, 31, 23, 0.255), 10%);
+    background-color: darken(rgba(6, 27, 109, 0.418), 10%);
   }
 
   &::before {
@@ -115,13 +121,11 @@ body {
   }
 
   .title-text {
-    background-image: @text-btn;
-    color: transparent;
+    background-image: linear-gradient(to top, #feff27, #fe192d);
     -webkit-background-clip: text;
     background-clip: text;
-    position: relative;
+    color: transparent;
     z-index: 1;
-    text-shadow: -1.5px -1.5px 1.5px #695a13;
   }
 }
 
