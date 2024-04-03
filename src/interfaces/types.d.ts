@@ -120,3 +120,18 @@ export interface ArtCanvasProps {
     error: string | null;
   };
 }
+
+// common
+export interface ButtonProps {
+  onClick: () => void;
+  text: string;
+  className?: string;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+  loading?: boolean;
+  setError?: (error: Error) => void;
+  type?: "button" | "submit" | "reset";
+  ariaLabel?: string;
+  startIcon?: JSX.Element;
+  endIcon?: JSX.Element;
+}
