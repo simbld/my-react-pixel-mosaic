@@ -24,10 +24,10 @@ const MyComponent = () => {
 */
 
 import { useState, useCallback } from "react";
-import { UseErrorReturn } from "../interfaces/reduxState";
+import { UseErrorReturnProps } from "../interfaces/types";
 import { toast } from "react-toastify";
 
-const useError = (): UseErrorReturn => {
+const useError = (): UseErrorReturnProps => {
   const [error, setError] = useState<Error | null>(null);
 
   const displayError = useCallback(() => {
