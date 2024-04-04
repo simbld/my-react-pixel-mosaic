@@ -1,9 +1,11 @@
 import { createContext, useContext, ReactNode } from "react";
 import useError from "../common/useError";
-import { ErrorContextType } from "../interfaces/reduxState";
+import { ErrorContextTypeProps } from "../interfaces/types";
 
 // Création du contexte avec une valeur par défaut
-const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
+const ErrorContext = createContext<ErrorContextTypeProps | undefined>(
+  undefined
+);
 
 // Hook personnalisé pour utiliser le contexte
 export const useErrorContext = () => {
