@@ -41,13 +41,7 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx"
   },
-  "include": [
-    "prop-types.d.ts",
-    "font-loading.d.ts",
-    "index.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
+  "include": ["types.d.ts", "index.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
