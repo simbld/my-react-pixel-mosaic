@@ -10,20 +10,40 @@ const Button: React.FC<ButtonProps> = ({
   ariaLabel,
   type = "button",
   startIcon,
-  endIcon
+  endIcon,
+  error
 }) => {
+  if (loading) {
+    return (
+      <div className="loader">
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+      </div>
+    );
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <button
       type={type}
-      className={`button ${className}`}
+      className={`button ${className} ${error ? "button--error" : ""}`}
       onClick={onClick}
       style={style}
       disabled={disabled || loading}
       aria-label={ariaLabel}
     >
-      {startIcon && <span className="button-icon">{startIcon}</span>}
+      {startIcon && <span className="button-icon start-icon">{startIcon}</span>}
       {text}
-      {endIcon && <span className="button-icon">{endIcon}</span>}
+      {endIcon && <span className="button-icon end-icon">{endIcon}</span>}
     </button>
   );
 };
