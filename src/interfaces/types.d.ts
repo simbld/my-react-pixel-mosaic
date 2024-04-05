@@ -134,5 +134,5 @@ export interface ButtonProps {
   ariaLabel?: string;
   startIcon?: JSX.Element;
   endIcon?: JSX.Element;
-  error?: string;
+  error?: { message: string };
 }
