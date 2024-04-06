@@ -136,3 +136,8 @@ export interface ButtonProps {
   endIcon?: JSX.Element;
   error?: { message: string };
 }
+
+export interface LoaderProps {
+  barCount?: number;
+  color?: string;
+}
