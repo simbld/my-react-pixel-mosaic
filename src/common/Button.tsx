@@ -1,49 +1,9 @@
 import type { ButtonProps } from "../interfaces/types";
 
-const Button: React.FC<ButtonProps> = ({
-  text,
-  onClick,
-  className,
-  style,
-  disabled = false,
-  loading = false,
-  ariaLabel,
-  type = "button",
-  startIcon,
-  endIcon,
-  error
-}) => {
-  if (loading) {
-    return (
-      <div className="loader">
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-      </div>
-    );
-  }
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
+const Button: React.FC<ButtonProps> = ({ text, onClick, loading = false }) => {
   return (
-    <button
-      type={type}
-      className={`button ${className} ${error ? "button--error" : ""}`}
-      onClick={onClick}
-      style={style}
-      disabled={disabled || loading}
-      aria-label={ariaLabel}
-    >
-      {startIcon && <span className="button-icon start-icon">{startIcon}</span>}
+    <button className="title-btn" onClick={onClick} disabled={loading}>
       {text}
-      {endIcon && <span className="button-icon end-icon">{endIcon}</span>}
     </button>
   );
 };

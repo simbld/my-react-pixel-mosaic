@@ -1,0 +1,37 @@
+.title-btn {
+  position: relative;
+  height: 160px;
+  padding: 0px 30px;
+  background: @title-bg-color;
+  border-radius: 25px;
+  box-shadow: @box-shadow;
+  font-family: "Back", monospace;
+  font-size: 2em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  overflow: hidden;
+
+  &:hover::before {
+    background-color: darken(rgba(6, 27, 109, 0.418), 10%);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 25px;
+    background: transparent;
+    z-index: 0;
+  }
+
+  .title-text {
+    background-image: linear-gradient(to top, #feff27, #fe192d);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    z-index: 1;
+  }
+}
