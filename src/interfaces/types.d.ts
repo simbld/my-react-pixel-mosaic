@@ -135,6 +135,8 @@ export interface ButtonProps {
   startIcon?: JSX.Element;
   endIcon?: JSX.Element;
   error?: { message: string };
+  fill?: string;
+  filter?: string;
 }
 
 export interface LoaderProps {
