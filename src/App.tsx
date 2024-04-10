@@ -16,7 +16,7 @@ const App: React.FC = () => {
     setTimeout(() => {
       setLoading(false);
       setShowGameboy(true);
-    }, 300);
+    }, 30000);
   };
 
   return (
@@ -27,7 +27,12 @@ const App: React.FC = () => {
             {loading ? (
               <Loader />
             ) : (
-              <Button text="HACK & PAST" onClick={handleClick} />
+              <Button
+                text="HACK & PAST"
+                onClick={handleClick}
+                fill="url(#text-gradient)"
+                filter="url(#text-filter)"
+              />
             )}
           </>
         ) : (
