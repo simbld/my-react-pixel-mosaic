@@ -137,6 +137,7 @@ export interface ButtonProps {
   error?: { message: string };
   fill?: string;
   filter?: string;
+  ref?: React.RefObject<HTMLButtonElement>;
 }
 
 export interface LoaderProps {
