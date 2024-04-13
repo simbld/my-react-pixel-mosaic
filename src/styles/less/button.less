@@ -1,37 +1,85 @@
 .title-btn {
   position: relative;
-  height: 160px;
-  padding: 0px 30px;
-  background: @title-bg-color;
-  border-radius: 25px;
-  box-shadow: @box-shadow;
-  font-family: "Back", monospace;
-  font-size: 2em;
+  display: inline-block;
+  text-align: center;
   cursor: pointer;
-  transition: background-color 0.3s;
-  overflow: hidden;
+  outline: none;
+  border: none;
+  background: none;
+  border-radius: 12px;
+  padding: 0px;
+  width: 600px;
+  height: 200px;
+  overflow: visible;
+  .flex-center();
+}
 
-  &:hover::before {
-    background-color: darken(rgba(6, 27, 109, 0.418), 10%);
+.button-text {
+  transition:
+    opacity 0.5s ease-in-out,
+    transform 0.5s ease-in-out;
+  transform: scale(1);
+}
+
+.button-text-hover {
+  transform: scale(1.1);
+  transition: transform 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.title-btn:hover .button-text-hover {
+  opacity: 1;
+  animation: blink 1s infinite;
+}
+
+.text-svg {
+  width: 100%;
+  height: auto;
+}
+
+.arrow-group {
+  animation: slideLeft 4s linear;
+}
+
+.title-btn:hover .arrow-group-0 {
+  animation: slideLeft 1s 0.3s cubic-bezier(0.1, 0, 0.6, 0);
+}
+
+.title-btn:hover .arrow-group-1 {
+  animation: slideLeft 1s 0.4s cubic-bezier(0.2, 0, 0.5, 0);
+}
+
+.title-btn:hover .arrow-group-2 {
+  animation: slideLeft 1s 0.5s cubic-bezier(0.3, 0, 0.4, 0);
+}
+
+.title-btn:hover .arrow-group-3 {
+  animation: slideLeft 1s 0.6s cubic-bezier(0.4, 0, 0.3, 0);
+}
+
+.title-btn:hover .arrow-group-4 {
+  animation: slideLeft 1s 0.7s cubic-bezier(0.5, 0, 0.2, 0);
+}
+
+.title-btn:hover .arrow-group-5 {
+  animation: slideLeft 1s 0.8s cubic-bezier(0.6, 0, 0.1, 0);
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0;
   }
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 25px;
-    background: transparent;
-    z-index: 0;
+  50% {
+    opacity: 1;
   }
+}
 
-  .title-text {
-    background-image: linear-gradient(to top, #feff27, #fe192d);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    z-index: 1;
+@keyframes slideLeft {
+  0% {
+    transform: translateX(0%;);
+  }
+  100% {
+    transform: translateX(-10%;);
   }
 }
