@@ -16,7 +16,7 @@ const App: React.FC = () => {
     setTimeout(() => {
       setLoading(false);
       setShowGameboy(true);
-    }, 30000);
+    }, 1000);
   };
 
   return (
