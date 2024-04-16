@@ -100,7 +100,7 @@ export interface AppImageDataProps {
   appImageData: string;
 }
 
-export interface MainLayoutProps {
+export interface AsciiArtFilterProps {
   imageSrc: string;
 }
 
