@@ -1,12 +1,37 @@
+import { useState, useRef } from "react";
 import { GameboyProps } from "../interfaces/types";
 
 const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
+  const [isOn, setIsOn] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(
+    new Audio("/assets/gameboy-sound.mp3")
+  );
+
+  const handleSwitchClick = () => {
+    setIsOn((prevIsOn) => {
+      const newState = !prevIsOn;
+      if (newState) {
+        audioRef.current.play();
+      } else {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      return newState;
+    });
+  };
+
   return (
-    <div className="gameboy">
-      <div className="switch"></div>
+    <div className={`gameboy ${isOn ? "gameboy-on" : ""}`}>
+      <div
+        className={`switch ${isOn ? "switch-on" : ""}`}
+        onClick={handleSwitchClick}
+      ></div>
+
       <div className="console">
         <div className="off-on">
-          <div className="off-on-container">◀OFF●ON▶</div>
+          <div className="off-on-container" onClick={handleSwitchClick}>
+            ◀OFF●ON▶
+          </div>
           <div className="line-container-top">
             <div className="line"></div>
             <div className="line"></div>
@@ -26,14 +51,32 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
           <div className="text-indication">
             <div className="dot-matrix">DOT MATRIX WITH STEREO SOUND</div>
             <div className="battery-text">BATTERY</div>
-
-            <div className="indicator-light"></div>
+            <div
+              className={`indicator-light ${isOn ? "indicator-light-on" : ""}`}
+            ></div>
           </div>
 
-          <div className="glass-screen-matrix">
-            <div className="falling-title-L">RE</div>
-            <div className="falling-title-R">ACT</div>
-            <div className="rising-title"> pixel </div>
+          <div
+            className={`glass-screen-matrix ${isOn ? "glass-screen-matrix-on" : ""}`}
+          >
+            <div
+              className={`falling-title-L ${isOn ? "animate-fall-left" : "hidden"}`}
+              key={`fall-left-${isOn}`}
+            >
+              RE
+            </div>
+            <div
+              className={`falling-title-R ${isOn ? "animate-fall-right" : "hidden"}`}
+              key={`fall-right-${isOn}`}
+            >
+              ACT
+            </div>
+            <div
+              className={`rising-title ${isOn ? "animate-rise" : "hidden"}`}
+              key={`rise-${isOn}`}
+            >
+              pixel
+            </div>
           </div>
         </div>
 

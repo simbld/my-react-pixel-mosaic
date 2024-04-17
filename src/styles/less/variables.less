@@ -73,9 +73,9 @@
 @screenOffLight: #82600f;
 @screenOffDark: #212009;
 
-@switch: #c8c4c5;
-@switchLight: #d9d5da;
-@switchDark: #a69999;
+@switch: #e5e5e5;
+@switchLight: #fefefe;
+@switchDark: #b1afaf;
 
 @pinkBtn: #7c094f;
 @pinkBtnLight: #896873;
@@ -106,53 +106,82 @@
 
 @keyframes batteryOn {
   0% {
-    background: #67534d;
+    background: #4d150a;
   }
   100% {
-    background: #f74f2f;
+    background: #f45236;
+  }
+}
+
+@keyframes screenOn {
+  0% {
+    background: @w;
+  }
+  100% {
+    background: @screenOnLight;
   }
 }
 
 @keyframes switchOn {
-  0% {
-    left: 30px;
+  from {
+    left: -90px;
   }
-  100% {
-    left: 35px;
+  to {
+    left: -68px;
   }
 }
 
 @keyframes fall-left {
   0% {
+    opacity: 0;
     transform: translateY(-300%) translateX(57px);
   }
   30%,
   60% {
+    opacity: 1;
     transform: translateY(-51%) translateX(57px);
   }
+  80% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(48px);
+  }
   100% {
+    opacity: 0;
     transform: translateY(-50%) translateX(48px);
   }
 }
 
 @keyframes fall-right {
   0% {
+    opacity: 0;
     transform: translateY(-300%) translateX(-55px);
   }
   30%,
   60% {
+    opacity: 1;
     transform: translateY(-51%) translateX(-55px);
   }
+  80% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-40px);
+  }
   100% {
+    opacity: 0;
     transform: translateY(-50%) translateX(-40px);
   }
 }
 
 @keyframes rise {
   0% {
+    opacity: 0;
     transform: translateY(300%);
   }
+  80% {
+    opacity: 1;
+    transform: translateY(-26%);
+  }
   100% {
+    opacity: 0;
     transform: translateY(-26%);
   }
 }
