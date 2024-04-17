@@ -121,6 +121,7 @@
       position: relative;
       left: 12%;
       &-container {
+        cursor: pointer;
         .flex-center();
         z-index: 2;
         transform: translate(0, 0);
@@ -210,11 +211,10 @@
           width: 7px;
           height: 7px;
           border-radius: 50px;
-          background: #f74f2f;
-
-          animation: batteryOn 5s;
-          animation-duration: 1s;
-          animation-delay: 1s;
+          background: #4d150a;
+        }
+        .indicator-light-on {
+          animation: batteryOn 1s ease-out forwards;
         }
       }
 
@@ -263,34 +263,41 @@
           -10px 0px 5px -1px #815f0e inset,
           6px -5px 20px #815f0e inset;
         overflow: hidden;
+        color: @screenOnDark;
 
         .falling-title-L,
         .falling-title-R,
         .rising-title {
           position: absolute;
-          color: #1a6770;
           font-family: "Gidugu", sans-serif;
           font-size: 18px;
           text-align: center;
         }
 
         .falling-title-L {
-          top: 50%;
-          left: 0;
-          animation: fall-left 3s ease-out forwards;
+          top: 66px;
+          left: 1px;
+          animation: fall-left 5s ease-out forwards;
         }
 
         .falling-title-R {
-          top: 50%;
-          left: 127px;
-          animation: fall-right 3s ease-out forwards;
+          top: 66.1px;
+          left: 126px;
+          animation: fall-right 5s ease-out forwards;
         }
 
         .rising-title {
-          top: 50.4%;
-          left: 42%;
+          top: 66px;
+          left: 61px;
           bottom: 0;
-          animation: rise 3s ease-out forwards;
+          animation: rise 5s ease-out forwards;
+        }
+        &-on {
+          background-color: @screenOnLight;
+          color: @screenOnDark;
+          box-shadow: none;
+          border: @b 0.5px solid;
+          animation: screenOn 1s ease-out forwards;
         }
       }
     }
@@ -741,23 +748,82 @@
     }
   }
 
+  .falling-title-L,
+  .falling-title-R,
+  .rising-title {
+    opacity: 0;
+  }
+
+  .gameboy-on .falling-title-L {
+    opacity: 1;
+    top: 50%;
+    left: 0;
+    animation: fall-left 3s ease-out forwards;
+  }
+  .gameboy-on .falling-title-R {
+    opacity: 1;
+    top: 50%;
+    left: 127px;
+    animation: fall-right 3s ease-out forwards;
+  }
+  .gameboy-on .rising-title {
+    opacity: 1;
+    top: 50.4%;
+    left: 42%;
+    bottom: 0;
+    animation: rise 3s ease-out forwards;
+  }
+
   .switch {
     width: 14px;
-    height: 6px;
+    height: 5px;
     background: @switch;
     border-radius: 20px 20px 0 0;
     position: absolute;
-    top: -2px;
-    left: 35px;
+    top: -240px;
+    left: -90px;
     background-image: linear-gradient(
-      0deg,
+      46deg,
       @switchDark,
       @switchLight 95% 99%,
       transparent
     );
-    // Animation du switch
-    animation: switchOn;
-    animation-duration: 1s;
-    animation-delay: 1s;
+
+    cursor: pointer;
+    transition: left 0.3s ease;
+  }
+
+  .switch-on {
+    left: -75px;
+  }
+
+  .switch-active {
+    animation: switchOn 0.5s ease-out forwards;
+  }
+
+  .title,
+  .battery-light {
+    display: none;
+  }
+
+  .hidden {
+    visibility: hidden;
+  }
+
+  .animate-fall-left {
+    opacity: 0;
+    animation: fall-left 3s ease-out forwards;
+  }
+
+  .animate-fall-right {
+    opacity: 0;
+    animation: fall-right 3s ease-out forwards;
+  }
+
+  .animate-rise {
+    opacity: 0;
+    animation: rise 3s ease-out forwards;
   }
 }
+
+// animation: [nom de l'animation] [durée de l'animation] [fonction de timing] [délai avant le début] [nombre de fois] [direction] [mode de remplissage] [état de lecture];
