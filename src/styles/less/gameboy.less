@@ -269,26 +269,28 @@
         .falling-title-R,
         .rising-title {
           position: absolute;
-          font-family: "Gidugu", sans-serif;
-          font-size: 18px;
+          font-family: @early;
+          font-size: 8px;
           text-align: center;
         }
 
         .falling-title-L {
-          top: 66px;
-          left: 1px;
+          top: 67px;
+          left: -4px;
           animation: fall-left 5s ease-out forwards;
         }
 
         .falling-title-R {
-          top: 66.1px;
-          left: 126px;
+          top: 67px;
+          left: 123px;
           animation: fall-right 5s ease-out forwards;
         }
 
         .rising-title {
-          top: 66px;
-          left: 61px;
+          transform: scaleX(-1);
+          letter-spacing: -1px;
+          top: 76px;
+          left: 60px;
           bottom: 0;
           animation: rise 5s ease-out forwards;
         }
