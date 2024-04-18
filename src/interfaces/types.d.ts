@@ -25,10 +25,6 @@ export interface PixelColorProps {
   b: number;
 }
 
-export interface GameboyProps {
-  imageSrc: string;
-}
-
 export interface ImageURLProps {
   imageUrl: string;
 }
@@ -143,4 +139,16 @@ export interface ButtonProps {
 export interface LoaderProps {
   barCount?: number;
   color?: string;
+}
+
+export interface GameboyProps {
+  imageSrc: string;
+  onSelectMenu: () => void;
+}
+
+export interface MenuGameboyProps {
+  onUploadImage: () => void;
+  onChooseFilter: () => void;
+  onDisplayOptions: () => void;
+  onDownloadImage: () => void;
 }
