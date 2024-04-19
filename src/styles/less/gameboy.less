@@ -790,17 +790,12 @@
       @switchLight 95% 99%,
       transparent
     );
-
     cursor: pointer;
     transition: left 0.3s ease;
   }
 
   .switch-on {
     left: -75px;
-  }
-
-  .switch-active {
-    animation: switchOn 0.5s ease-out forwards;
   }
 
   .title,
@@ -825,6 +820,57 @@
   .animate-rise {
     opacity: 0;
     animation: rise 3s ease-out forwards;
+  }
+
+  .glass-screen-matrix ul {
+    list-style-type: none;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .glass-screen-matrix li {
+    display: none;
+    position: relative;
+    color: @screenOnDark;
+    font-family: @early;
+    font-size: 6px;
+    text-align: left;
+    padding-left: 25px;
+    margin-bottom: 2px;
+    cursor: default;
+  }
+
+  .gameboy-on .glass-screen-matrix li {
+    display: block;
+    position: relative;
+    /* Reste de votre style */
+  }
+
+  .glass-screen-matrix li::before {
+    content: "~";
+    position: absolute;
+    left: 0;
+    transform: translateX(-100%);
+  }
+
+  .glass-screen-matrix li.selected {
+    cursor: pointer;
+  }
+
+  .glass-screen-matrix li.selected::before {
+    content: "~";
+  }
+  .glass-screen-matrix li:not(.selected)::before {
+    content: "";
   }
 }
 
