@@ -12,7 +12,8 @@ localforage.config({
 const persistConfig = {
   key: "root",
   version: 1,
-  storage: localforage
+  storage: localforage,
+  whitelist: ["imageProcessing", "gameboy", "menuGameboy"]
 };
 
 export const persistedReducer: Reducer<RootState, UnknownAction> =

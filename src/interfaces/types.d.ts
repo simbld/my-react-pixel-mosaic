@@ -12,10 +12,10 @@ export interface ImageProcessingStateProps {
 }
 
 export interface GameboyState {
-  power: boolean;
-  cartridge: string | null;
-  screen: string | null;
-  screenColorOn: "green" | "darkgreen";
+  poweredOn: boolean;
+  titlesShown: boolean;
+  menuVisible: boolean;
+  soundPlaying: boolean;
 }
 
 // helpers
@@ -143,7 +143,7 @@ export interface LoaderProps {
 
 export interface GameboyProps {
   imageSrc: string;
-  onSelectMenu: () => void;
+  onGameboyHome: () => void;
 }
 
 export interface MenuGameboyProps {
