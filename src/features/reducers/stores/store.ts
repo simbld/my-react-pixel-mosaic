@@ -1,5 +1,4 @@
 import { configureStore, Store } from "@reduxjs/toolkit";
-import { thunk } from "redux-thunk";
 import rootReducer from "../../reducers/rootReducer";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
@@ -17,7 +16,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["imageProcessing", "gameboy"]
+  whitelist: ["gameboy", "menuGameboy", "imageProcessing"]
 };
 
 // Création du store redux avec redux-persist
@@ -30,7 +29,7 @@ export const store: Store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
-    }).concat(thunk) // thunk est un middleware supplémentaire
+    })
 });
 
 // Initialisation de redux-persist avec le store configuré

@@ -12,10 +12,10 @@ export interface ImageProcessingStateProps {
 }
 
 export interface GameboyState {
-  power: boolean;
-  cartridge: string | null;
-  screen: string | null;
-  screenColorOn: "green" | "darkgreen";
+  poweredOn: boolean;
+  titlesShown: boolean;
+  menuVisible: boolean;
+  soundPlaying: boolean;
 }
 
 // helpers
@@ -23,10 +23,6 @@ export interface PixelColorProps {
   r: number;
   g: number;
   b: number;
-}
-
-export interface GameboyProps {
-  imageSrc: string;
 }
 
 export interface ImageURLProps {
@@ -143,4 +139,16 @@ export interface ButtonProps {
 export interface LoaderProps {
   barCount?: number;
   color?: string;
+}
+
+export interface GameboyProps {
+  imageSrc: string;
+  onGameboyHome: () => void;
+}
+
+export interface MenuGameboyProps {
+  onUploadImage: () => void;
+  onChooseFilter: () => void;
+  onDisplayOptions: () => void;
+  onDownloadImage: () => void;
 }
