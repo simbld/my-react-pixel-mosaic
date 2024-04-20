@@ -18,29 +18,31 @@ export const gameboySlice = createSlice({
   initialState,
   reducers: {
     // Basculer l'état de power et arrêter le son si éteint
-    togglePower: (state, action: PowerAction) => {
-      state.poweredOn = action.payload;
-      if (!state.poweredOn) {
-        state.soundPlaying = false; // Arrêter le son si la console est éteinte
-      }
+    togglePower: (state) => {
+      state.poweredOn = !state.poweredOn;
+      // Gère également les états liés à l'alimentation
+      state.soundPlaying = state.poweredOn;
+      state.titlesShown = state.poweredOn;
+      state.menuVisible = false; // Cache le menu lors de l'extinction
     },
     // Afficher les titres et cacher le menu
     showTitles: (state) => {
       state.titlesShown = true;
-      state.menuVisible = false;
+    },
+    hideTitles: (state) => {
+      state.titlesShown = false;
     },
     // Cacher les titres et afficher le menu
     showMenu: (state) => {
-      state.titlesShown = false;
       state.menuVisible = true;
+    },
+    hideMenu: (state) => {
+      state.menuVisible = false;
     },
     // Jouer le son uniquement si la console est allumée
     playSound: (state) => {
-      if (state.poweredOn) {
-        state.soundPlaying = true;
-      }
+      state.soundPlaying = true;
     },
-    // Arrêter le son
     stopSound: (state) => {
       state.soundPlaying = false;
     }
@@ -48,8 +50,15 @@ export const gameboySlice = createSlice({
 });
 
 // Export des actions pour être utilisées dans les composants
-export const { togglePower, showTitles, showMenu, playSound, stopSound } =
-  gameboySlice.actions;
+export const {
+  togglePower,
+  showTitles,
+  hideTitles,
+  showMenu,
+  hideMenu,
+  playSound,
+  stopSound
+} = gameboySlice.actions;
 
 // Export du reducer pour être inclus dans le store
 export default gameboySlice.reducer;
