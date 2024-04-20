@@ -3,9 +3,6 @@ import { GameboyState } from "../../../interfaces/types";
 
 // Définition des types d'actions utilisant PayloadAction
 export type PowerAction = PayloadAction<boolean>;
-export type ShowTitlesAction = PayloadAction<void>;
-export type ShowMenuAction = PayloadAction<void>;
-export type PlaySoundAction = PayloadAction<void>;
 
 // Définition de l'état initial
 const initialState: GameboyState = {
@@ -20,29 +17,48 @@ export const gameboySlice = createSlice({
   name: "gameboy",
   initialState,
   reducers: {
-    // Basculer l'état de power
-    togglePower: (state, action: PowerAction) => {
-      state.poweredOn = action.payload;
+    // Basculer l'état de power et arrêter le son si éteint
+    togglePower: (state) => {
+      state.poweredOn = !state.poweredOn;
+      // Gère également les états liés à l'alimentation
+      state.soundPlaying = state.poweredOn;
+      state.titlesShown = state.poweredOn;
+      state.menuVisible = false; // Cache le menu lors de l'extinction
     },
-    // Afficher les titres
+    // Afficher les titres et cacher le menu
     showTitles: (state) => {
       state.titlesShown = true;
     },
-    // Afficher le menu après les titres
-    showMenu: (state) => {
+    hideTitles: (state) => {
       state.titlesShown = false;
+    },
+    // Cacher les titres et afficher le menu
+    showMenu: (state) => {
       state.menuVisible = true;
     },
-    // Jouer le son du Gameboy
+    hideMenu: (state) => {
+      state.menuVisible = false;
+    },
+    // Jouer le son uniquement si la console est allumée
     playSound: (state) => {
       state.soundPlaying = true;
+    },
+    stopSound: (state) => {
+      state.soundPlaying = false;
     }
   }
 });
 
 // Export des actions pour être utilisées dans les composants
-export const { togglePower, showTitles, showMenu, playSound } =
-  gameboySlice.actions;
+export const {
+  togglePower,
+  showTitles,
+  hideTitles,
+  showMenu,
+  hideMenu,
+  playSound,
+  stopSound
+} = gameboySlice.actions;
 
 // Export du reducer pour être inclus dans le store
 export default gameboySlice.reducer;

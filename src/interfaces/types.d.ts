@@ -18,6 +18,11 @@ export interface GameboyState {
   soundPlaying: boolean;
 }
 
+export interface MenuGameboyState {
+  selectedOptionIndex: number;
+  optionCount: number;
+}
+
 // helpers
 export interface PixelColorProps {
   r: number;
