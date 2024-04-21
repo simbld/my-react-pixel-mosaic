@@ -18,13 +18,23 @@ export const gameboySlice = createSlice({
   initialState,
   reducers: {
     // Basculer l'état de power et arrêter le son si éteint
-    togglePower: (state) => {
-      state.poweredOn = !state.poweredOn;
-      // Gère également les états liés à l'alimentation
-      state.soundPlaying = state.poweredOn;
-      state.titlesShown = state.poweredOn;
-      state.menuVisible = false; // Cache le menu lors de l'extinction
+    togglePower: (state, action: PowerAction) => {
+      // Définir l'état poweredOn selon l'action
+      state.poweredOn = action.payload;
+
+      // Si la console est éteinte, réinitialiser les états associés
+      if (!state.poweredOn) {
+        state.soundPlaying = false; // Arrête le son
+        state.titlesShown = false; // Cache les titres
+        state.menuVisible = false; // Cache le menu
+      } else {
+        // Si la console est allumée, configurer les états pour l'allumage
+        state.titlesShown = true; // Affiche les titres
+        state.menuVisible = false; // S'assure que le menu n'est pas visible immédiatement
+        // La logique pour jouer le son pourrait être gérée ici ou déclenchée par un effet dans le composant
+      }
     },
+
     // Afficher les titres et cacher le menu
     showTitles: (state) => {
       state.titlesShown = true;

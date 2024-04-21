@@ -1,32 +1,93 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../features/reducers/stores/store";
+import {
+  togglePower,
+  playSound,
+  stopSound,
+  hideTitles,
+  showMenu,
+  hideMenu,
+  showTitles
+} from "../features/reducers/gameboy/gameboySlice";
+import MenuGameboy from "./MenuGameboy";
 import { GameboyProps } from "../interfaces/types";
 
-const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
-  const [isOn, setIsOn] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(
-    new Audio("/assets/gameboy-sound.mp3")
+const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
+  const dispatch = useDispatch();
+  const { poweredOn, titlesShown, menuVisible, soundPlaying } = useSelector(
+    (state: RootState) => state.gameboy
   );
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (poweredOn && soundPlaying) {
+      audioRef.current = new Audio("/src/assets/gameboy-sound.mp3");
+      audioRef.current
+        .play()
+        .catch((err) => console.error("Error playing audio:", err));
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+          audioRef.current = null;
+        }
+      };
+    }
+  }, [poweredOn, soundPlaying]);
 
   const handleSwitchClick = () => {
-    setIsOn((prevIsOn) => {
-      const newState = !prevIsOn;
-      if (newState) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-      return newState;
-    });
+    // Bascule l'état poweredOn
+    dispatch(togglePower(!poweredOn));
+
+    if (!poweredOn) {
+      // Actions si la console est allumée
+      dispatch(playSound());
+      dispatch(showTitles()); // Montre les titres initialement
+      // Potentiellement, vous pourriez vouloir retarder l'affichage du menu
+      setTimeout(() => {
+        dispatch(showMenu()); // Affiche le menu après un délai
+      }, 4500);
+    } else {
+      // Actions si la console est éteinte
+      dispatch(stopSound());
+      dispatch(hideTitles());
+      dispatch(hideMenu());
+    }
+  };
+
+  // Gère la fin des animations de démarrage
+  const handleAnimationEnd = () => {
+    // Cache les titres
+    dispatch(hideTitles());
+    // Montre le menu après que les titres sont cachés
+    dispatch(showMenu());
+    // Appel à onGameboyHome si nécessaire à ce moment
+    onGameboyHome();
+  };
+
+  const handleUploadImage = () => {
+    console.log("Upload Image clicked");
+  };
+
+  const handleChooseFilter = () => {
+    console.log("Choose Filter clicked");
+  };
+
+  const handleDisplayOptions = () => {
+    console.log("Display Options clicked");
+  };
+
+  const handleDownloadImage = () => {
+    console.log("Download Image clicked");
   };
 
   return (
-    <div className={`gameboy ${isOn ? "gameboy-on" : ""}`}>
+    <div className={`gameboy ${poweredOn ? "gameboy-on" : ""}`}>
       <div
-        className={`switch ${isOn ? "switch-on" : ""}`}
+        className={`switch ${poweredOn ? "switch-on" : ""}`}
         onClick={handleSwitchClick}
       ></div>
-
       <div className="console">
         <div className="off-on">
           <div className="off-on-container" onClick={handleSwitchClick}>
@@ -52,31 +113,43 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
             <div className="dot-matrix">DOT MATRIX WITH STEREO SOUND</div>
             <div className="battery-text">BATTERY</div>
             <div
-              className={`indicator-light ${isOn ? "indicator-light-on" : ""}`}
+              className={`indicator-light ${poweredOn ? "indicator-light-on" : ""}`}
             ></div>
           </div>
 
           <div
-            className={`glass-screen-matrix ${isOn ? "glass-screen-matrix-on" : ""}`}
+            className={`glass-screen-matrix ${menuVisible ? "glass-screen-matrix-on" : ""}`}
           >
-            <div
-              className={`falling-title-L ${isOn ? "animate-fall-left" : "hidden"}`}
-              key={`fall-left-${isOn}`}
-            >
-              RE
-            </div>
-            <div
-              className={`falling-title-R ${isOn ? "animate-fall-right" : "hidden"}`}
-              key={`fall-right-${isOn}`}
-            >
-              ACT
-            </div>
-            <div
-              className={`rising-title ${isOn ? "animate-rise" : "hidden"}`}
-              key={`rise-${isOn}`}
-            >
-              pixel
-            </div>
+            {titlesShown && (
+              <div className="titles" onAnimationEnd={handleAnimationEnd}>
+                <div
+                  className={`falling-title-L ${poweredOn ? "animate-fall-left" : "hidden"}`}
+                  onAnimationEnd={handleAnimationEnd}
+                >
+                  RE
+                </div>
+                <div
+                  className={`falling-title-R ${poweredOn ? "animate-fall-right" : "hidden"}`}
+                  onAnimationEnd={handleAnimationEnd}
+                >
+                  ACT
+                </div>
+                <div
+                  className={`rising-title ${poweredOn ? "animate-rise" : "hidden"}`}
+                  onAnimationEnd={handleAnimationEnd}
+                >
+                  pixel
+                </div>
+              </div>
+            )}
+            {menuVisible && (
+              <MenuGameboy
+                onUploadImage={handleUploadImage}
+                onChooseFilter={handleChooseFilter}
+                onDisplayOptions={handleDisplayOptions}
+                onDownloadImage={handleDownloadImage}
+              />
+            )}
           </div>
         </div>
 
@@ -154,7 +227,6 @@ const Gameboy: React.FC<GameboyProps> = ({ imageSrc }) => {
           </div>
         </div>
         <div className="speaker">
-          <div className="speaker-line"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
