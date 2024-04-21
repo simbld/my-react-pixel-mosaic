@@ -6,6 +6,7 @@ import {
   previousOption,
   selectOption
 } from "../features/reducers/menugameboy/menuGameboySlice";
+import { useEffect, useRef } from "react";
 
 const MenuGameboy: React.FC<MenuGameboyProps> = ({
   onUploadImage,
@@ -14,6 +15,8 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
   onDownloadImage
 }) => {
   const dispatch = useDispatch();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const { selectedOptionIndex, optionCount } = useSelector(
     (state: RootState) => ({
       selectedOptionIndex: state.menuGameboy.selectedOptionIndex,
@@ -47,23 +50,35 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
     menuOptions[index].action();
   };
 
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.focus();
+    }
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       className="glass-screen-matrix-on"
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
+      <div className="menu-title">Select an Option</div>
+
       <ul>
         {menuOptions.map((option, index) => (
           <li
             key={index}
-            className={selectedOptionIndex === index ? "selected" : ""}
-            onClick={() => handleOptionSelect(index)}
+            className={index === 0 ? "selected" : ""}
+            onClick={() => dispatch(selectOption(index))}
           >
-            {option.name}
+            <span>{option.name}</span>
           </li>
         ))}
       </ul>
+
+      <div className="menu-footer">Use arrows and </div>
+      <div></div>
     </div>
   );
 };
