@@ -257,37 +257,6 @@
           6px -5px 20px #815f0e inset;
         overflow: hidden;
         color: @screenOnDark;
-
-        .falling-title-L,
-        .falling-title-R,
-        .rising-title {
-          opacity: 1;
-          position: absolute;
-          font-family: @early;
-          font-size: 8px;
-          text-align: center;
-        }
-
-        .falling-title-L {
-          top: 67px;
-          left: -4px;
-          animation: fall-left 3s ease;
-        }
-
-        .falling-title-R {
-          top: 67px;
-          left: 123px;
-          animation: fall-right 3s ease;
-        }
-
-        .rising-title {
-          transform: scaleX(-1);
-          letter-spacing: -1px;
-          top: 76px;
-          left: 60px;
-          bottom: 0;
-          animation: rise 3s ease;
-        }
       }
     }
 

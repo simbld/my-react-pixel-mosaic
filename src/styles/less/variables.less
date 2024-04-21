@@ -27,6 +27,7 @@
 @b: black;
 @w: white;
 @g: #808080;
+@s: #fdf9c8;
 @gLight: #a2a1a1;
 
 @offOnText: #8d8d8d8e;
@@ -107,7 +108,13 @@
 
 @keyframes screenOn {
   0% {
-    background: @w;
+    background: @screenOff;
+  }
+  10% {
+    background: @s;
+  }
+  20% {
+    background: @screenOnLight;
   }
   100% {
     background: @screenOnLight;
