@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import type { MenuGameboyProps } from "../interfaces/types";
-import type { RootState } from "../features/reducers/stores/store";
-import {
+import menuGameboySlice, {
   nextOption,
   previousOption,
   selectOption
 } from "../features/reducers/menugameboy/menuGameboySlice";
 import { useEffect, useRef } from "react";
+import type { RootState } from "../features/reducers/stores/store";
 
 const MenuGameboy: React.FC<MenuGameboyProps> = ({
   onUploadImage,
@@ -15,14 +15,12 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
   onDownloadImage
 }) => {
   const dispatch = useDispatch();
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const { selectedOptionIndex, optionCount } = useSelector(
-    (state: RootState) => ({
-      selectedOptionIndex: state.menuGameboy.selectedOptionIndex,
-      optionCount: state.menuGameboy.optionCount
-    })
+  const selectedOptionIndex = useSelector(
+    (state: RootState) => state.menuGameboy.selectedOptionIndex
   );
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const menuOptions = [
     { name: "upload my image", action: onUploadImage },
@@ -69,7 +67,7 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
         {menuOptions.map((option, index) => (
           <li
             key={index}
-            className={index === 0 ? "selected" : ""}
+            className={selectedOptionIndex === index ? "selected" : ""}
             onClick={() => dispatch(selectOption(index))}
           >
             <span>{option.name}</span>
