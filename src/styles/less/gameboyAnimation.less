@@ -1,0 +1,92 @@
+// animation: [nom de l'animation] [durée de l'animation] [fonction de timing] [délai avant le début] [nombre de fois] [direction] [mode de remplissage] [état de lecture];
+@import "./gameboy.less";
+
+.switch {
+  position: absolute;
+  width: 14px;
+  height: 5px;
+  background: @switch;
+  border-radius: 20px 20px 0 0;
+  top: -200px;
+  left: -85px;
+  background-image: linear-gradient(
+    46deg,
+    @switchDark,
+    @switchLight 95% 99%,
+    transparent
+  );
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.switch-on {
+  position: absolute;
+  left: -75px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.animate-fall-left {
+  opacity: 0;
+  animation: fall-left 3s ease-out;
+}
+
+.animate-fall-right {
+  opacity: 0;
+  animation: fall-right 3s ease-out;
+}
+
+.animate-rise {
+  opacity: 0;
+  animation: rise 3s ease-out;
+}
+
+/* Styles pour l'ensemble du composant */
+.glass-screen-matrix-on {
+  width: auto;
+  height: 100%;
+  background-color: @screenOnLight;
+  color: @screenOnDark;
+  box-shadow: none;
+  border: @b 0.5px solid;
+  animation: screenOn 1s ease-out;
+}
+
+/* Styles pour la liste */
+.glass-screen-matrix-on ul {
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  list-style-type: none;
+  cursor: pointer;
+  font-size: 5px;
+  font-family: "Early", sans-serif;
+  width: 100%;
+  height: 100%;
+}
+
+/* Styles pour chaque option de menu */
+.glass-screen-matrix-on ul li {
+  margin: 4px;
+}
+
+/* Styles pour l'option de menu sélectionnée */
+.glass-screen-matrix-on ul li.selected {
+  font-size: 7px;
+}
+
+/* Pour afficher le symbole avant l'élément de liste sélectionné */
+.glass-screen-matrix-on ul li.selected::before {
+  content: "~";
+}
+
+.glass-screen-matrix-on ul li.selected::before {
+  display: inline-block;
+  margin-right: 0px;
+  content: "~";
+}
