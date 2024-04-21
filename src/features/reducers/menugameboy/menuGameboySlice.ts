@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { MenuGameboyState } from "../../../interfaces/types";
 
+export type MenuGameboyAction = PayloadAction<number>;
+
 const initialState: MenuGameboyState = {
   selectedOptionIndex: 0,
   optionCount: 4 // Cette valeur peut être dynamique si nécessaire
@@ -11,7 +13,7 @@ export const menuGameboySlice = createSlice({
   initialState,
   reducers: {
     // Action pour sélectionner une option directement
-    selectOption: (state, action: PayloadAction<number>) => {
+    selectOption: (state, action: MenuGameboyAction) => {
       // Vérifie si l'index est dans les limites des options disponibles
       if (action.payload >= 0 && action.payload < state.optionCount) {
         state.selectedOptionIndex = action.payload;
@@ -28,7 +30,7 @@ export const menuGameboySlice = createSlice({
         (state.selectedOptionIndex - 1 + state.optionCount) % state.optionCount;
     },
     // Action pour définir le nombre total d'options (si dynamique)
-    setOptionCount: (state, action: PayloadAction<number>) => {
+    setOptionCount: (state, action: MenuGameboyAction) => {
       state.optionCount = action.payload;
     }
   }
