@@ -13,23 +13,6 @@ const App: React.FC = () => {
   const [showGameboy, setShowGameboy] = useState(false);
   const [showMenuGameboy, setShowMenuGameboy] = useState(false);
 
-  // Define the actions for each menu option
-  const handleUploadImage = () => {
-    // Define what should happen when "upload my image" is clicked
-  };
-
-  const handleChooseFilter = () => {
-    // Define what should happen when "choose my filter" is clicked
-  };
-
-  const handleDisplayOptions = () => {
-    // Define what should happen when "display options" is clicked
-  };
-
-  const handleDownloadImage = () => {
-    // Define what should happen when "download my filtered image" is clicked
-  };
-
   const handleGameboyAnimationEnd = () => {
     setShowMenuGameboy(true);
   };
