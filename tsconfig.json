@@ -15,6 +15,7 @@
       "@contexts/*": ["src/contexts/*"],
       "@env/*": ["src/env/*"],
       "@features/*": ["src/features/*"],
+      "@filters/*": ["src/filters/*"],
       "@reducers/*": ["src/features/reducers/*"],
       "@fonts/*": ["src/fonts/*"],
       "@helpers/*": ["src/helpers/*"],
