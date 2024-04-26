@@ -22,8 +22,8 @@ const Button: React.FC<ButtonProps> = ({ text, onClick, loading = false }) => {
       <svg className="text-svg" viewBox="0 0 1200 300" overflow="visible">
         <defs>
           <linearGradient id="text-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="darkblue" />
-            <stop offset="100%" stopColor="lightblue" />
+            <stop offset="0%" stopColor="grey" />
+            <stop offset="100%" stopColor="purple" />
           </linearGradient>
           <linearGradient
             id="text-gradient-hover"
@@ -32,8 +32,8 @@ const Button: React.FC<ButtonProps> = ({ text, onClick, loading = false }) => {
             x2="0%"
             y2="100%"
           >
-            <stop offset="0%" stopColor="lightblue" />
-            <stop offset="100%" stopColor="darkblue" />
+            <stop offset="0%" stopColor="purple" />
+            <stop offset="100%" stopColor="grey" />
           </linearGradient>
           <linearGradient id="arrow-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="red" />
@@ -113,7 +113,7 @@ const Button: React.FC<ButtonProps> = ({ text, onClick, loading = false }) => {
           className="button-text"
           x="585"
           y="160"
-          fontSize="110"
+          fontSize="100"
           fontFamily="'Back', sans-serif"
           fill="url(#text-gradient)"
           stroke="url(#border-gradient)"
@@ -128,7 +128,7 @@ const Button: React.FC<ButtonProps> = ({ text, onClick, loading = false }) => {
           className="button-text-hover"
           x="530"
           y="150"
-          fontSize="120"
+          fontSize="100"
           fontFamily="'Back', sans-serif"
           fill="url(#text-gradient-hover)"
           stroke="url(#border-gradient)"
