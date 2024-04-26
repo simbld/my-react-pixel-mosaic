@@ -13,29 +13,30 @@ const App: React.FC = () => {
   const [showGameboy, setShowGameboy] = useState(false);
   const [showMenuGameboy, setShowMenuGameboy] = useState(false);
 
-  const handleGameboyAnimationEnd = () => {
-    setShowMenuGameboy(true);
-  };
-
   const handleClick = () => {
     setLoading(true);
     setTimeout(() => {
-      setLoading(false);
       setShowGameboy(true);
-    }, 1000);
+      setLoading(false);
+    });
+  };
+
+  const handleGameboyAnimationEnd = () => {
+    setLoading(false);
+    setShowMenuGameboy(true);
   };
 
   return (
     <ErrorProvider>
       <div className="App">
-        {showGameboy ? (
+        {loading && <Loader />}
+        {showGameboy && (
           <Gameboy
             imageSrc={defaultImage}
             onGameboyHome={handleGameboyAnimationEnd}
           />
-        ) : loading ? (
-          <Loader />
-        ) : (
+        )}
+        {!showGameboy && (
           <Button
             text="HACK & PAST"
             onClick={handleClick}
