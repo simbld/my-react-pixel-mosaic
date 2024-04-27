@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../features/reducers/stores/store";
 import {
@@ -12,6 +12,8 @@ import {
 } from "../features/reducers/gameboy/gameboySlice";
 import MenuGameboy from "./MenuGameboy";
 import { GameboyProps } from "../interfaces/types";
+import { toggleFilter } from "../features/reducers/imageprocessing/imageProcessingSlice";
+import ImageUploaderModal from "../modals/ImageUploaderModal";
 
 const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const dispatch = useDispatch();
@@ -19,6 +21,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     (state: RootState) => state.gameboy
   );
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (poweredOn && soundPlaying) {
@@ -36,54 +39,51 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     }
   }, [poweredOn, soundPlaying]);
 
+  const handleUploadImage = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleChooseFilter = () => {
+    // Implémentez cette fonction selon vos besoins
+  };
+
+  const handleDisplayOptions = () => {
+    // Implémentez cette fonction selon vos besoins
+  };
+
+  const handleDownloadImage = () => {
+    // Implémentez cette fonction selon vos besoins
+  };
+
   const handleSwitchClick = () => {
-    // Bascule l'état poweredOn
     dispatch(togglePower(!poweredOn));
 
     if (!poweredOn) {
-      // Actions si la console est allumée
       dispatch(playSound());
-      dispatch(showTitles()); // Montre les titres initialement
-      // Potentiellement, vous pourriez vouloir retarder l'affichage du menu
+      dispatch(showTitles());
       setTimeout(() => {
-        dispatch(showMenu()); // Affiche le menu après un délai
+        dispatch(showMenu());
       }, 4500);
     } else {
-      // Actions si la console est éteinte
       dispatch(stopSound());
       dispatch(hideTitles());
       dispatch(hideMenu());
     }
   };
 
-  // Gère la fin des animations de démarrage
   const handleAnimationEnd = () => {
-    // Cache les titres
     dispatch(hideTitles());
-    // Montre le menu après que les titres sont cachés
     dispatch(showMenu());
-    // Appel à onGameboyHome si nécessaire à ce moment
     onGameboyHome();
-  };
-
-  const handleUploadImage = () => {
-    console.log("Upload Image clicked");
-  };
-
-  const handleChooseFilter = () => {
-    console.log("Choose Filter clicked");
-  };
-
-  const handleDisplayOptions = () => {
-    console.log("Display Options clicked");
-  };
-
-  const handleDownloadImage = () => {
-    console.log("Download Image clicked");
   };
 
   return (
     <div className={`gameboy ${poweredOn ? "gameboy-on" : ""}`}>
+      <ImageUploaderModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onUpload={(file) => console.log(file)}
+      />
       <div
         className={`switch ${poweredOn ? "switch-on" : ""}`}
         onClick={handleSwitchClick}

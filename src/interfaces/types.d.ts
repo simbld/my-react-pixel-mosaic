@@ -36,12 +36,7 @@ export interface ImageURLProps {
 
 // custom hooks
 export interface UseImageLoaderReturnProps {
-  imageLoader: ImageData | null;
-  loading: boolean;
-}
-
-export interface UseImageLoaderReturnProps {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  imageData: ImageData | null;
   loading: boolean;
 }
 
@@ -61,11 +56,6 @@ export interface UseErrorReturnProps {
 }
 
 // utils
-export interface AsciiArtHookResultProps {
-  asciiArt: string;
-  loading: boolean;
-  error: string | null;
-}
 
 export interface AsciiCharacterProps {
   brightness: number;
@@ -99,10 +89,6 @@ export interface HomeFiltersProps {
 
 export interface AppImageDataProps {
   appImageData: string;
-}
-
-export interface AsciiArtFilterProps {
-  imageSrc: string;
 }
 
 export interface CanvasComponentProps {
@@ -156,4 +142,16 @@ export interface MenuGameboyProps {
   onChooseFilter: () => void;
   onDisplayOptions: () => void;
   onDownloadImage: () => void;
+}
+
+// features
+export interface FilterProps {
+  imageSrc: string;
+}
+
+// modals
+export interface ImageUploaderModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onUpload: (file: File) => void;
 }
