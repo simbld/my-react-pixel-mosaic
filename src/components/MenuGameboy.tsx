@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import type { MenuGameboyProps } from "../interfaces/types";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import type { RootState } from "../features/reducers/stores/store";
 import {
   nextOption,
@@ -8,10 +8,26 @@ import {
   selectOption
 } from "../features/reducers/menugameboy/menuGameboySlice";
 
+const MenuItem = memo(
+  ({
+    name,
+    onSelect,
+    isSelected
+  }: {
+    name: string;
+    onSelect: () => void;
+    isSelected: boolean;
+  }) => (
+    <li className={isSelected ? "selected" : ""} onClick={onSelect}>
+      <span>{name}</span>
+    </li>
+  )
+);
+
 const MenuGameboy: React.FC<MenuGameboyProps> = ({
   onUploadImage,
   onChooseFilter,
-  onDisplayOptions,
+  onDisplaySettings,
   onDownloadImage
 }) => {
   const selectedOptionIndex = useSelector(
@@ -30,8 +46,8 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
       action: onChooseFilter
     },
     {
-      name: "options",
-      action: onDisplayOptions
+      name: "settings",
+      action: onDisplaySettings
     },
     {
       name: "download",
@@ -67,16 +83,15 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
       <div className="menu-title">Select an Option</div>
       <ul>
         {menuOptions.map((option, index) => (
-          <li
+          <MenuItem
             key={index}
-            className={selectedOptionIndex === index ? "selected" : ""}
-            onClick={() => dispatch(selectOption(index))}
-          >
-            <span>{option.name}</span>
-          </li>
+            name={option.name}
+            onSelect={() => dispatch(selectOption(index))}
+            isSelected={selectedOptionIndex === index}
+          />
         ))}
       </ul>
-      <div className="menu-footer">Use arrows and ↵</div>
+      <div className="menu-footer">Press A or ↵</div>
     </div>
   );
 };
