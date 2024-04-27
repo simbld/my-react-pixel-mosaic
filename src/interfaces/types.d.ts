@@ -140,7 +140,7 @@ export interface GameboyProps {
 export interface MenuGameboyProps {
   onUploadImage: () => void;
   onChooseFilter: () => void;
-  onDisplayOptions: () => void;
+  onDisplaySettings: () => void;
   onDownloadImage: () => void;
 }
 

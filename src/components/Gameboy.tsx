@@ -12,8 +12,11 @@ import {
 } from "../features/reducers/gameboy/gameboySlice";
 import MenuGameboy from "./MenuGameboy";
 import { GameboyProps } from "../interfaces/types";
-import { toggleFilter } from "../features/reducers/imageprocessing/imageProcessingSlice";
 import ImageUploaderModal from "../modals/ImageUploaderModal";
+import {
+  nextOption,
+  previousOption
+} from "../features/reducers/menugameboy/menuGameboySlice";
 
 const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const dispatch = useDispatch();
@@ -22,6 +25,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   );
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageUpload, setImageUpload] = useState<string | null>(null);
 
   useEffect(() => {
     if (poweredOn && soundPlaying) {
@@ -47,7 +51,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     // Implémentez cette fonction selon vos besoins
   };
 
-  const handleDisplayOptions = () => {
+  const handleDisplaySettings = () => {
     // Implémentez cette fonction selon vos besoins
   };
 
@@ -77,12 +81,20 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     onGameboyHome();
   };
 
+  const handleImageDisplay = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImageUpload(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
     <div className={`gameboy ${poweredOn ? "gameboy-on" : ""}`}>
       <ImageUploaderModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onUpload={(file) => console.log(file)}
+        onUpload={handleImageDisplay}
       />
       <div
         className={`switch ${poweredOn ? "switch-on" : ""}`}
@@ -146,7 +158,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
               <MenuGameboy
                 onUploadImage={handleUploadImage}
                 onChooseFilter={handleChooseFilter}
-                onDisplayOptions={handleDisplayOptions}
+                onDisplaySettings={handleDisplaySettings}
                 onDownloadImage={handleDownloadImage}
               />
             )}
@@ -191,12 +203,30 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           <div className="pad-center">
             <div className="pad-center-cir"></div>
           </div>
+          <div className="control-area">
+            <div
+              className="control up"
+              onClick={() => dispatch(previousOption())}
+            ></div>
+            <div
+              className="control down"
+              onClick={() => dispatch(nextOption())}
+            ></div>
+            <div
+              className="control left"
+              onClick={() => dispatch(previousOption())}
+            ></div>
+            <div
+              className="control right"
+              onClick={() => dispatch(nextOption())}
+            ></div>
+          </div>
         </div>
 
         <div className="BA-btn-container">
           <div className="pink-btn">
             <div className="pink-btn-B"></div>
-            <div className="pink-btn-A"></div>
+            <div className="pink-btn-A" onClick={handleUploadImage}></div>
           </div>
           <div className="BA-btn-container-label">
             <div className="b">B</div>
