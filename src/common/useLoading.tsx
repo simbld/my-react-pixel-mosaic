@@ -40,8 +40,8 @@ function useLoading() {
   const [error, setError] = useState<ErrorState>(null);
 
   const startLoading = () => {
-    setError(null); // Réinitialiser l'erreur
-    setLoading(true); // Commencer le chargement
+    setError(null);
+    setLoading(true);
   };
 
   const endLoading = () => {
@@ -49,7 +49,7 @@ function useLoading() {
   };
 
   const handleError = (error: Error) => {
-    setError(error); // Gérer l'erreur
+    setError(error);
     setLoading(false); // Terminer le chargement même en cas d'erreur
   };
 
