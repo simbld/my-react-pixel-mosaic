@@ -26,13 +26,13 @@
 .menu-title,
 .menu-footer {
   width: 100%;
-  height: 20%;
+  height: 10%;
   background-color: @textBrand;
   color: @screenOnLight;
-  font-size: 14px;
+  font-size: 9px;
   font-family: "DOS", monospace;
   font-weight: bold;
-  padding: 2px;
+  padding: 1.5px;
 }
 
 .glass-screen-matrix {
@@ -69,6 +69,10 @@
 }
 
 .glass-screen-matrix-on {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
   width: auto;
   height: 100%;
   display: flex;
@@ -79,7 +83,6 @@
   font-family: "Early", sans-serif;
   box-shadow: none;
   border: @b 0.5px solid;
-  animation: screenOn 5s ease-out;
 }
 
 .glass-screen-matrix-on::selection {
@@ -98,10 +101,10 @@
 
 .glass-screen-matrix-on ul {
   margin: 0;
-  padding: 10px 0px;
+  padding: 5px 0px;
   display: flex;
-  justify-content: space-evenly;
-  align-content: space-between;
+  justify-content: flex-end;
+  align-content: space-around;
   flex-wrap: wrap;
   list-style-type: none;
   cursor: pointer;
@@ -109,7 +112,7 @@
   width: 100%;
   height: 100%;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 .glass-screen-matrix-on ul li.selected::before {
@@ -117,7 +120,8 @@
   position: absolute;
   color: @screenOnDark;
   font-size: 13px;
-  margin-left: -35px;
+  top: 0;
+  left: -35px;
   font-family: "early", "DOS", monospace;
   animation: none;
 }
@@ -132,4 +136,13 @@
   margin-left: -24px;
   font-size: 10px;
   animation: blinking 0.8s infinite;
+}
+
+.glass-screen-matrix-on .cursor {
+  position: fixed;
+  top: 0;
+  left: 0; /* Aligner le curseur à gauche */
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Empêche le conteneur de bloquer les clics sur les éléments en dessous */
 }

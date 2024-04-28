@@ -10,32 +10,19 @@
 
 .gameboy {
   .flex-center(flex, column);
-  position: absolute;
+  position: relative;
+  z-index: 1;
 
   .console {
     position: relative;
-    top: -196px;
-    left: -125px;
+    top: 0px;
+    left: 0px;
     width: @allW;
     height: calc(@allW * 1.8);
     border-radius: 10px 10px 68px 10px;
     background: @gameboyColor;
+    background-repeat: repeat;
     overflow: hidden;
-    background-image: linear-gradient(
-        90deg,
-        @lineDark,
-        transparent 6% 95%,
-        @lineLight 98% 99%,
-        transparent
-      ),
-      linear-gradient(
-        0deg,
-        @reflect,
-        transparent 1% 97%,
-        @lineLight 99% 99%,
-        transparent,
-        @lineDark
-      );
     box-shadow:
       -3px 0px 4px 0px white inset,
       -1px -5px 8px 0px #010101 inset,
@@ -44,6 +31,19 @@
       0 35px 20px -2px rgba(0, 0, 0, 0.08),
       -20px 18px 20px 20px #00000082,
       -15px 20px 20px 20px rgba(0, 0, 0, 0.477);
+    z-index: 2;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: @gameboyColorGresille;
+      opacity: 0.1;
+      z-index: -1;
+    }
 
     .big-horizontal-line {
       filter: blur(0.3px);
@@ -99,7 +99,7 @@
         @lineBottom
       );
       border-bottom: transparent;
-      z-index: 9;
+      z-index: 10;
     }
 
     .small-L-vertical-line {
@@ -116,7 +116,7 @@
       &-container {
         cursor: pointer;
         .flex-center();
-        z-index: 2;
+        z-index: 10;
         transform: translate(0, 0);
         top: 5px;
         width: 58px;
@@ -144,7 +144,7 @@
     .line-container-top {
       position: relative;
       left: 2%;
-      z-index: 6;
+      z-index: 10;
 
       .line {
         position: absolute;
@@ -154,7 +154,7 @@
         background: linear-gradient(to top, @gameboyColor, @offOnBoxBottom);
         border-right: 0.25px @offOnBorderTop solid;
         border-left: 0.5px @w solid;
-        z-index: 9;
+        z-index: 10;
         filter: blur(0.3px);
         transform: translate(0, 0);
 
@@ -434,20 +434,28 @@
     }
 
     .control-area {
+      border-radius: 50px;
+      width: 110%;
+      height: 110%;
+      box-shadow:
+        0px 0px 5px #d1d1d1 inset,
+        0px 0px 5px #a0a09f inset;
+      overflow: hidden;
       position: absolute;
-      top: 0;
-      left: 0;
+      top: -4px;
+      left: -4px;
       right: 0;
       bottom: 0;
+      z-index: 10;
     }
 
-    .control {
+    .controlP {
       position: absolute;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
       cursor: pointer;
       user-select: none;
     }
@@ -482,7 +490,7 @@
       position: absolute;
       top: 225px;
       left: 32px;
-      gap: 2px;
+      gap: 5px;
       color: @textBrand;
       font-weight: bold;
 
@@ -526,6 +534,7 @@
           0px 0px 5px @gameboyColor inset,
           0px 0px 5px @BtnDark inset;
         overflow: hidden;
+        z-index: 10;
 
         &-B,
         &-A {
@@ -540,7 +549,6 @@
             -1px 2px 2px -1px @pinkBtnTransform,
             0px -2px 2px -1px @pinkBtnTransform,
             -3px 0px 2px -1px @b;
-          cursor: pointer;
         }
       }
 
@@ -560,6 +568,39 @@
       }
     }
 
+    .control-btn {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .controlB {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .btn-B {
+      border-radius: 50px;
+      top: 22px;
+      transform: translateY(-50%);
+      left: -2px;
+    }
+
+    .btn-A {
+      border-radius: 50px;
+      top: 22px;
+      transform: translateY(-50%);
+      right: 11px;
+    }
+
     .menu {
       .flex-center(flex, row, space-around);
       width: 90px;
@@ -573,6 +614,7 @@
       .menu-start {
         .rotation(@rotateText);
         text-align: center;
+        z-index: 10;
 
         .select,
         .start {
@@ -584,13 +626,13 @@
         }
 
         .select {
-          left: 5px;
+          left: -2px;
           top: 18px;
           transform: scale(1.3, 1);
         }
 
         .start {
-          left: 8px;
+          left: 0;
           top: 17px;
           transform: scale(1.5, 1);
         }
@@ -622,6 +664,41 @@
             1px 2px 2px -1px @menu;
         }
       }
+    }
+
+    .control-menu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .control {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .select {
+      width: 44px;
+      height: 44px;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+    }
+
+    .start {
+      width: 44px;
+      height: 44px;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 0;
     }
 
     .speaker {
@@ -656,7 +733,7 @@
           );
 
           filter: blur(2px);
-          z-index: -1;
+          z-index: 10;
         }
       }
 
@@ -718,7 +795,7 @@
         color: @w;
         background: @gameboyColor;
         overflow: hidden;
-        z-index: 9;
+        z-index: 10;
       }
 
       .line-container-bottom {
@@ -734,7 +811,7 @@
           border-right: 0.25px @offOnBorderTop solid;
           border-left: 0.5px @w solid;
           border-top: transparent;
-          z-index: 9;
+          z-index: 10;
           filter: blur(0.3px);
           transform: translate(0, 0);
 
