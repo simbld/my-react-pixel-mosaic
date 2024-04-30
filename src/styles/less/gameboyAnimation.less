@@ -7,16 +7,18 @@
   width: 14px;
   height: 5px;
   border-radius: 20px 20px 0 0;
-  top: -200px;
-  left: -85px;
-  background-image: linear-gradient(0deg, @g, white);
+  top: -4px;
+  left: 40px;
+  z-index: 2;
+  background: @w;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .switch-on {
   position: absolute;
-  left: -75px;
+  left: 50px;
+  top: -4px;
 }
 
 .hidden {
@@ -49,13 +51,13 @@
   .falling-title-L {
     top: 67px;
     left: -4px;
-    animation: fall-left 5s ease;
+    animation: fall-left 5s ease 1s;
   }
 
   .falling-title-R {
     top: 67px;
     left: 123px;
-    animation: fall-right 5s ease;
+    animation: fall-right 5s ease 1s;
   }
 
   .rising-title {
@@ -64,7 +66,7 @@
     top: 76px;
     left: 60px;
     bottom: 0;
-    animation: rise 5s ease-out;
+    animation: rise 5s ease-out 1s;
   }
 }
 
@@ -141,8 +143,8 @@
 .glass-screen-matrix-on .cursor {
   position: fixed;
   top: 0;
-  left: 0; /* Aligner le curseur à gauche */
+  left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* Empêche le conteneur de bloquer les clics sur les éléments en dessous */
+  pointer-events: none;
 }

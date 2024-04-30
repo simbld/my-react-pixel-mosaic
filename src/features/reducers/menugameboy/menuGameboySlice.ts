@@ -10,23 +10,23 @@ export const menuGameboySlice = createSlice({
   name: "menuGameboy",
   initialState,
   reducers: {
-    // Action pour sélectionner une option directement
     selectOption: (state, action: PayloadAction<number>) => {
       state.selectedOptionIndex = action.payload;
     },
-    // Action pour naviguer à l'option suivante
     nextOption: (state) => {
       state.selectedOptionIndex = (state.selectedOptionIndex + 1) % 4;
     },
-    // Action pour revenir à l'option précédente
     previousOption: (state) => {
       state.selectedOptionIndex = (state.selectedOptionIndex - 1 + 4) % 4;
+    },
+    resetToFirstOption: (state) => {
+      state.selectedOptionIndex = 0;
     }
   }
 });
 
 // Exportation des actions pour utilisation dans les composants
-export const { selectOption, nextOption, previousOption } =
+export const { selectOption, nextOption, previousOption, resetToFirstOption } =
   menuGameboySlice.actions;
 
 // Exportation du reducer pour inclusion dans le store

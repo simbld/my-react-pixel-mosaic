@@ -1,4 +1,7 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { hideMenu } from "../gameboy/gameboySlice";
 import { RootState } from "../stores/store";
+import { resetToFirstOption } from "./menuGameboySlice";
 
 // Un simple selector pour obtenir l'index de l'option sélectionnée
 export const selectOptionIndex = (state: RootState) =>
@@ -14,6 +17,17 @@ export const selectCurrentOption = (state: RootState) => {
   const options = state.menuGameboy.options; // Assurez-vous que vous stockez vos options quelque part dans l'état
   return options[state.menuGameboy.selectedOptionIndex];
 };
+
+export const goBackToMainMenu = createAsyncThunk(
+  "menuGameboy/goBackToMainMenu",
+  async (_, { dispatch, getState }) => {
+    const { gameboy } = getState() as RootState;
+    if (gameboy.menuVisible) {
+      dispatch(hideMenu());
+    }
+    dispatch(resetToFirstOption());
+  }
+);
 
 // Si vous avez besoin de sélectionner des données plus complexes ou calculées,
 // vous pouvez utiliser createSelector pour la composition des selectors:
