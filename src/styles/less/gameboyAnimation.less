@@ -4,11 +4,11 @@
 
 .switch {
   position: absolute;
-  width: 14px;
-  height: 5px;
-  border-radius: 20px 20px 0 0;
-  top: -4px;
-  left: 40px;
+  width: 34.78px;
+  height: 12.48px;
+  border-radius: 49.69px 49.69px 0 0;
+  top: -9.93px;
+  left: 99.39px;
   z-index: 2;
   background: @w;
   cursor: pointer;
@@ -17,8 +17,8 @@
 
 .switch-on {
   position: absolute;
-  left: 50px;
-  top: -4px;
+  left: 124.24px;
+  top: -9.93px;
 }
 
 .hidden {
@@ -31,10 +31,10 @@
   height: 10%;
   background-color: @textBrand;
   color: @screenOnLight;
-  font-size: 9px;
+  font-size: 22.36px;
   font-family: "DOS", monospace;
   font-weight: bold;
-  padding: 1.5px;
+  padding: 3.72px;
 }
 
 .glass-screen-matrix {
@@ -44,27 +44,29 @@
     opacity: 0;
     position: absolute;
     font-family: @early;
-    font-size: 8px;
+    font-size: 30px;
     text-align: center;
   }
 
   .falling-title-L {
-    top: 67px;
-    left: -4px;
+    top: 167px;
+    left: 30px;
+    letter-spacing: -5px;
     animation: fall-left 5s ease 1s;
   }
 
   .falling-title-R {
-    top: 67px;
-    left: 123px;
+    top: 167px;
+    right: 30px;
+    letter-spacing: -5px;
     animation: fall-right 5s ease 1s;
   }
 
   .rising-title {
     transform: scaleX(-1);
-    letter-spacing: -1px;
-    top: 76px;
-    left: 60px;
+    letter-spacing: -5px;
+    top: 185px;
+    left: 150px;
     bottom: 0;
     animation: rise 5s ease-out 1s;
   }
@@ -84,7 +86,7 @@
   color: @screenOnDark;
   font-family: "Early", sans-serif;
   box-shadow: none;
-  border: @b 0.5px solid;
+  border: @b 1.24px solid;
 }
 
 .glass-screen-matrix-on::selection {
@@ -93,24 +95,24 @@
 }
 
 .selected {
-  left: 22px;
+  left: 54.66px;
   content: "~";
   color: @screenOnDark;
-  font-size: 12px;
+  font-size: 29.81px;
   font-family: "early", "DOS", monospace;
   margin-left: 0px;
 }
 
 .glass-screen-matrix-on ul {
   margin: 0;
-  padding: 5px 0px;
+  padding: 12.42px 0px;
   display: flex;
   justify-content: flex-end;
   align-content: space-around;
   flex-wrap: wrap;
   list-style-type: none;
   cursor: pointer;
-  font-size: 7px;
+  font-size: 17.39px;
   width: 100%;
   height: 100%;
   flex-direction: column;
@@ -121,22 +123,22 @@
   content: "~";
   position: absolute;
   color: @screenOnDark;
-  font-size: 13px;
+  font-size: 32.3px;
   top: 0;
-  left: -35px;
+  left: -86.96px;
   font-family: "early", "DOS", monospace;
   animation: none;
 }
 
 .glass-screen-matrix-on ul li {
   position: relative;
-  left: 38px;
+  left: 94.42px;
 }
 
 .glass-screen-matrix-on ul li.selected span {
   white-space: nowrap;
-  margin-left: -24px;
-  font-size: 10px;
+  margin-left: -59.63px;
+  font-size: 24.84px;
   animation: blinking 0.8s infinite;
 }
 

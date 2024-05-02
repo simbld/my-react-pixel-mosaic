@@ -5,8 +5,10 @@ import type { RootState } from "../features/reducers/stores/store";
 import {
   nextOption,
   previousOption,
-  selectOption
+  selectOption,
+  resetToFirstOption
 } from "../features/reducers/menugameboy/menuGameboySlice";
+import { defaultImage } from "../config/config";
 
 const MenuItem = memo(
   ({
@@ -30,12 +32,13 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
   onDisplaySettings,
   onDownloadImage
 }) => {
+  const imageUrl = useSelector((state: RootState) => state.imageProcessing.url);
   const selectedOptionIndex = useSelector(
     (state: RootState) => state.menuGameboy.selectedOptionIndex
   );
+
   const dispatch = useDispatch();
   const containerRef = useRef<HTMLDivElement | null>(null);
-
   const menuOptions = [
     {
       name: "open file",
@@ -55,9 +58,31 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
     }
   ];
 
+  const handleBackAction = () => {
+    dispatch(resetToFirstOption());
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    switch (event.key) {
+      case "ArrowDown":
+        dispatch(nextOption());
+        break;
+      case "ArrowUp":
+        dispatch(previousOption());
+        break;
+      case "Enter":
+        menuOptions[selectedOptionIndex]?.action();
+        break;
+      case "Escape":
+      case "b": // Supposons que 'b' est pour le bouton B
+        handleBackAction();
+        break;
+    }
+  };
+
   useEffect(() => {
     if (containerRef.current) {
-      containerRef.current.focus();
+      containerRef.current.style.backgroundImage = `url(${defaultImage})`;
     }
   }, []);
 
@@ -65,22 +90,11 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
     <div
       ref={containerRef}
       className="glass-screen-matrix-on"
-      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
-        switch (event.key) {
-          case "ArrowDown":
-            dispatch(nextOption());
-            break;
-          case "ArrowUp":
-            dispatch(previousOption());
-            break;
-          case "Enter":
-            menuOptions[selectedOptionIndex]?.action();
-            break;
-        }
-      }}
+      onKeyDown={handleKeyDown}
+      onBlur={() => containerRef.current?.focus()}
       tabIndex={0}
     >
-      <div className="menu-title">Select an Option</div>
+      <div className="menu-title">Use Pad or </div>
       <ul>
         {menuOptions.map((option, index) => (
           <MenuItem

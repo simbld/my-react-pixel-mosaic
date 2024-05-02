@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../features/reducers/stores/store";
+import type { AppDispatch, RootState } from "../features/reducers/stores/store";
 import {
   togglePower,
   playSound,
@@ -15,33 +15,22 @@ import { GameboyProps } from "../interfaces/types";
 import ImageUploaderModal from "../modals/ImageUploaderModal";
 import {
   nextOption,
-  previousOption
+  previousOption,
+  selectOption,
+  resetToFirstOption
 } from "../features/reducers/menugameboy/menuGameboySlice";
 
 const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { poweredOn, titlesShown, menuVisible, soundPlaying } = useSelector(
     (state: RootState) => state.gameboy
   );
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUpload, setImageUpload] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (poweredOn && soundPlaying) {
-      audioRef.current = new Audio("/src/assets/gameboy-sound.mp3");
-      audioRef.current
-        .play()
-        .catch((err) => console.error("Error playing audio:", err));
-      return () => {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.currentTime = 0;
-          audioRef.current = null;
-        }
-      };
-    }
-  }, [poweredOn, soundPlaying]);
+  const selectedOptionIndex = useSelector(
+    (state: RootState) => state.menuGameboy.selectedOptionIndex
+  );
 
   const handleUploadImage = () => {
     setIsModalOpen(true);
@@ -67,7 +56,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
       dispatch(showTitles());
       setTimeout(() => {
         dispatch(showMenu());
-      }, 4500);
+      }, 6000);
     } else {
       dispatch(stopSound());
       dispatch(hideTitles());
@@ -88,6 +77,52 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     };
     reader.readAsDataURL(file);
   };
+
+  const handleConfirmSelection = () => {
+    dispatch(selectOption(selectedOptionIndex));
+  };
+
+  const handleReset = () => {
+    dispatch(resetToFirstOption());
+  };
+
+  useEffect(() => {
+    if (poweredOn && soundPlaying) {
+      audioRef.current = new Audio("/src/assets/gameboy-sound.mp3");
+      audioRef.current
+        .play()
+        .catch((err) => console.error("Error playing audio:", err));
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+          audioRef.current = null;
+        }
+      };
+    }
+  }, [poweredOn, soundPlaying]);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      switch (event.key) {
+        case "Start":
+        case "Enter":
+        case "a":
+          handleConfirmSelection();
+          break;
+        case "Select":
+        case "Escape":
+        case "b":
+          handleReset();
+          break;
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleConfirmSelection, handleReset]);
 
   return (
     <div className={`gameboy ${poweredOn ? "gameboy-on" : ""}`}>
@@ -166,8 +201,8 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
         </div>
 
         <div className="brand">
-          <div className="nintendo">Nintendo</div>
-          <div className="GAME_BOY">GAME BOY</div>
+          <div className="nintendo">Simon</div>
+          <div className="GAME_BOY">BULLADO</div>
           <div className="TM">TM</div>
         </div>
 
@@ -205,32 +240,39 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           </div>
           <div className="control-area">
             <div
-              className="control up"
+              className="controlP up"
               onClick={() => dispatch(previousOption())}
             ></div>
             <div
-              className="control down"
+              className="controlP down"
               onClick={() => dispatch(nextOption())}
             ></div>
             <div
-              className="control left"
+              className="controlP left"
               onClick={() => dispatch(previousOption())}
             ></div>
             <div
-              className="control right"
+              className="controlP right"
               onClick={() => dispatch(nextOption())}
             ></div>
           </div>
         </div>
 
-        <div className="BA-btn-container">
-          <div className="pink-btn">
-            <div className="pink-btn-B"></div>
-            <div className="pink-btn-A" onClick={handleUploadImage}></div>
+        <div className="BA-btn-text-container">
+          <div className="BA-btn-container">
+            <div className="BA-btn-container-B"></div>
+            <div className="BA-btn-container-A"></div>
           </div>
-          <div className="BA-btn-container-label">
-            <div className="b">B</div>
-            <div className="a">A</div>
+          <div className="BA-btn-container-text">
+            <div className="BA-btn-container-text-B">B</div>
+            <div className="BA-btn-container-text-A">A</div>
+          </div>
+          <div className="control-btn">
+            <div className="controlB btn-B" onClick={handleReset}></div>
+            <div
+              className="controlB btn-A"
+              onClick={handleConfirmSelection}
+            ></div>
           </div>
         </div>
 
@@ -247,9 +289,16 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
             </div>
             <div className="start">START</div>
           </div>
+          <div className="control-menu">
+            <div className="control select" onClick={handleReset}></div>
+            <div
+              className="control start"
+              onClick={handleConfirmSelection}
+            ></div>
+          </div>
         </div>
         <div className="phones">
-          <div className="phones-sound">ΩPHONES</div>
+          <div className="phones-sound">🎧PHONES</div>
           <div className="line-container-bottom">
             <div className="line"></div>
             <div className="line"></div>
@@ -257,6 +306,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           </div>
         </div>
         <div className="speaker">
+          <div className="speaker-line"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
           <div className="speaker-line"></div>
