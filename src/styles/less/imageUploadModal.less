@@ -10,83 +10,99 @@
 }
 
 .closeButton {
-  width: 10rem;
-  height: 3rem;
+  .flex-center();
+  width: 15rem;
+  height: 4rem;
+  bottom: 15%;
   cursor: pointer;
-  border-radius: 15px;
-  border: black 1px solid;
-  background-color: #f44336;
-  color: white;
-  font-size: 16px;
+  box-shadow: 5px 5px 0px 0px @screenOnOutline;
+  text-shadow:
+    3px 0px 0px @screenOnOutline,
+    -3px 0px 0px @screenOnOutline,
+    0px 3px 0px @screenOnOutline,
+    0px -3px 0px @screenOnOutline;
+  border: @screenOnOutline 3px solid;
+  background-color: @screenOnMiddle;
+  color: @screenOnDark;
+  font-size: 25px;
+  font-family: "Early", sans-serif;
+  position: absolute;
+  z-index: 101;
+}
+
+.closeButton:active {
+  box-shadow: 0px 0px 0px 0px @screenOnOutline;
+  transform: translate(5px, 5px);
+  transition:
+    box-shadow 0.1s,
+    transform 0.1s;
 }
 
 .glass-screen-modal {
   .flex-center();
   z-index: 101;
-  padding: 20px;
-  width: 1440px;
-  height: 1120px;
+  padding: 51.89px;
+  width: 120rem;
+  height: 100rem;
   background: @glass;
   margin: 0;
   position: relative;
-  border-radius: 10px 10px 36px 10px;
+  border-radius: 50px 50px 150px 50px;
   box-shadow:
-    inset -3px 3px 2px #544f60,
-    inset -6px 6px 2px -9px #1b1b1b,
-    inset -7px 1px 3px -3px #d8d5d5,
-    0px -2px 1px #858585;
+    inset -9px 9px 6px #544f60,
+    inset -16px 16px 6px -23.35px #1b1b1b,
+    inset -7px 1px 9px -9px #d8d5d5,
+    0px -6px 2.59px #858585;
 
   .text-indication-modal {
     .battery-text-modal {
       color: @textGColor;
       filter: blur(0.15px);
-      font-size: 1rem;
+      font-size: 3rem;
       font-family: @lavigne;
       transform: scaleX(1.5);
       position: absolute;
       z-index: 20;
       display: inline-block;
-      margin-left: -3rem;
-      margin-top: -5.18rem;
+      left: 5%;
+      top: 43%;
     }
     .indicator-light-modal {
       position: absolute;
-      top: 31.13rem;
-      left: 64.86px;
-      width: 18.16px;
-      height: 18.16px;
-      border-radius: 129.73px;
+      top: 37rem;
+      left: 6rem;
+      width: 25px;
+      height: 25px;
+      border-radius: 50px;
       background: @batteryOn;
+      box-shadow: 0px 0px 25px 5px #f50f36;
+      border: rgb(137, 51, 51) 1px solid;
       z-index: 20;
     }
     .dot-matrix-modal {
+      white-space: nowrap;
       position: absolute;
-      padding: 2.59px;
-      top: 15.56px;
-      left: 30%;
-      width: 311px;
+      top: 5%;
+      left: 36%;
+      width: 45%;
       background: @glass;
       color: @textGColor;
-      font-size: 48px;
+      font-size: 4rem;
       font-family: @lavigne;
-      text-align: center;
       transform: scale(1.05, 0.8);
       z-index: 20;
     }
   }
-
   &-line {
     position: absolute;
-    top: 7%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 5.5%;
+    left: 4%;
     &-l {
-      height: 4.15px;
-      width: 30rem;
+      height: 12px;
+      width: 110rem;
       background: @topLineScreen;
-      margin-bottom: 3.37px;
+      margin-bottom: 5px;
       &:nth-child(2) {
-        height: 4.15px;
         background: @bottomLineScreen;
       }
     }
@@ -95,15 +111,57 @@
   .glass-screen-matrix-modal {
     .container();
     position: absolute;
-    top: 7.78rem;
+    top: 1%;
+    left: -2%;
     position: relative;
-    width: 80%;
-    height: 80%;
+    width: 65%;
+    height: 85%;
     background-color: @screenOnLight;
     color: @screenOnDark;
     font-family: "Early", sans-serif;
-
     border: @b 2.59px solid;
     z-index: 20;
+  }
+  .title-modal {
+    position: absolute;
+    font-size: 2rem;
+    right: 3%;
+    bottom: 2%;
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .upload-button {
+    .flex-center();
+    position: absolute;
+    height: 140px;
+    width: 380px;
+    box-shadow:
+      5px 5px 0px 0px @screenOnOutline,
+      10px 10px 0px 0px @screenOnOutline,
+      15px 15px 0px 0px @screenOnOutline;
+    text-shadow:
+      3px 0px 0px @screenOnOutline,
+      -3px 0px 0px @screenOnOutline,
+      0px 3px 0px @screenOnOutline,
+      0px -3px 0px @screenOnOutline;
+    border: @screenOnOutline 3px solid;
+    background-color: @screenOnMiddle;
+    color: @screenOnDark;
+    font-size: 35px;
+    font-family: "Early", sans-serif;
+    cursor: pointer;
+    top: 45%;
+    left: 30%;
+  }
+
+  .upload-button:active {
+    box-shadow: 5px 5px 0px 0px @screenOnOutline;
+    transform: translate(15px, 15px);
+    transition:
+      box-shadow 0.3s,
+      transform 0.3s;
   }
 }
