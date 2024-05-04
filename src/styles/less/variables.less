@@ -1,7 +1,8 @@
 @title-bg-color: rgba(5, 24, 98, 0.418);
 @text-btn: linear-gradient(90deg, #e0a735, #f7e062, #876624);
 
-@bg-image: url("../../assets/brick-black.jpg");
+@bg-image: url("src/assets/brick-black.jpg");
+@soundStart: url("src/assets/gameboy-sound.mp3");
 @box-shadow:
   -2px -5px 0px rgba(112, 107, 100, 0.875),
   inset 20px -20px 10px rgba(36, 3, 44, 0.365),
@@ -18,9 +19,10 @@
 @lavigne: "Lavigne", sans-serif;
 @back: "Back", sans-serif;
 
-@allW: 263px;
+@allW: 665px;
 
 @rotateBtn: -24.5deg;
+@rotateReflect: 25deg;
 @rotateSpeaker: -28.5deg;
 @rotateText: -27deg;
 
@@ -46,16 +48,22 @@
 
 @gameboyColor: rgb(209, 209, 209);
 @gameboyColorGresille: url("../../assets/background-grésillé.png");
+@text-A: url("../../assets/text-A.png");
+@text-B: url("../../assets/text-B.png");
+@text-Start: url("../../assets/text-Start.png");
+@text-Select: url("../../assets/text-Select.png");
 @gameboyColorDark: #7e7e8b;
 
 @BtnLight: #e8e7e6;
 @BtnDark: #a0a09f;
 
+@controlArea: white;
+
 @textBrand: #303390;
 @reliefColor: #cfcfcf;
 
 @bottomLineScreen: @textBrand;
-@topLineScreen: @pinkBtn;
+@topLineScreen: @pinkBtnDark;
 @textGColor: #d8d7e1;
 
 @line: #dbd5ce;
@@ -64,6 +72,8 @@
 @lineTop: #888787;
 @lineMiddle: #cccccc;
 @lineBottom: #b7b7b7;
+
+@phoneText: #ffffff00;
 
 @glass: #6b6d7b;
 @glassLight: #b9b8c3;
@@ -79,9 +89,9 @@
 @switchLight: #fefefe;
 @switchDark: #b1afaf;
 
-@pinkBtn: #7c094f;
+@pinkBtn: #b30f42;
 @pinkBtnLight: #896873;
-@pinkBtnDark: #2b0b17;
+@pinkBtnDark: #640116;
 @pinkBtnTransform: rgb(13 1 1);
 
 @menuBtn: #2b2b2d;
@@ -89,7 +99,7 @@
 @menuBtnDark: #605f5d;
 @menuBtnShadow: #0a0a0a;
 
-@speaker: #524e4c;
+@speaker: #9d9c9b;
 @speakerLight: #dad9d9e8;
 @speakerDark: #1a0b0a;
 @speakerCorner: #f6f0ed79;
@@ -98,27 +108,24 @@
 @menuLight: #878092;
 @menuDark: #5a5465;
 
+@batteryOn: #ff404a;
+@batteryOff: #4d150a;
+
 @keyframes batteryOn {
   0% {
-    background: #4d150a;
+    background: @batteryOff;
   }
   100% {
-    background: #f45236;
+    background: @batteryOn;
   }
 }
 
 @keyframes screenOn {
   0% {
-    background: @screenOff;
-  }
-  10% {
-    background: @s;
-  }
-  20% {
     background: @screenOnLight;
   }
   100% {
-    background: @screenOnLight;
+    background: @screenOff;
   }
 }
 
@@ -134,55 +141,57 @@
 @keyframes fall-left {
   0% {
     opacity: 0;
-    transform: translateY(-300%) translateX(57px);
+    transform: translateY(-300%) translateX(96px);
   }
-  30%,
+  30% {
+    opacity: 1;
+    transform: translateY(-10%) translateX(96px);
+  }
   60% {
     opacity: 1;
-    transform: translateY(-50%) translateX(57px);
-  }
-  80% {
-    opacity: 1;
-    transform: translateY(-50%) translateX(48px);
+    transform: translateY(-10%) translateX(40px);
   }
   100% {
     opacity: 0;
-    transform: translateY(-50%) translateX(48px);
+    transform: translateY(-10%) translateX(40px);
   }
 }
 
 @keyframes fall-right {
   0% {
     opacity: 0;
-    transform: translateY(-300%) translateX(-55px);
+    transform: translateY(-300%) translateX(-78px);
   }
-  30%,
+  30% {
+    opacity: 1;
+    transform: translateY(-10%) translateX(-78px);
+  }
   60% {
-    opacity: 1;
-    transform: translateY(-50%) translateX(-55px);
-  }
-  80% {
-    opacity: 1;
-    transform: translateY(-50%) translateX(-28px);
+    opacity: 0;
+    transform: translateY(-10%) translateX(-10px);
   }
   100% {
     opacity: 0;
-    transform: translateY(-50%) translateX(-28px);
+    transform: translateY(-10%) translateX(-300px);
   }
 }
 
 @keyframes rise {
   0% {
     opacity: 0;
-    transform: translateY(300%);
+    transform: translateY(200%);
   }
-  80% {
+  50% {
     opacity: 1;
-    transform: translateY(-26%);
+    transform: translateY(-16%) translateX(-25px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-16%) translateX(-25px);
   }
   100% {
     opacity: 0;
-    transform: translateY(-26%);
+    transform: translateY(-16%) translateX(-25px);
   }
 }
 

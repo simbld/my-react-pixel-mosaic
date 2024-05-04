@@ -1,33 +1,167 @@
 .overlay {
+  .flex-center();
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal {
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: rgba(122, 19, 207, 0.514);
+  z-index: 100;
 }
 
 .closeButton {
-  display: inline-block;
-  padding: 10px 20px;
-  margin: 20px 0px;
+  .flex-center();
+  width: 15rem;
+  height: 4rem;
+  bottom: 15%;
   cursor: pointer;
-  border-radius: 5px;
-  border: none;
-  background-color: #f44336;
-  color: white;
-  font-size: 16px;
+  box-shadow: 5px 5px 0px 0px @screenOnOutline;
+  text-shadow:
+    3px 0px 0px @screenOnOutline,
+    -3px 0px 0px @screenOnOutline,
+    0px 3px 0px @screenOnOutline,
+    0px -3px 0px @screenOnOutline;
+  border: @screenOnOutline 3px solid;
+  background-color: @screenOnMiddle;
+  color: @screenOnDark;
+  font-size: 25px;
+  font-family: "Early", sans-serif;
+  position: absolute;
+  z-index: 101;
+}
+
+.closeButton:active {
+  box-shadow: 0px 0px 0px 0px @screenOnOutline;
+  transform: translate(5px, 5px);
+  transition:
+    box-shadow 0.1s,
+    transform 0.1s;
+}
+
+.glass-screen-modal {
+  .flex-center();
+  z-index: 101;
+  padding: 51.89px;
+  width: 120rem;
+  height: 100rem;
+  background: @glass;
+  margin: 0;
+  position: relative;
+  border-radius: 50px 50px 150px 50px;
+  box-shadow:
+    inset -9px 9px 6px #544f60,
+    inset -16px 16px 6px -23.35px #1b1b1b,
+    inset -7px 1px 9px -9px #d8d5d5,
+    0px -6px 2.59px #858585;
+
+  .text-indication-modal {
+    .battery-text-modal {
+      color: @textGColor;
+      filter: blur(0.15px);
+      font-size: 3rem;
+      font-family: @lavigne;
+      transform: scaleX(1.5);
+      position: absolute;
+      z-index: 20;
+      display: inline-block;
+      left: 5%;
+      top: 43%;
+    }
+    .indicator-light-modal {
+      position: absolute;
+      top: 37rem;
+      left: 6rem;
+      width: 25px;
+      height: 25px;
+      border-radius: 50px;
+      background: @batteryOn;
+      box-shadow: 0px 0px 25px 5px #f50f36;
+      border: rgb(137, 51, 51) 1px solid;
+      z-index: 20;
+    }
+    .dot-matrix-modal {
+      white-space: nowrap;
+      position: absolute;
+      top: 5%;
+      left: 36%;
+      width: 45%;
+      background: @glass;
+      color: @textGColor;
+      font-size: 4rem;
+      font-family: @lavigne;
+      transform: scale(1.05, 0.8);
+      z-index: 20;
+    }
+  }
+  &-line {
+    position: absolute;
+    top: 5.5%;
+    left: 4%;
+    &-l {
+      height: 12px;
+      width: 110rem;
+      background: @topLineScreen;
+      margin-bottom: 5px;
+      &:nth-child(2) {
+        background: @bottomLineScreen;
+      }
+    }
+  }
+
+  .glass-screen-matrix-modal {
+    .container();
+    position: absolute;
+    top: 1%;
+    left: -2%;
+    position: relative;
+    width: 65%;
+    height: 85%;
+    background-color: @screenOnLight;
+    color: @screenOnDark;
+    font-family: "Early", sans-serif;
+    border: @b 2.59px solid;
+    z-index: 20;
+  }
+  .title-modal {
+    position: absolute;
+    font-size: 2rem;
+    right: 3%;
+    bottom: 2%;
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .upload-button {
+    .flex-center();
+    position: absolute;
+    height: 140px;
+    width: 380px;
+    box-shadow:
+      5px 5px 0px 0px @screenOnOutline,
+      10px 10px 0px 0px @screenOnOutline,
+      15px 15px 0px 0px @screenOnOutline;
+    text-shadow:
+      3px 0px 0px @screenOnOutline,
+      -3px 0px 0px @screenOnOutline,
+      0px 3px 0px @screenOnOutline,
+      0px -3px 0px @screenOnOutline;
+    border: @screenOnOutline 3px solid;
+    background-color: @screenOnMiddle;
+    color: @screenOnDark;
+    font-size: 35px;
+    font-family: "Early", sans-serif;
+    cursor: pointer;
+    top: 45%;
+    left: 30%;
+  }
+
+  .upload-button:active {
+    box-shadow: 5px 5px 0px 0px @screenOnOutline;
+    transform: translate(15px, 15px);
+    transition:
+      box-shadow 0.3s,
+      transform 0.3s;
+  }
 }
