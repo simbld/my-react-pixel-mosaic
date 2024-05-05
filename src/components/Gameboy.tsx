@@ -11,7 +11,7 @@ import {
   showTitles
 } from "../features/reducers/gameboy/gameboySlice";
 import MenuGameboy from "./MenuGameboy";
-import { GameboyProps } from "../interfaces/types";
+import { GameboyProps, type MenuOption } from "../interfaces/types";
 import ImageUploaderModal from "../modals/ImageUploaderModal";
 import {
   nextOption,
@@ -22,12 +22,14 @@ import {
 
 const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const dispatch: AppDispatch = useDispatch();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageUpload, setImageUpload] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const { poweredOn, titlesShown, menuVisible, soundPlaying } = useSelector(
     (state: RootState) => state.gameboy
   );
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imageUpload, setImageUpload] = useState<string | null>(null);
   const selectedOptionIndex = useSelector(
     (state: RootState) => state.menuGameboy.selectedOptionIndex
   );
@@ -47,6 +49,13 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const handleDownloadImage = () => {
     // Implémentez cette fonction selon vos besoins
   };
+
+  const menuOptions: MenuOption[] = [
+    { name: "open file", action: handleUploadImage },
+    { name: "filters", action: handleChooseFilter },
+    { name: "settings", action: handleDisplaySettings },
+    { name: "download", action: handleDownloadImage }
+  ];
 
   const handleSwitchClick = () => {
     dispatch(togglePower(!poweredOn));
@@ -79,7 +88,8 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   };
 
   const handleConfirmSelection = () => {
-    dispatch(selectOption(selectedOptionIndex));
+    const selectedAction = menuOptions[selectedOptionIndex]?.action;
+    selectedAction?.();
   };
 
   const handleReset = () => {
@@ -101,28 +111,6 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
       };
     }
   }, [poweredOn, soundPlaying]);
-
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      switch (event.key) {
-        case "Start":
-        case "Enter":
-        case "a":
-          handleConfirmSelection();
-          break;
-        case "Select":
-        case "Escape":
-        case "b":
-          handleReset();
-          break;
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [handleConfirmSelection, handleReset]);
 
   return (
     <div className={`gameboy ${poweredOn ? "gameboy-on" : ""}`}>
@@ -191,6 +179,8 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
             )}
             {menuVisible && (
               <MenuGameboy
+                menuOptions={menuOptions}
+                onSelectOption={handleConfirmSelection}
                 onUploadImage={handleUploadImage}
                 onChooseFilter={handleChooseFilter}
                 onDisplaySettings={handleDisplaySettings}
@@ -260,19 +250,15 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
 
         <div className="BA-btn-text-container">
           <div className="BA-btn-container">
-            <div className="BA-btn-container-B"></div>
-            <div className="BA-btn-container-A"></div>
+            <div className="BA-btn-container-B" onClick={handleReset}></div>
+            <div
+              className="BA-btn-container-A"
+              onClick={handleConfirmSelection}
+            ></div>
           </div>
           <div className="BA-btn-container-text">
             <div className="BA-btn-container-text-B">B</div>
             <div className="BA-btn-container-text-A">A</div>
-          </div>
-          <div className="control-btn">
-            <div className="controlB btn-B" onClick={handleReset}></div>
-            <div
-              className="controlB btn-A"
-              onClick={handleConfirmSelection}
-            ></div>
           </div>
         </div>
 

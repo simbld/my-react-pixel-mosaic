@@ -48,17 +48,8 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
   const imageUrl = useSelector((state: RootState) => state.imageProcessing.url);
 
   const handleConfirmSelection = () => {
-    console.log(
-      "handleConfirmSelection in MenuGameboy called with index:",
-      selectedOptionIndex
-    );
     const selectedAction = menuOptions[selectedOptionIndex]?.action;
-    if (selectedAction) {
-      console.log("Executing action for selected option:", selectedOptionIndex);
-      selectedAction();
-    } else {
-      console.log("No action found for selected option:", selectedOptionIndex);
-    }
+    selectedAction?.();
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
