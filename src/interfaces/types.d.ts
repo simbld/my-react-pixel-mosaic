@@ -142,6 +142,21 @@ export interface MenuGameboyProps {
   onChooseFilter: () => void;
   onDisplaySettings: () => void;
   onDownloadImage: () => void;
+  onSelectOption: (index: number) => void;
+}
+
+export interface MenuOption {
+  name: string;
+  action: () => void;
+}
+
+export interface MenuGameboyProps {
+  menuOptions: MenuOption[];
+  onSelectOption: (index: number) => void;
+  onUploadImage: () => void;
+  onChooseFilter: () => void;
+  onDisplaySettings: () => void;
+  onDownloadImage: () => void;
 }
 
 // features
