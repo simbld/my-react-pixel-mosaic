@@ -173,9 +173,10 @@
     }
 
     .glass-screen {
+      .flex-center();
       top: -20px;
-      width: 556.6px;
-      height: 424.9px;
+      width: 555px;
+      height: 425px;
       background: @glass;
       margin: 100px 0px 0px 55px;
       position: relative;
@@ -195,8 +196,8 @@
         position: absolute;
         z-index: 10;
         display: inline-block;
-        margin-left: -253.45px;
-        margin-top: 186.36px;
+        margin-left: -71.45px;
+        margin-top: -24.64px;
       }
 
       .text-indication {
@@ -211,7 +212,8 @@
         }
         .indicator-light-on {
           animation: batteryOn 1s ease-out forwards;
-          border: @batteryOff 1.73px solid;
+          box-shadow: 0px 0px 15px 2px #f50f36;
+          border: rgb(137, 51, 51) 1px solid;
         }
       }
 
@@ -251,8 +253,8 @@
         width: 360.3px;
         height: 323.03px;
         background-color: @screenOff;
-        top: 50%;
-        left: 50%;
+        top: 38%;
+        left: 32%;
         transform: translate(-50%, -50%);
         border-radius: 4.96px;
         box-shadow:
@@ -274,6 +276,17 @@
       align-items: center;
       width: 186.36px;
       height: 186.36px;
+      z-index: 2;
+      cursor: pointer;
+      pointer-events: none;
+
+      &-v,
+      &-h,
+      &-v-btn,
+      &-h-btn,
+      &-center {
+        pointer-events: none;
+      }
 
       &-v {
         .flex-center();
@@ -285,6 +298,7 @@
         top: 50%;
         transform: translate(-50%, -50%);
         border-radius: 7.45px;
+        z-index: 2;
       }
       &-h {
         width: 166.48px;
@@ -295,6 +309,7 @@
         top: 50%;
         transform: translate(-50%, -50%);
         border-radius: 7.45px;
+        z-index: 2;
       }
 
       &-v-btn {
@@ -311,6 +326,7 @@
           0px 0px 0px 0px @pad inset,
           -0.5px 1px 1px 0.5px @padReflect inset;
         filter: blur(0.25px);
+        z-index: 2;
 
         &-grips {
           width: 37.27px;
@@ -338,6 +354,7 @@
           0px -1px 0px 0px @pad inset,
           -0.5px 0.5px 0.5px 1px @padReflect inset;
         filter: blur(0.25px);
+        z-index: 2;
         &-grips {
           width: 12.42px;
           height: 37.27px;
@@ -351,6 +368,7 @@
 
       &-center {
         .flex-center();
+        cursor: pointer;
         width: 49.69px;
         height: 49.69px;
         position: absolute;
@@ -358,6 +376,7 @@
         top: 50%;
         transform: translate(-50%, -50%);
         border-radius: 7.45px;
+        z-index: 2;
         box-shadow:
           inset 0px 0px 30px 0px @pad,
           inset 0px 0px 30px 0px @pad;
@@ -405,9 +424,11 @@
       .pad-down,
       .pad-left,
       .pad-right {
+        pointer-events: none;
         position: absolute;
         color: @w;
         font-size: 14.9px;
+        z-index: 2;
         text-shadow:
           0.5px -0.5px 1px @offOnText,
           0.5px 0.5px 1px @offOnText,
@@ -445,9 +466,10 @@
       left: -9.93px;
       right: 0;
       bottom: 0;
-      z-index: -1;
+      z-index: 1;
       overflow: visible;
       background: transparent;
+      pointer-events: none;
     }
 
     .control-area::before {
@@ -464,7 +486,7 @@
         rgba(234, 232, 228, 0.4) 50%,
         rgba(229, 229, 229, 0.4) 100%
       );
-      z-index: 10;
+      z-index: -999;
     }
 
     .controlP {
@@ -476,6 +498,8 @@
       height: 62.12px;
       cursor: pointer;
       user-select: none;
+      pointer-events: auto;
+      z-index: 2;
     }
 
     .up {
@@ -621,39 +645,6 @@
       pointer-events: none;
     }
 
-    .control-btn {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-
-    .controlB {
-      position: absolute;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 124.24px;
-      height: 124.24px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .btn-B {
-      border-radius: 50px;
-      top: 54.66px;
-      transform: translateY(-50%);
-      left: -4.96px;
-    }
-
-    .btn-A {
-      border-radius: 50px;
-      top: 60px;
-      transform: translateY(-50%);
-      right: 0px;
-    }
-
     .menu {
       .flex-center(flex, row, space-around);
       width: 223.63px;
@@ -725,6 +716,7 @@
       left: 0;
       right: 0;
       bottom: 0;
+      z-index: 999;
     }
 
     .control {
@@ -797,9 +789,9 @@
         border-right: 2.32px @g solid;
         filter: blur(0.25px);
         border-radius: 50px;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
-        border-left: 2.42px solid rgba(255, 255, 255, 0.6);
-        box-shadow: inset 2px -20px 3px 2px rgba(0, 0, 0, 0.55);
+        border-bottom: 3px solid rgba(255, 255, 255, 0.4);
+        border-left: 3px solid rgba(255, 255, 255, 0.6);
+
         position: relative;
         overflow: hidden;
 
@@ -809,7 +801,7 @@
           width: 12.42px;
           height: 79.51px;
           background: @speakerDark;
-          border-radius: 50px;
+          border-radius: 10px;
           top: 0px;
           left: -8.5px;
         }
