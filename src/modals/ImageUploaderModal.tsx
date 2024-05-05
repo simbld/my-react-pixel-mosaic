@@ -10,6 +10,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const [isActive, setIsActive] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const labelRef = useRef<HTMLLabelElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,8 +31,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   };
 
   useEffect(() => {
-    if (isOpen) {
-      fileInputRef.current?.focus();
+    if (isOpen && labelRef.current) {
+      labelRef.current.focus();
     }
   }, [isOpen]);
 
@@ -41,7 +42,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
         fileInputRef.current?.click();
         break;
       case "Escape":
-        onClose();
+        handleModalClose();
         break;
     }
   };
@@ -60,7 +61,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
       className="overlay"
       role="dialog"
       ref={modalRef}
-      tabIndex={-1}
+      tabIndex={0}
       onKeyDown={handleKeyDown}
     >
       <div className="glass-screen-modal">
@@ -80,10 +81,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             id="file"
             accept="image/*"
             className="file-input"
-            onChange={(e) => {
-              const file = e.target.files ? e.target.files[0] : null;
-              if (file) onUpload(file);
-            }}
+            onChange={handleImageChange}
             ref={fileInputRef}
             onKeyDown={(e) => {
               if (e.key === "Escape") {
@@ -94,6 +92,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <label
             className={`upload-button ${isActive ? "active" : ""}`}
             htmlFor="file"
+            ref={labelRef}
             onClick={handleClick}
             tabIndex={0}
             onKeyDown={handleKeyDown}
@@ -103,7 +102,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           </label>
           {imagePreviewUrl && <img src={imagePreviewUrl} alt="Preview" />}
           <button
-            onClick={onClose}
+            onClick={handleModalClose}
             className="closeButton"
             ref={closeBtnRef}
             onKeyDown={handleKeyDown}
