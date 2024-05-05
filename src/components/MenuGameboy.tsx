@@ -13,72 +13,77 @@ import { defaultImage } from "../config/config";
 const MenuItem = memo(
   ({
     name,
-    onSelect,
+    onClick,
+    onDoubleClick,
     isSelected
   }: {
     name: string;
-    onSelect: () => void;
+    onClick: () => void;
+    onDoubleClick: () => void;
     isSelected: boolean;
   }) => (
-    <li className={isSelected ? "selected" : ""} onClick={onSelect}>
+    <li
+      className={isSelected ? "selected" : ""}
+      onClick={onClick}
+      onDoubleClick={onDoubleClick}
+      style={{ userSelect: "none" }}
+      draggable="false"
+    >
       <span>{name}</span>
     </li>
   )
 );
 
 const MenuGameboy: React.FC<MenuGameboyProps> = ({
-  onUploadImage,
-  onChooseFilter,
-  onDisplaySettings,
-  onDownloadImage
+  menuOptions,
+  onSelectOption
 }) => {
-  const imageUrl = useSelector((state: RootState) => state.imageProcessing.url);
   const selectedOptionIndex = useSelector(
     (state: RootState) => state.menuGameboy.selectedOptionIndex
   );
 
   const dispatch = useDispatch();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const menuOptions = [
-    {
-      name: "open file",
-      action: onUploadImage
-    },
-    {
-      name: "filters",
-      action: onChooseFilter
-    },
-    {
-      name: "settings",
-      action: onDisplaySettings
-    },
-    {
-      name: "download",
-      action: onDownloadImage
-    }
-  ];
 
-  const handleBackAction = () => {
-    dispatch(resetToFirstOption());
+  const imageUrl = useSelector((state: RootState) => state.imageProcessing.url);
+
+  const handleConfirmSelection = () => {
+    console.log(
+      "handleConfirmSelection in MenuGameboy called with index:",
+      selectedOptionIndex
+    );
+    const selectedAction = menuOptions[selectedOptionIndex]?.action;
+    if (selectedAction) {
+      console.log("Executing action for selected option:", selectedOptionIndex);
+      selectedAction();
+    } else {
+      console.log("No action found for selected option:", selectedOptionIndex);
+    }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
+      case "Enter":
+        handleConfirmSelection();
+        break;
+      case "Escape":
+        dispatch(resetToFirstOption());
+        break;
       case "ArrowDown":
         dispatch(nextOption());
         break;
       case "ArrowUp":
         dispatch(previousOption());
         break;
-      case "Enter":
-        menuOptions[selectedOptionIndex]?.action();
-        break;
-      case "Escape":
-      case "b": // Supposons que 'b' est pour le bouton B
-        handleBackAction();
-        break;
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedOptionIndex]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -90,7 +95,10 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
     <div
       ref={containerRef}
       className="glass-screen-matrix-on"
-      onKeyDown={handleKeyDown}
+      onClick={handleConfirmSelection}
+      onKeyDown={() => {
+        handleKeyDown;
+      }}
       onBlur={() => containerRef.current?.focus()}
       tabIndex={0}
     >
@@ -100,7 +108,8 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({
           <MenuItem
             key={index}
             name={option.name}
-            onSelect={() => dispatch(selectOption(index))}
+            onClick={() => dispatch(selectOption(index))}
+            onDoubleClick={() => handleConfirmSelection()}
             isSelected={selectedOptionIndex === index}
           />
         ))}
