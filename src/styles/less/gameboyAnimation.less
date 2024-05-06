@@ -15,6 +15,19 @@
   transition: all 0.3s ease;
 }
 
+.switch::after {
+  content: "";
+  position: absolute;
+  opacity: 0.5;
+  border-radius: 100%;
+  z-index: 1;
+  top: 3px;
+  right: 10px;
+  bottom: 4px;
+  left: 0px;
+  box-shadow: inset 1px 3px 40px 20px @glass;
+}
+
 .switch-on {
   position: absolute;
   left: 124.24px;

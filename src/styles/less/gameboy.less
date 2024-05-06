@@ -17,17 +17,17 @@
     left: 0px;
     width: @allW;
     height: calc(636px * 1.8);
-    border-radius: 24.24px 24.24px 168.96px 24.24px;
+    border-radius: 25px 25px 140px 25px;
     background: @gameboyColor;
     background-repeat: repeat;
     overflow: hidden;
     box-shadow:
       -7.45px 0px 9.93px 0px white inset,
-      -2.48px -12.42px 19.87px 0px #010101 inset,
+      12px -11px 19.87px 0px #010101 inset,
       14.9px 0 17.39px 0px #808080 inset,
       0 9.93px 2.48px white inset,
       0 86.96px 49.69px -4.96px rgba(0, 0, 0, 0.08),
-      -49.69px 44.72px 49.69px 49.69px #00000082,
+      -20px 20px 20px 15px #000000,
       -37.27px 49.69px 49.69px 49.69px rgba(0, 0, 0, 0.477);
     z-index: 2;
 
@@ -39,7 +39,7 @@
       right: 0;
       bottom: 0;
       background-image: @gameboyColorGresille;
-      opacity: 0.04;
+      opacity: 0.09;
       z-index: -1;
     }
 
@@ -90,12 +90,9 @@
       width: 9.93px;
       height: 53.24px;
       position: absolute;
-      background-image: linear-gradient(
-        to left,
-        @offOnBorderTop,
-        @lineMiddle,
-        @lineBottom
-      );
+      box-shadow:
+        inset 1px 2px 0px @offOnBoxBottom,
+        inset -3px -2px 5px 3px @offOnBoxTop;
       z-index: 10;
     }
 
@@ -124,17 +121,17 @@
         font-size: 19.87px;
         letter-spacing: 2.48px;
         color: @w;
-        border-top: 2.48px @offOnBorderTop solid;
-        border-bottom: 3.72px @offOnBorderBottom solid;
+        border-top: 2px @offOnBorderTop solid;
+        border-bottom: 4px @offOnBorderBottom solid;
         filter: blur(0.25px);
         text-shadow:
-          1.24px -1.24px 2.48px @offOnText,
-          1.24px 1.24px 2.48px @offOnText,
-          1.24px 1.24px 2.48px @offOnText,
-          -1.24px 1.24px 2.48px @offOnText;
+          2px -2px 3px @offOnText,
+          2px 2px 3px @offOnText,
+          2px 2px 3px @offOnText,
+          -2px 2px 3px @offOnText;
         box-shadow:
-          -2.48px -4.96px 7.45px @offOnBoxBottom inset,
-          0px 4.96px 7.45px 0px @offOnBoxTop inset;
+          inset -3px -5px 8px @offOnBoxBottom,
+          inset 2px 3px 5px 0px @offOnBoxTop;
       }
     }
 
@@ -148,17 +145,15 @@
         width: 7px;
         height: 17px;
         top: -2.48px;
-        background-image: linear-gradient(
-          to left,
-          @offOnBorderTop,
-          @lineMiddle,
-          @lineBottom
-        );
+        box-shadow:
+          inset 1px 2px 0px @offOnBoxBottom,
+          inset -3px -2px 5px 3px @offOnBoxTop;
         border-right: 0.62px @offOnBorderTop solid;
         border-left: 1.24px @w solid;
         z-index: 10;
         filter: blur(0.3px);
         transform: translate(0, 0);
+        opacity: 0.4;
 
         &:nth-child(1) {
           left: 24.84px;
@@ -258,11 +253,10 @@
         transform: translate(-50%, -50%);
         border-radius: 4.96px;
         box-shadow:
-          -19.87px 4.96px 9.93px #212009 inset,
-          -24.84px 0px 12.42px -2.48px #815f0e inset,
-          14.9px -12.42px 49.69px #815f0e inset;
+          inset -19.87px 4.96px 9.93px @screenOffDark,
+          inset -24.84px 0px 12.42px -2.48px @screenOff,
+          inset 9px -9px 18px 0px @screenOffLight;
         overflow: hidden;
-        color: @screenOnDark;
       }
     }
 
@@ -560,7 +554,7 @@
     }
 
     .BA-btn-text-container {
-      transform: rotate(@rotateBtn);
+      transform: rotate(@rotateContainerBtn);
       position: absolute;
       right: 20px;
       top: 737px;
@@ -588,34 +582,60 @@
     .BA-btn-container-A {
       height: 82px;
       width: 82px;
-      transform: rotate(@rotateReflect);
+      transform: rotate(@rotateBtn);
       border-radius: 50%;
-      background: linear-gradient(to bottom, #b30f42 0%, #640116 100%);
-      border-top: 4px solid #d74f73;
+      background: linear-gradient(
+        to top,
+        @pinkBtnLight 0%,
+        @pinkBtnDark 100%
+      );
       position: absolute;
       top: 16px;
       cursor: pointer;
       box-shadow:
-        0px 6px 5px 3px rgba(0, 0, 0, 0.8),
-        inset 0 4.96px 14.9px -4.96px rgba(255, 255, 255, 0.8);
+      -1px -2px 5px 5px @pinkBtnShadow, // ici on diminuera lors du :active
+        inset 0 4.96px 14.9px -4.96px @b,
+        inset 6px -7px 13px 4px @pinkBtn;
       overflow: visible;
+    }
+
+    .BA-btn-container-B::before,
+    .BA-btn-container-A::before {
+      content: "";
+      position: absolute;
+      border-radius: 100%;
+      height: 81.5px;
+      width: 81.5px;
+      top: -3.5px;
+      left: -3.5px;
+      border: @pinkBtnShadow 4px solid;
+      filter: blur(0.5px);
     }
 
     .BA-btn-container-B::after,
     .BA-btn-container-A::after {
       content: "";
       position: absolute;
-      top: 0;
-      right: 20px;
-      bottom: 60px;
-      left: 20px;
-      box-shadow: inset 0 19.87px 0px -9.93px rgba(255, 255, 255, 0.4);
+      transform: rotate(@rotateReflect);
       border-radius: 100%;
       z-index: 1;
+      top: -3px;
+      right: 16px;
+      bottom: 39px;
+      left: 30px;
+      box-shadow: inset -8px 19px 0px -10px @pinkBtnReflect;
     }
 
     .BA-btn-container-B {
       left: 16px;
+    }
+
+    .BA-btn-container-B::after {
+      top: 32px;
+      right: 14px;
+      bottom: 3px;
+      left: 16px;
+      box-shadow: inset -13px 20px 0px -9.93px @pinkBtnReflect;
     }
 
     .BA-btn-container-A {
@@ -688,24 +708,21 @@
         border-radius: 50px;
         overflow: hidden;
         box-shadow:
-          12.42px -12.42px 7.45px @menuBtnLight inset,
-          -19.87px 17.39px 7.45px 0px @padReflect inset;
+          12.42px -12.42px 7.45px 10px @menuBtnLight inset,
+          -19.87px 17.39px 7.45px 10px @padReflect inset;
         filter: blur(0.25px);
 
         &-btn {
           cursor: pointer;
           width: 79.51px;
           height: 22.36px;
-          border: #000 2.48px solid;
+          border: #000 3px solid;
           border-radius: 50px;
-          background: #605f5d;
           box-shadow:
-            2.48px -9.93px 2.48px 0px @menu inset,
-            0px 19.87px 2.48px @menuLight inset,
-            0px 19.87px 0px -39.75px @menuDark,
-            0 0 0 -4.96px @menuDark,
-            0px 0px 2.48px 2.48px @menuDark,
-            2.48px 4.96px 4.96px -2.48px @menu;
+            inset 2.48px -9.93px 2.48px 0px #50465c,
+            inset 10px 5px 2.48px 10px #8d8b90,
+            20px 2px 2.48px 2.48px #a1a0a2,
+            20px -8px 20px -2.48px #50465c;
         }
       }
     }
@@ -748,65 +765,80 @@
 
     .speaker {
       .flex-center(flex, row, space-between);
-      width: 203.27px;
-      height: 159.03px;
-      bottom: 28.84px;
       position: absolute;
-      right: 46.33px;
-      .rotation(@rotateText);
+      width: 227px;
+      height: 165px;
+      bottom: 40px;
+      right: 30px;
+      .rotation(@rotateSpeaker);
 
       &-corner {
-        width: 500px;
-        height: 149.09px;
+        width: 700px;
+        height: 150px;
         position: absolute;
-        top: 64.6px;
+        top: 85px;
         left: -223.63px;
         opacity: 0.5;
         overflow: hidden;
+        z-index: 1;
 
         &::before {
           content: "";
           position: absolute;
-          top: 12.42px;
+          top: 28px;
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(
-            to top,
-            @gameboyColorDark 85%,
-            @gameboyColor 15%
-          );
-
-          filter: blur(2px);
-          z-index: 10;
+          background-image: @gameboyColorGresille;
+          box-shadow:
+            -3px -5px 8px 0px #848181,
+            inset 100px 100px 8px 0px #8b8a8a;
+          z-index: 2;
+        }
+        &::after {
+          content: "";
+          position: absolute;
+          top: 28px;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          opacity: 0.5;
+          background-image: @g;
+          z-index: 3;
         }
       }
 
       &-line {
-        width: 17px;
-        height: 105px;
-        bottom: 6px;
-        border-right: 2.32px @g solid;
-        filter: blur(0.25px);
-        border-radius: 50px;
-        border-bottom: 3px solid rgba(255, 255, 255, 0.4);
-        border-left: 3px solid rgba(255, 255, 255, 0.6);
-
         position: relative;
+        display: inline-block;
+        margin: 1px;
+        width: 18px;
+        height: 77%;
+        border-radius: 30px;
         overflow: hidden;
+        background-color: @gLight;
+        border-top: 4px solid @speakerCorner;
+        border-bottom: 2px solid @speakerLight;
+        border-left: 1px solid @speakerCorner;
+        border-right: 4px solid @speakerLight;
+        box-shadow: inset -5px 9px 8px 0px rgb(79 74 74);
 
         &::after {
-          position: absolute;
           content: "";
-          width: 12.42px;
-          height: 79.51px;
-          background: @speakerDark;
-          border-radius: 10px;
+          position: absolute;
           top: 0px;
-          left: -8.5px;
+          left: 0;
+          display: block;
+          width: 5px;
+          height: 88px;
+          background: @speakerDark;
+          border-bottom: 3px solid rgba(255, 255, 255, 0.8);
+          border-right: 2px solid rgb(90, 90, 90);
         }
         &:first-child::after {
           background: none;
+          border-bottom: none;
+          border-right: none;
         }
       }
     }
@@ -829,10 +861,10 @@
           0px 1px 0px @offOnText,
           1px 2px 2px @offOnText;
         box-shadow:
-          1px 2px 0px @offOnBoxBottom inset,
-          -3px -2px 0px 0px @offOnBoxTop inset;
-        border-top: 2.48px @offOnBorderTop solid;
-        border-bottom: 2.48px @offOnBorderBottom solid;
+          inset -3px -5px 8px 0px @offOnBoxBottom,
+          inset 2px 3px 5px 0px @offOnBoxTop;
+        border-top: 2px @offOnBorderTop solid;
+        border-bottom: 4px @offOnBorderBottom solid;
         filter: blur(0.25px);
         font-size: 14.9px;
         letter-spacing: 3.72px;
@@ -851,18 +883,16 @@
           width: 8.69px;
           height: 29.81px;
           top: -2.48px;
-          background-image: linear-gradient(
-            to left,
-            @offOnBorderTop,
-            @lineMiddle,
-            @lineBottom
-          );
+          box-shadow:
+            inset 1px 2px 0px @offOnBoxBottom,
+            inset -3px -2px 5px 3px @offOnBoxTop;
           border-right: 0.62px @offOnBorderTop solid;
           border-left: 1.24px @w solid;
           border-top: transparent;
           z-index: 10;
           filter: blur(0.3px);
           transform: translate(0, 0);
+          opacity: 0.8;
 
           &:nth-child(1) {
             left: 24.84px;
