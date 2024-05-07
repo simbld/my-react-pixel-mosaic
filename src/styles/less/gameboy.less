@@ -554,7 +554,7 @@
     }
 
     .BA-btn-text-container {
-      transform: rotate(@rotateContainerBtn);
+      transform: rotate(@containerBtn);
       position: absolute;
       right: 20px;
       top: 737px;
@@ -582,7 +582,7 @@
     .BA-btn-container-A {
       height: 82px;
       width: 82px;
-      transform: rotate(@rotateBtn);
+      transform: rotate(@btn);
       border-radius: 50%;
       background: linear-gradient(
         to top,
@@ -593,14 +593,14 @@
       top: 16px;
       cursor: pointer;
       box-shadow:
-      -1px -2px 5px 5px @pinkBtnShadow, // ici on diminuera lors du :active
+      -1px -2px 5px 5px @pinkBtnShadow, // ------------------------------------   :active
         inset 0 4.96px 14.9px -4.96px @b,
         inset 6px -7px 13px 4px @pinkBtn;
       overflow: visible;
     }
 
-    .BA-btn-container-B::before,
-    .BA-btn-container-A::before {
+    .BA-btn-container-B:active,
+    .BA-btn-container-A:active {
       content: "";
       position: absolute;
       border-radius: 100%;
@@ -608,22 +608,21 @@
       width: 81.5px;
       top: -3.5px;
       left: -3.5px;
-      border: @pinkBtnShadow 4px solid;
-      filter: blur(0.5px);
+      filter: blur(0.1px);
     }
 
     .BA-btn-container-B::after,
     .BA-btn-container-A::after {
       content: "";
       position: absolute;
-      transform: rotate(@rotateReflect);
       border-radius: 100%;
       z-index: 1;
-      top: -3px;
+      transform: rotate(@reflectA);
+      top: 61px;
       right: 16px;
-      bottom: 39px;
-      left: 30px;
-      box-shadow: inset -8px 19px 0px -10px @pinkBtnReflect;
+      bottom: 2px;
+      left: 22px;
+      box-shadow: inset -1px 13px 0px -10px @pinkBtnReflect;
     }
 
     .BA-btn-container-B {
@@ -631,11 +630,12 @@
     }
 
     .BA-btn-container-B::after {
-      top: 32px;
-      right: 14px;
-      bottom: 3px;
-      left: 16px;
-      box-shadow: inset -13px 20px 0px -9.93px @pinkBtnReflect;
+      transform: rotate(@reflectB);
+      top: 61px;
+      right: 16px;
+      bottom: 2px;
+      left: 22px;
+      box-shadow: inset -1px 13px 0px -10px @pinkBtnReflect;
     }
 
     .BA-btn-container-A {
@@ -676,7 +676,7 @@
 
       .menu-select,
       .menu-start {
-        .rotation(@rotateText);
+        .rotation(@text);
         text-align: center;
         z-index: 10;
 
@@ -770,7 +770,7 @@
       height: 165px;
       bottom: 40px;
       right: 30px;
-      .rotation(@rotateSpeaker);
+      .rotation(@speaker);
 
       &-corner {
         width: 700px;
@@ -778,7 +778,7 @@
         position: absolute;
         top: 85px;
         left: -223.63px;
-        opacity: 0.5;
+        opacity: 0.9;
         overflow: hidden;
         z-index: 1;
 
@@ -790,6 +790,7 @@
           right: 0;
           bottom: 0;
           background-image: @gameboyColorGresille;
+          opacity: 0.5;
           box-shadow:
             -3px -5px 8px 0px #848181,
             inset 100px 100px 8px 0px #8b8a8a;
