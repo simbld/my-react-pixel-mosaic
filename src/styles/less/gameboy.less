@@ -85,6 +85,7 @@
 
     .small-R-vertical-line,
     .small-L-vertical-line {
+      overflow: visible;
       filter: blur(0.25px);
       top: -0.3px;
       width: 9.93px;
@@ -102,6 +103,17 @@
 
     .small-R-vertical-line {
       right: 52.2px;
+    }
+
+    .notch {
+      z-index: 1001;
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 35%;
+      left: 52px;
+      top: -5px;
+      background-color: transparent;
     }
 
     .off-on {
@@ -200,9 +212,9 @@
           position: absolute;
           top: 154.06px;
           left: 32.3px;
-          width: 17.39px;
-          height: 17.39px;
-          border-radius: 50px;
+          width: 18px;
+          height: 18px;
+          border-radius: 75px;
           background: #4d150a;
         }
         .indicator-light-on {
@@ -476,9 +488,9 @@
       border-radius: 124.24px;
       background: linear-gradient(
         to bottom,
-        rgba(172, 172, 171, 0.4) 0%,
-        rgba(234, 232, 228, 0.4) 50%,
-        rgba(229, 229, 229, 0.4) 100%
+        rgba(108, 108, 108, 0.2) 0%,
+        rgba(187, 187, 187, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 100%
       );
       z-index: -999;
     }
@@ -565,81 +577,141 @@
     }
 
     .BA-btn-container {
-      width: 243.51px;
-      height: 111.81px;
-      border-radius: 50px;
+      width: 240px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 75px;
       background: linear-gradient(
         to bottom,
-        rgba(172, 172, 171, 0.4) 0%,
-        rgba(234, 232, 228, 0.4) 50%,
-        rgba(229, 229, 229, 0.4) 100%
+        rgba(108, 108, 108, 0.2) 0%,
+        rgba(187, 187, 187, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 100%
       );
       overflow: visible;
       position: relative;
     }
 
-    .BA-btn-container-B,
-    .BA-btn-container-A {
+    .BA-btn-container-B:active {
+      margin: auto;
       height: 82px;
       width: 82px;
-      transform: rotate(@btn);
-      border-radius: 50%;
-      background: linear-gradient(
-        to top,
-        @pinkBtnLight 0%,
-        @pinkBtnDark 100%
-      );
-      position: absolute;
-      top: 16px;
-      cursor: pointer;
-      box-shadow:
-      -1px -2px 5px 5px @pinkBtnShadow, // ------------------------------------   :active
-        inset 0 4.96px 14.9px -4.96px @b,
-        inset 6px -7px 13px 4px @pinkBtn;
-      overflow: visible;
+      left: 16px;
+    }
+
+    .BA-btn-container-A:active {
+      margin: auto;
+      height: 82px;
+      width: 82px;
+      right: 16px;
     }
 
     .BA-btn-container-B:active,
     .BA-btn-container-A:active {
+      transform: translate(1px, 1px);
+      transform: rotate(@btn);
+      box-shadow:
+        -1px -2px 3px 2px black,
+        inset 0 3px 5px -2px black,
+        inset 1px -3px 2px 0.5px #d44776;
+      background-image: linear-gradient(
+        to top,
+        #c30755 0%,
+        #89063d 50%,
+        #570427 100%
+      );
+    }
+
+    .BA-btn-container-B,
+    .BA-btn-container-A {
+      margin: auto;
+      height: 82px;
+      width: 82px;
+      transform: rotate(@btn);
+      border-radius: 75px;
+      background-image: linear-gradient(
+        to top,
+        #c30755 0%,
+        #89063d 50%,
+        #570427 100%
+      );
+      top: 16px;
+      cursor: pointer;
+      box-shadow:
+        -1px -2px 6px 5px black,
+        inset 0 5px 10px -5px black,
+        inset 1px -5px 3px 1px #d44776;
+      overflow: visible;
+    }
+
+    .BA-btn-container-B::after {
       content: "";
       position: absolute;
       border-radius: 100%;
-      height: 81.5px;
-      width: 81.5px;
-      top: -3.5px;
-      left: -3.5px;
-      filter: blur(0.1px);
+      z-index: 1;
+      transform: rotate(170deg);
+      top: 61px;
+      right: 15px;
+      bottom: 2px;
+      left: 23px;
+      box-shadow: inset -1px 15px 2px -11px #f4f3f37d;
     }
 
-    .BA-btn-container-B::after,
+    .BA-btn-container-B::before {
+      content: "";
+      position: absolute;
+      border-radius: 100%;
+      z-index: 1;
+      transform: rotate(91deg);
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0px;
+      box-shadow: inset 0px 0px 6px 3px #f7bdbd00;
+    }
+
     .BA-btn-container-A::after {
       content: "";
       position: absolute;
       border-radius: 100%;
       z-index: 1;
-      transform: rotate(@reflectA);
-      top: 61px;
-      right: 16px;
-      bottom: 2px;
-      left: 22px;
-      box-shadow: inset -1px 13px 0px -10px @pinkBtnReflect;
+      transform: rotate(172deg);
+      top: 3px;
+      right: 1px;
+      bottom: 1px;
+      left: 1px;
+      box-shadow: inset -1px 9px 2px -6px #ffffff7d;
+    }
+
+    .BA-btn-container-A::before {
+      content: "";
+      position: absolute;
+      border-radius: 100%;
+      z-index: 1;
+      transform: rotate(91deg);
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0px;
+      box-shadow: inset 0px 0px 6px 3px #f7bdbd00;
     }
 
     .BA-btn-container-B {
       left: 16px;
     }
 
+    .BA-btn-container-A {
+      right: 16px;
+    }
+
     .BA-btn-container-B::after {
       transform: rotate(@reflectB);
       top: 61px;
-      right: 16px;
+      right: 15px;
       bottom: 2px;
-      left: 22px;
-      box-shadow: inset -1px 13px 0px -10px @pinkBtnReflect;
-    }
-
-    .BA-btn-container-A {
-      right: 16px;
+      left: 23px;
+      box-shadow: inset 1px 13px 2px -11px @pinkBtnReflect;
     }
 
     .BA-btn-container-text {
@@ -655,12 +727,10 @@
       height: 18px;
       width: 18px;
       position: relative;
-      font-size: 22px;
+      font-size: 25px;
+      transform: rotate(@textBtn);
       font-family: "Labo", sans-serif;
       color: @textBrand;
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
       cursor: pointer;
       pointer-events: none;
     }
@@ -708,23 +778,49 @@
         border-radius: 50px;
         overflow: hidden;
         box-shadow:
-          12.42px -12.42px 7.45px 10px @menuBtnLight inset,
-          -19.87px 17.39px 7.45px 10px @padReflect inset;
+          inset -20px 9px 5px 1px #8b8b8e,
+          inset 0px 0px 2px 2px #b0b0b3;
         filter: blur(0.25px);
 
         &-btn {
+          position: absolute;
           cursor: pointer;
+          overflow: visible;
           width: 79.51px;
           height: 22.36px;
           border: #000 3px solid;
           border-radius: 50px;
-          box-shadow:
-            inset 2.48px -9.93px 2.48px 0px #50465c,
-            inset 10px 5px 2.48px 10px #8d8b90,
-            20px 2px 2.48px 2.48px #a1a0a2,
-            20px -8px 20px -2.48px #50465c;
+          background: linear-gradient(
+            to bottom,
+            #adadad 0%,
+            #6e6e6e 50%,
+            #1d1d1d 100%
+          );
+          box-shadow: -1px 1px 2px 1px #000;
+        }
+
+        .menu-container-btn:active {
+          z-index: 10;
+          transform: translate(2px, 2px);
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.3);
         }
       }
+    }
+
+    .menu-container-btn::after {
+      content: "";
+      position: absolute;
+      border-radius: 100%;
+      z-index: 1;
+      transform: rotate(170deg);
+      top: 61px;
+      right: 15px;
+      bottom: 2px;
+      left: 23px;
+      box-shadow:
+        1px -1px 4px 2px #0d0101,
+        inset 4px 6px 14.9px -5px #7b6f67,
+        inset 60px 0px 7px 4px #352e2a;
     }
 
     .control-menu {
