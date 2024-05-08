@@ -138,6 +138,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
         <div className="small-L-vertical-line"></div>
         <div className="big-horizontal-line"></div>
         <div className="big-horizontal-line-bottom"></div>
+        <div className="notch"></div>
         <div className="glass-screen">
           <div className="glass-screen-line">
             <div className="glass-screen-line-l"></div>
