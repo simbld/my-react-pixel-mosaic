@@ -265,23 +265,16 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
 
         <div className="menu">
           <div className="menu-select">
-            <div className="menu-container">
+            <div className="menu-container" onClick={handleReset}>
               <div className="menu-container-btn"></div>
             </div>
             <div className="select">SELECT</div>
           </div>
           <div className="menu-start">
-            <div className="menu-container">
+            <div className="menu-container" onClick={handleConfirmSelection}>
               <div className="menu-container-btn"></div>
             </div>
             <div className="start">START</div>
-          </div>
-          <div className="control-menu">
-            <div className="control select" onClick={handleReset}></div>
-            <div
-              className="control start"
-              onClick={handleConfirmSelection}
-            ></div>
           </div>
         </div>
         <div className="phones">
