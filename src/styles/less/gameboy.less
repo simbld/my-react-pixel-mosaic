@@ -593,82 +593,36 @@
       position: relative;
     }
 
-    .BA-btn-container-B:active {
-      margin: auto;
-      height: 82px;
-      width: 82px;
-      left: 16px;
-    }
-
-    .BA-btn-container-A:active {
-      margin: auto;
-      height: 82px;
-      width: 82px;
-      right: 16px;
-    }
-
-    .BA-btn-container-B:active,
-    .BA-btn-container-A:active {
-      transform: translate(1px, 1px);
-      transform: rotate(@btn);
-      box-shadow:
-        -1px -2px 3px 2px black,
-        inset 0 3px 5px -2px black,
-        inset 1px -3px 2px 0.5px #d44776;
-      background-image: linear-gradient(
-        to top,
-        #c30755 0%,
-        #89063d 50%,
-        #570427 100%
-      );
-    }
-
     .BA-btn-container-B,
     .BA-btn-container-A {
-      margin: auto;
+      display: block;
+      position: absolute;
+      cursor: pointer;
+      overflow: visible;
+      margin: 5px;
       height: 82px;
       width: 82px;
-      transform: rotate(@btn);
+      top: 17px;
+      transform: rotate(270deg);
       border-radius: 75px;
       background-image: linear-gradient(
         to top,
-        #c30755 0%,
-        #89063d 50%,
-        #570427 100%
+        #d0055a 0%,
+        #8b043c 50%,
+        #42011d 100%
       );
-      top: 16px;
-      cursor: pointer;
       box-shadow:
-        -1px -2px 6px 5px black,
-        inset 0 5px 10px -5px black,
-        inset 1px -5px 3px 1px #d44776;
-      overflow: visible;
+        1px -2px 5px 5px black,
+        inset 0 5px 17px 5px #540525,
+        inset 1px -5px 3px 1px #b93b65;
     }
 
-    .BA-btn-container-B::after {
-      content: "";
-      position: absolute;
-      border-radius: 100%;
-      z-index: 1;
-      transform: rotate(170deg);
-      top: 61px;
-      right: 15px;
-      bottom: 2px;
-      left: 23px;
-      box-shadow: inset -1px 15px 2px -11px #f4f3f37d;
+    .BA-btn-container-B {
+      left: 16px;
     }
 
-    .BA-btn-container-B::before {
-      content: "";
-      position: absolute;
-      border-radius: 100%;
-      z-index: 1;
-      transform: rotate(91deg);
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0px;
-      box-shadow: inset 0px 0px 6px 3px #f7bdbd00;
+    .BA-btn-container-A {
+      right: 16px;
     }
 
     .BA-btn-container-A::after {
@@ -697,21 +651,90 @@
       box-shadow: inset 0px 0px 6px 3px #f7bdbd00;
     }
 
-    .BA-btn-container-B {
-      left: 16px;
-    }
-
-    .BA-btn-container-A {
-      right: 16px;
-    }
-
     .BA-btn-container-B::after {
-      transform: rotate(@reflectB);
+      content: "";
+      position: absolute;
       top: 61px;
       right: 15px;
       bottom: 2px;
       left: 23px;
+      border-radius: 100%;
+      z-index: 1;
       box-shadow: inset 1px 13px 2px -11px @pinkBtnReflect;
+      transform: rotate(170deg);
+    }
+
+    .BA-btn-container-B::before {
+      content: "";
+      position: absolute;
+      border-radius: 100%;
+      z-index: 1;
+      transform: rotate(91deg);
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0px;
+      box-shadow: inset 0px 0px 6px 3px #f7bdbd00;
+    }
+
+    .BA-btn-container-B:active {
+      left: 16px;
+    }
+
+    .BA-btn-container-A:active {
+      right: 16px;
+    }
+
+    .BA-btn-container-B:active,
+    .BA-btn-container-A:active {
+      transform: scale(0.95) translate(0px, -1px);
+      background-image: linear-gradient(
+        to left,
+        #d0055a 0%,
+        #8b043c 50%,
+        #42011d 100%
+      );
+      box-shadow:
+        0px 0px 4px 4px black,
+        inset 0 5px 17px 5px #540525,
+        inset 1px -5px 3px 1px #912247;
+    }
+
+    .BA-btn-container-B:active::after,
+    .BA-btn-container-A:active::after {
+      box-shadow: none;
+    }
+
+    .BA-btn-container-A::after,
+    .BA-btn-container-B::after {
+      content: "";
+      position: absolute;
+      border-radius: 100%;
+      z-index: 1;
+      transform: rotate(172deg);
+    }
+
+    .BA-btn-container-A::before,
+    .BA-btn-container-B::before {
+      content: "";
+      position: absolute;
+      border-radius: 100%;
+      z-index: 1;
+      box-shadow: inset 0px 0px 6px 3px #f7bdbd00;
+    }
+
+    .BA-btn-container-A::after {
+      top: 3px;
+      right: 1px;
+      bottom: 1px;
+      left: 1px;
+    }
+
+    .BA-btn-container-B::after {
+      top: 61px;
+      right: 15px;
+      bottom: 2px;
+      left: 23px;
     }
 
     .BA-btn-container-text {
@@ -789,19 +812,21 @@
           width: 79.51px;
           height: 22.36px;
           border: #000 3px solid;
+          border-bottom: #000 2px solid;
+          border-left: #000 1px solid;
           border-radius: 50px;
           background: linear-gradient(
             to bottom,
-            #adadad 0%,
-            #6e6e6e 50%,
-            #1d1d1d 100%
+            #a2a2a2 0%,
+            #676767 50%,
+            #3f3f3f 100%
           );
           box-shadow: -1px 1px 3px 0px #3e3e3e;
         }
 
         &-btn:active {
           z-index: 10;
-          transform: translate(0px, -1px);
+          transform: scale(0.95) translate(0px, -1px);
           position: absolute;
           cursor: pointer;
           overflow: visible;
@@ -812,8 +837,8 @@
           background: linear-gradient(
             to bottom,
             #a2a2a2 0%,
-            #717171 50%,
-            #555555 100%
+            #616161 50%,
+            #323232 100%
           );
           box-shadow: -1px 1px 2px 1px #a4a4a4;
         }
