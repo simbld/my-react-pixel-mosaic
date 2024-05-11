@@ -159,6 +159,10 @@ export interface MenuGameboyProps {
   onDownloadImage: () => void;
 }
 
+export interface DirectionProps {
+  direction: "up" | "down" | "left" | "right";
+}
+
 // features
 export interface FilterProps {
   imageSrc: string;

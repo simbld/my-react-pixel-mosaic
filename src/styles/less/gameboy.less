@@ -274,12 +274,12 @@
 
     .pad {
       position: relative;
-      left: 23.5%;
-      top: 22%;
-      transform: translate(-50%, -50%);
       display: flex;
       justify-content: center;
       align-items: center;
+      left: 23.5%;
+      top: 22%;
+      transform: translate(-50%, -50%);
       width: 186.36px;
       height: 186.36px;
       z-index: 2;
@@ -320,12 +320,12 @@
 
       &-v-btn {
         .flex-center(flex, column, space-around);
-        position: absolute;
+        position: relative;
         left: 50%;
-        top: 50%;
+        top: 42%;
         transform: translate(-50%, -50%);
-        width: 49.69px;
-        height: 151.57px;
+        width: 50px;
+        height: 152px;
         border-radius: 7.45px;
         background: @pad;
         box-shadow:
@@ -333,11 +333,13 @@
           -0.5px 1px 1px 0.5px @padReflect inset;
         filter: blur(0.25px);
         z-index: 2;
+        transition:
+          transform 0.2s ease-out,
+          box-shadow 0.2s ease-out;
 
         &-grips {
           width: 37.27px;
           height: 12.42px;
-          position: relative;
           background: @pad;
           border-radius: 124.24px;
           border-right: 0.62px @padReflect solid;
@@ -348,12 +350,11 @@
 
       &-h-btn {
         .flex-center(flex, row, space-around);
-        width: 151.57px;
-        height: 49.69px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        width: 152px;
+        height: 50px;
+        position: relative;
+        left: -12%;
+        top: 1%;
         border-radius: 7.45px;
         background: @pad;
         box-shadow:
@@ -361,6 +362,10 @@
           -0.5px 0.5px 0.5px 1px @padReflect inset;
         filter: blur(0.25px);
         z-index: 2;
+        transition:
+          transform 0.2s ease-out,
+          box-shadow 0.2s ease-out;
+
         &-grips {
           width: 12.42px;
           height: 37.27px;
@@ -475,7 +480,7 @@
       z-index: 1;
       overflow: visible;
       background: transparent;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     .control-area::before {
@@ -500,11 +505,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 62.12px;
-      height: 62.12px;
+      width: 70px;
+      height: 70px;
       cursor: pointer;
       user-select: none;
       pointer-events: auto;
+      border-radius: 10px;
       z-index: 2;
     }
 
