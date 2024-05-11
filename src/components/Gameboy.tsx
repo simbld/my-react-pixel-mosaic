@@ -11,7 +11,11 @@ import {
   showTitles
 } from "../features/reducers/gameboy/gameboySlice";
 import MenuGameboy from "./MenuGameboy";
-import { GameboyProps, type MenuOption } from "../interfaces/types";
+import {
+  GameboyProps,
+  type DirectionProps,
+  type MenuOption
+} from "../interfaces/types";
 import ImageUploaderModal from "../modals/ImageUploaderModal";
 import {
   nextOption,
@@ -22,10 +26,12 @@ import {
 
 const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const dispatch: AppDispatch = useDispatch();
-
+  const [vPadStyle, setVPadStyle] = useState({});
+  const [hPadStyle, setHPadStyle] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUpload, setImageUpload] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [padScale, setPadScale] = useState({ vertical: 1, horizontal: 1 });
 
   const { poweredOn, titlesShown, menuVisible, soundPlaying } = useSelector(
     (state: RootState) => state.gameboy
@@ -39,15 +45,15 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   };
 
   const handleChooseFilter = () => {
-    // Implémentez cette fonction selon vos besoins
+    // TODO
   };
 
   const handleDisplaySettings = () => {
-    // Implémentez cette fonction selon vos besoins
+    // TODO
   };
 
   const handleDownloadImage = () => {
-    // Implémentez cette fonction selon vos besoins
+    // TODO
   };
 
   const menuOptions: MenuOption[] = [
@@ -94,6 +100,23 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
 
   const handleReset = () => {
     dispatch(resetToFirstOption());
+  };
+
+  const handleControlClick = (directionProps: DirectionProps) => {
+    switch (directionProps.direction) {
+      case "up":
+        dispatch(previousOption());
+        break;
+      case "down":
+        dispatch(nextOption());
+        break;
+      case "left":
+        dispatch(previousOption());
+        break;
+      case "right":
+        dispatch(nextOption());
+        break;
+    }
   };
 
   useEffect(() => {
@@ -204,7 +227,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           <div className="pad-right">▶</div>
           <div className="pad-v"></div>
           <div className="pad-h"></div>
-          <div className="pad-v-btn">
+          <div className="pad-v-btn" style={vPadStyle}>
             <div className="pad-v-btn-grips"></div>
             <div className="pad-v-btn-grips"></div>
             <div className="pad-v-btn-grips"></div>
@@ -215,7 +238,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
             <div className="pad-v-btn-grips"></div>
             <div className="pad-v-btn-grips"></div>
           </div>
-          <div className="pad-h-btn">
+          <div className="pad-h-btn" style={hPadStyle}>
             <div className="pad-h-btn-grips"></div>
             <div className="pad-h-btn-grips"></div>
             <div className="pad-h-btn-grips"></div>
@@ -232,19 +255,23 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           <div className="control-area">
             <div
               className="controlP up"
-              onClick={() => dispatch(previousOption())}
+              onMouseDown={() => handlePressRelease("up", true)}
+              onMouseUp={() => handlePressRelease("up", false)}
             ></div>
             <div
               className="controlP down"
-              onClick={() => dispatch(nextOption())}
+              onMouseDown={() => handlePressRelease("down", true)}
+              onMouseUp={() => handlePressRelease("down", false)}
             ></div>
             <div
               className="controlP left"
-              onClick={() => dispatch(previousOption())}
+              onMouseDown={() => handlePressRelease("left", true)}
+              onMouseUp={() => handlePressRelease("left", false)}
             ></div>
             <div
               className="controlP right"
-              onClick={() => dispatch(nextOption())}
+              onMouseDown={() => handlePressRelease("right", true)}
+              onMouseUp={() => handlePressRelease("right", false)}
             ></div>
           </div>
         </div>
