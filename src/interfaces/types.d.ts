@@ -163,6 +163,12 @@ export interface DirectionProps {
   direction: "up" | "down" | "left" | "right";
 }
 
+export interface PadStyle {
+  transform: string;
+  transformOrigin: string;
+  transition: string;
+}
+
 // features
 export interface FilterProps {
   imageSrc: string;
