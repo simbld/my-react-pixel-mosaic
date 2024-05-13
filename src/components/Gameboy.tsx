@@ -14,7 +14,8 @@ import MenuGameboy from "./MenuGameboy";
 import {
   GameboyProps,
   type DirectionProps,
-  type MenuOption
+  type MenuOption,
+  type PadStyle
 } from "../interfaces/types";
 import ImageUploaderModal from "../modals/ImageUploaderModal";
 import {
@@ -26,12 +27,99 @@ import {
 
 const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const dispatch: AppDispatch = useDispatch();
-  const [vPadStyle, setVPadStyle] = useState({});
-  const [hPadStyle, setHPadStyle] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUpload, setImageUpload] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [padScale, setPadScale] = useState({ vertical: 1, horizontal: 1 });
+
+  const [vPadStyle, setVPadStyle] = useState<PadStyle>({
+    transform: "perspective(600px) rotateX(0deg)",
+    transformOrigin: "center",
+    transition: "transform 0.3s ease"
+  });
+
+  const [hPadStyle, setHPadStyle] = useState<PadStyle>({
+    transform: "perspective(600px) rotateY(0deg)",
+    transformOrigin: "center",
+    transition: "transform 0.3s ease"
+  });
+
+  const handlePress = (direction: "up" | "down" | "left" | "right") => {
+    switch (direction) {
+      case "up":
+        dispatch(previousOption());
+        setVPadStyle((prevState) => ({
+          ...prevState,
+          transform: "perspective(1000px) rotateX(20deg)",
+          transformOrigin: "center",
+          transition: "transform 0.3s ease"
+        }));
+        setHPadStyle((prevState) => ({
+          ...prevState,
+          transform: "perspective(600px) rotateX(20deg)",
+          transformOrigin: "center",
+          transition: "transform 0.3s ease"
+        }));
+        break;
+
+      case "down":
+        dispatch(nextOption());
+        setVPadStyle({
+          transform: "perspective(600px) rotateX(-20deg)",
+          transformOrigin: "center",
+          transition: "transform 0.3s ease"
+        });
+        setHPadStyle((prevState) => ({
+          ...prevState,
+          transform: "perspective(600px) rotateX(-20deg)",
+          transformOrigin: "center",
+          transition: "transform 0.3s ease"
+        }));
+        break;
+
+      case "left":
+        dispatch(previousOption());
+        setHPadStyle({
+          transform: "perspective(600px) rotateY(-20deg)",
+          transformOrigin: "center",
+          transition: "transform 0.3s ease"
+        });
+        setVPadStyle((prevState) => ({
+          ...prevState,
+          transform: "perspective(600px) rotateY(-20deg)",
+          transformOrigin: "center",
+          transition: "transform 0.3s ease"
+        }));
+        break;
+
+      case "right":
+        dispatch(nextOption());
+        setHPadStyle({
+          transform: "perspective(600px) rotateY(20deg)",
+          transformOrigin: "center",
+          transition: "transform 0.3s ease"
+        });
+        setVPadStyle((prevState) => ({
+          ...prevState,
+          transform: "perspective(600px) rotateY(20deg)",
+          transformOrigin: "center",
+          transition: "transform 0.3s ease"
+        }));
+        break;
+    }
+  };
+
+  const handleRelease = () => {
+    setVPadStyle({
+      transform: "rotateX(0deg)",
+      transformOrigin: "center",
+      transition: "transform 0.3s ease"
+    });
+    setHPadStyle({
+      transform: "rotateY(0deg)",
+      transformOrigin: "center",
+      transition: "transform 0.3s ease"
+    });
+  };
 
   const { poweredOn, titlesShown, menuVisible, soundPlaying } = useSelector(
     (state: RootState) => state.gameboy
@@ -100,23 +188,6 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
 
   const handleReset = () => {
     dispatch(resetToFirstOption());
-  };
-
-  const handleControlClick = (directionProps: DirectionProps) => {
-    switch (directionProps.direction) {
-      case "up":
-        dispatch(previousOption());
-        break;
-      case "down":
-        dispatch(nextOption());
-        break;
-      case "left":
-        dispatch(previousOption());
-        break;
-      case "right":
-        dispatch(nextOption());
-        break;
-    }
   };
 
   useEffect(() => {
@@ -227,24 +298,20 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           <div className="pad-right">▶</div>
           <div className="pad-v"></div>
           <div className="pad-h"></div>
-          <div className="pad-v-btn" style={vPadStyle}>
+          <div className="pad-v-btn" style={vPadStyle as React.CSSProperties}>
             <div className="pad-v-btn-grips"></div>
             <div className="pad-v-btn-grips"></div>
             <div className="pad-v-btn-grips"></div>
-            <div className="pad-v-btn-grips"></div>
-            <div className="pad-v-btn-grips"></div>
-            <div className="pad-v-btn-grips"></div>
+            <div className="pad-v-btn-center"></div>
             <div className="pad-v-btn-grips"></div>
             <div className="pad-v-btn-grips"></div>
             <div className="pad-v-btn-grips"></div>
           </div>
-          <div className="pad-h-btn" style={hPadStyle}>
+          <div className="pad-h-btn" style={hPadStyle as React.CSSProperties}>
             <div className="pad-h-btn-grips"></div>
             <div className="pad-h-btn-grips"></div>
             <div className="pad-h-btn-grips"></div>
-            <div className="pad-h-btn-grips"></div>
-            <div className="pad-h-btn-grips"></div>
-            <div className="pad-h-btn-grips"></div>
+            <div className="pad-h-btn-center"></div>
             <div className="pad-h-btn-grips"></div>
             <div className="pad-h-btn-grips"></div>
             <div className="pad-h-btn-grips"></div>
@@ -255,23 +322,27 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           <div className="control-area">
             <div
               className="controlP up"
-              onMouseDown={() => handlePressRelease("up", true)}
-              onMouseUp={() => handlePressRelease("up", false)}
+              onMouseDown={() => handlePress("up")}
+              onMouseUp={handleRelease}
+              onMouseLeave={handleRelease}
             ></div>
             <div
               className="controlP down"
-              onMouseDown={() => handlePressRelease("down", true)}
-              onMouseUp={() => handlePressRelease("down", false)}
+              onMouseDown={() => handlePress("down")}
+              onMouseUp={handleRelease}
+              onMouseLeave={handleRelease}
             ></div>
             <div
               className="controlP left"
-              onMouseDown={() => handlePressRelease("left", true)}
-              onMouseUp={() => handlePressRelease("left", false)}
+              onMouseDown={() => handlePress("left")}
+              onMouseUp={handleRelease}
+              onMouseLeave={handleRelease}
             ></div>
             <div
               className="controlP right"
-              onMouseDown={() => handlePressRelease("right", true)}
-              onMouseUp={() => handlePressRelease("right", false)}
+              onMouseDown={() => handlePress("right")}
+              onMouseUp={handleRelease}
+              onMouseLeave={handleRelease}
             ></div>
           </div>
         </div>

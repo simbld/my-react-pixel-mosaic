@@ -274,17 +274,18 @@
 
     .pad {
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       left: 23.5%;
       top: 22%;
       transform: translate(-50%, -50%);
-      width: 186.36px;
-      height: 186.36px;
-      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 200px;
+      z-index: -1;
       cursor: pointer;
-      pointer-events: none;
+      pointer-events: auto;
+      transform-origin: center center;
 
       &-v,
       &-h,
@@ -292,109 +293,115 @@
       &-h-btn,
       &-center {
         pointer-events: none;
+        .flex-center();
+      }
+
+      &-v,
+      &-h {
+        position: absolute;
+        width: 65px;
+        height: 190px;
+        background: @padBody;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 8px;
+        z-index: 2;
+        transform-style: preserve-3d;
+        perspective: 1000px;
       }
 
       &-v {
-        .flex-center();
-        width: 59.63px;
-        height: 166.48px;
-        background: @padBody;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        border-radius: 7.45px;
-        z-index: 2;
+        width: 65px;
+        height: 190px;
       }
+
       &-h {
-        width: 166.48px;
-        height: 59.63px;
-        background: @padBody;
+        width: 190px;
+        height: 65px;
+      }
+
+      &-v-btn,
+      &-h-btn {
         position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        border-radius: 7.45px;
+        border: 5px solid transparent;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
         z-index: 2;
+        background: @pad;
+        transform: translate(-50%, -50%);
+        transition: transform 0.3s ease;
+        transform-origin: center;
+        transform-style: preserve-3d;
       }
 
       &-v-btn {
         .flex-center(flex, column, space-around);
-        position: relative;
-        left: 50%;
-        top: 42%;
-        transform: translate(-50%, -50%);
-        width: 50px;
-        height: 152px;
-        border-radius: 7.45px;
-        background: @pad;
+        width: 53px;
+        height: 180px;
         box-shadow:
           0px 0px 0px 0px @pad inset,
           -0.5px 1px 1px 0.5px @padReflect inset;
-        filter: blur(0.25px);
-        z-index: 2;
-        transition:
-          transform 0.2s ease-out,
-          box-shadow 0.2s ease-out;
 
         &-grips {
-          width: 37.27px;
-          height: 12.42px;
+          width: 40px;
+          height: 13px;
+          position: relative;
           background: @pad;
-          border-radius: 124.24px;
-          border-right: 0.62px @padReflect solid;
-          border-top: 0.62px @padReflect solid;
-          filter: blur(0.25px);
+          border-radius: 8px;
+          border-right: 0.5px @padReflect solid;
+          border-top: 0.5px @padReflect solid;
+        }
+
+        &-center {
+          height: 55px;
+          width: 55px;
+          background: transparent;
         }
       }
 
       &-h-btn {
         .flex-center(flex, row, space-around);
-        width: 152px;
-        height: 50px;
-        position: relative;
-        left: -12%;
-        top: 1%;
-        border-radius: 7.45px;
-        background: @pad;
+        width: 180px;
+        height: 53px;
         box-shadow:
           0px -1px 0px 0px @pad inset,
           -0.5px 0.5px 0.5px 1px @padReflect inset;
-        filter: blur(0.25px);
-        z-index: 2;
-        transition:
-          transform 0.2s ease-out,
-          box-shadow 0.2s ease-out;
 
         &-grips {
-          width: 12.42px;
-          height: 37.27px;
-          border-radius: 124.24px;
+          width: 13px;
+          height: 40px;
+          border-radius: 8px;
           background: @pad;
-          border-right: 0.62px @padReflect solid;
-          border-top: 0.62px @padReflect solid;
-          filter: blur(0.25px);
+          border-right: 0.5px @padReflect solid;
+          border-top: 0.5px @padReflect solid;
+        }
+
+        &-center {
+          width: 55px;
+          height: 55px;
+          background: @pad;
         }
       }
 
       &-center {
         .flex-center();
         cursor: pointer;
-        width: 49.69px;
-        height: 49.69px;
+        width: 55px;
+        height: 55px;
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        border-radius: 7.45px;
+        border-radius: 8px;
         z-index: 2;
         box-shadow:
           inset 0px 0px 30px 0px @pad,
           inset 0px 0px 30px 0px @pad;
 
         &-cir {
-          width: 44.72px;
-          height: 44.72px;
+          width: 55px;
+          height: 55px;
           border-radius: 50%;
           background: @pad;
           filter: blur(0.25px);
@@ -505,12 +512,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 70px;
-      height: 70px;
+      width: 62.12px;
+      height: 62.12px;
       cursor: pointer;
       user-select: none;
       pointer-events: auto;
-      border-radius: 10px;
       z-index: 2;
     }
 
