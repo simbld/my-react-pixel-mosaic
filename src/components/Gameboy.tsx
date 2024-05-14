@@ -129,6 +129,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   );
 
   const handleUploadImage = () => {
+    console.log("Opening modal...");
     setIsModalOpen(true);
   };
 
@@ -182,6 +183,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   };
 
   const handleConfirmSelection = () => {
+    if (!poweredOn) return;
     const selectedAction = menuOptions[selectedOptionIndex]?.action;
     selectedAction?.();
   };
