@@ -5,51 +5,74 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(122, 19, 207, 0.514);
-  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: @gameboyColor;
+  background-repeat: repeat;
+  z-index: 101;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: @gameboyColorGresille;
+    opacity: 0.2;
+    z-index: 101;
+  }
 }
 
-.closeButton {
+.close-button {
   .flex-center();
-  width: 15rem;
-  height: 4rem;
-  bottom: 15%;
+  position: absolute;
+  width: 22%;
+  height: 6%;
+  bottom: 3%;
+  left: 3%;
+  z-index: 101;
   cursor: pointer;
-  box-shadow: 5px 5px 0px 0px @screenOnOutline;
-  text-shadow:
-    3px 0px 0px @screenOnOutline,
-    -3px 0px 0px @screenOnOutline,
-    0px 3px 0px @screenOnOutline,
-    0px -3px 0px @screenOnOutline;
   border: @screenOnOutline 3px solid;
   background-color: @screenOnMiddle;
-  color: @screenOnDark;
+  color: @screenOnUltraDark;
   font-size: 25px;
   font-family: "Early", sans-serif;
-  position: absolute;
-  z-index: 101;
+  box-shadow: 10px 10px 0px @screenOnOutline;
+  text-shadow: 2px 2px 2px @b;
+  will-change: transform, box-shadow;
+  transition: opacity 1s ease;
+  opacity: 0.4;
 }
 
-.closeButton:active {
-  box-shadow: 0px 0px 0px 0px @screenOnOutline;
-  transform: translate(5px, 5px);
+.close-button:hover {
+  background-color: @screenOnLight;
+  color: @screenOnDark;
+  box-shadow: 10px 10px 0px @screenOnOutline;
+  text-shadow: 2px 2px 2px @b;
   transition:
     box-shadow 0.1s,
-    transform 0.1s;
+    transform 0.1s ease;
+  opacity: 1;
+}
+
+.close-button:active {
+  transform: translate(10px, 10px);
+  box-shadow: none;
 }
 
 .glass-screen-modal {
   .flex-center();
+  position: relative;
   z-index: 101;
-  padding: 51.89px;
+  padding: 50px;
   width: 120rem;
   height: 100rem;
   background: @glass;
-  margin: 0;
-  position: relative;
+  margin: auto;
   border-radius: 50px 50px 150px 50px;
   box-shadow:
-    inset -9px 9px 6px #544f60,
+    Choisir un fichierAppliquer le filtreFermer inset -9px 9px 6px #544f60,
     inset -16px 16px 6px -23.35px #1b1b1b,
     inset -7px 1px 9px -9px #d8d5d5,
     0px -6px 2.59px #858585;
@@ -110,10 +133,9 @@
 
   .glass-screen-matrix-modal {
     .container();
-    position: absolute;
+    position: relative;
     top: 1%;
     left: -2%;
-    position: relative;
     width: 65%;
     height: 85%;
     background-color: @screenOnLight;
@@ -124,44 +146,106 @@
   }
   .title-modal {
     position: absolute;
-    font-size: 2rem;
+    font-size: 20px;
+    right: 1%;
+    bottom: 1%;
+  }
+
+  .upload-button {
+    .flex-center();
+    position: absolute;
+    width: 29%;
+    height: 9%;
+    top: 3%;
+    z-index: 101;
+    cursor: pointer;
+    border: @screenOnOutline 3px solid;
+    background-color: @screenOnMiddle;
+    color: @screenOnUltraDark;
+    font-size: 25px;
+    font-family: "Early", sans-serif;
+    text-shadow: 2px 2px 2px @b;
+    will-change: transform, box-shadow;
+    transition:
+      opacity 1s ease,
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    opacity: 0.4;
+  }
+
+  .upload-button:hover {
+    box-shadow: 10px 10px 0px 0px @screenOnOutline;
+    background-color: @screenOnLight;
+    color: @screenOnDark;
+    text-shadow: 2px 2px 2px @b;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    opacity: 1;
+  }
+
+  .upload-button:active {
+    transform: translate(10px, 10px);
+    transition:
+      box-shadow 0.1s,
+      transform 0.1s ease;
+    box-shadow: none;
+  }
+
+  .local {
+    left: 3%;
+  }
+
+  .inline {
     right: 3%;
-    bottom: 2%;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
   }
 
   .file-input {
     display: none;
   }
 
-  .upload-button {
+  .filter-button {
     .flex-center();
+    width: 30rem;
+    height: 10rem;
+    bottom: 25%;
+    z-index: 101;
     position: absolute;
-    height: 140px;
-    width: 380px;
-    box-shadow:
-      5px 5px 0px 0px @screenOnOutline,
-      10px 10px 0px 0px @screenOnOutline,
-      15px 15px 0px 0px @screenOnOutline;
-    text-shadow:
-      3px 0px 0px @screenOnOutline,
-      -3px 0px 0px @screenOnOutline,
-      0px 3px 0px @screenOnOutline,
-      0px -3px 0px @screenOnOutline;
-    border: @screenOnOutline 3px solid;
-    background-color: @screenOnMiddle;
-    color: @screenOnDark;
-    font-size: 35px;
-    font-family: "Early", sans-serif;
     cursor: pointer;
-    top: 45%;
-    left: 30%;
+    border: @screenOnOutline 3px solid;
+    color: @screenOnUltraDark;
+    font-size: 25px;
+    font-family: "Early", sans-serif;
+    text-shadow: 2px 2px 2px @b;
+    background-color: @screenOnMiddle;
+    will-change: transform, box-shadow;
+    opacity: 0.4;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
-  .upload-button:active {
-    box-shadow: 5px 5px 0px 0px @screenOnOutline;
-    transform: translate(15px, 15px);
+  .filter-button:hover {
+    box-shadow: 10px 10px 0px 0px @screenOnOutline;
+    background-color: @screenOnLight;
+    color: @screenOnDark;
+    box-shadow: 10px 10px 0px 0px @screenOnOutline;
+    text-shadow: 2px 2px 2px @b;
     transition:
-      box-shadow 0.3s,
-      transform 0.3s;
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .filter-button:active {
+    transform: translate(10px, 10px);
+    transition:
+      box-shadow 0.1s,
+      transform 0.1s ease;
+    box-shadow: none;
   }
 }
