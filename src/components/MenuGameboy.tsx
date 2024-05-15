@@ -34,18 +34,13 @@ const MenuItem = memo(
   )
 );
 
-const MenuGameboy: React.FC<MenuGameboyProps> = ({
-  menuOptions,
-  onSelectOption
-}) => {
+const MenuGameboy: React.FC<MenuGameboyProps> = ({ menuOptions }) => {
   const selectedOptionIndex = useSelector(
     (state: RootState) => state.menuGameboy.selectedOptionIndex
   );
 
   const dispatch = useDispatch();
   const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const imageUrl = useSelector((state: RootState) => state.imageProcessing.url);
 
   const handleConfirmSelection = () => {
     const selectedAction = menuOptions[selectedOptionIndex]?.action;

@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../features/reducers/stores/store";
 import {
@@ -13,7 +13,6 @@ import {
 import MenuGameboy from "./MenuGameboy";
 import {
   GameboyProps,
-  type DirectionProps,
   type MenuOption,
   type PadStyle
 } from "../interfaces/types";
@@ -21,7 +20,6 @@ import ImageUploaderModal from "../modals/ImageUploaderModal";
 import {
   nextOption,
   previousOption,
-  selectOption,
   resetToFirstOption
 } from "../features/reducers/menugameboy/menuGameboySlice";
 
@@ -30,6 +28,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUpload, setImageUpload] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [startAnimation, setStartAnimation] = useState<string>("");
 
   const [vPadStyle, setVPadStyle] = useState<PadStyle>({
     transform: "perspective(600px) rotateX(0deg)",
@@ -51,13 +50,13 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           ...prevState,
           transform: "perspective(1000px) rotateX(20deg)",
           transformOrigin: "center",
-          transition: "transform 0.3s ease"
+          transition: "transform 0.2s ease"
         }));
         setHPadStyle((prevState) => ({
           ...prevState,
           transform: "perspective(600px) rotateX(20deg)",
           transformOrigin: "center",
-          transition: "transform 0.3s ease"
+          transition: "transform 0.2s ease"
         }));
         break;
 
@@ -66,13 +65,13 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
         setVPadStyle({
           transform: "perspective(600px) rotateX(-20deg)",
           transformOrigin: "center",
-          transition: "transform 0.3s ease"
+          transition: "transform 0.2s ease"
         });
         setHPadStyle((prevState) => ({
           ...prevState,
           transform: "perspective(600px) rotateX(-20deg)",
           transformOrigin: "center",
-          transition: "transform 0.3s ease"
+          transition: "transform 0.2s ease"
         }));
         break;
 
@@ -81,13 +80,13 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
         setHPadStyle({
           transform: "perspective(600px) rotateY(-20deg)",
           transformOrigin: "center",
-          transition: "transform 0.3s ease"
+          transition: "transform 0.2s ease"
         });
         setVPadStyle((prevState) => ({
           ...prevState,
           transform: "perspective(600px) rotateY(-20deg)",
           transformOrigin: "center",
-          transition: "transform 0.3s ease"
+          transition: "transform 0.2s ease"
         }));
         break;
 
@@ -96,13 +95,13 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
         setHPadStyle({
           transform: "perspective(600px) rotateY(20deg)",
           transformOrigin: "center",
-          transition: "transform 0.3s ease"
+          transition: "transform 0.2s ease"
         });
         setVPadStyle((prevState) => ({
           ...prevState,
           transform: "perspective(600px) rotateY(20deg)",
           transformOrigin: "center",
-          transition: "transform 0.3s ease"
+          transition: "transform 0.2s ease"
         }));
         break;
     }
@@ -121,6 +120,48 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     });
   };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case "ArrowUp":
+        handlePress("up");
+        dispatch(previousOption());
+        break;
+      case "ArrowDown":
+        handlePress("down");
+        dispatch(nextOption());
+        break;
+      case "ArrowLeft":
+        handlePress("left");
+        dispatch(previousOption());
+        break;
+      case "ArrowRight":
+        handlePress("right");
+        dispatch(nextOption());
+        break;
+      case "Enter":
+        handleConfirmSelection();
+        break;
+      case "Escape":
+        dispatch(resetToFirstOption());
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleKeyUp = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case "ArrowUp":
+      case "ArrowDown":
+      case "ArrowLeft":
+      case "ArrowRight":
+        handleRelease();
+        break;
+      default:
+        break;
+    }
+  };
+
   const { poweredOn, titlesShown, menuVisible, soundPlaying } = useSelector(
     (state: RootState) => state.gameboy
   );
@@ -129,7 +170,6 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   );
 
   const handleUploadImage = () => {
-    console.log("Opening modal...");
     setIsModalOpen(true);
   };
 
@@ -157,14 +197,25 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
 
     if (!poweredOn) {
       dispatch(playSound());
-      dispatch(showTitles());
+      setStartAnimation("no-reflection");
+
+      document.body.offsetHeight;
+
       setTimeout(() => {
-        dispatch(showMenu());
-      }, 6000);
+        setStartAnimation("flash");
+        setTimeout(() => {
+          setStartAnimation("start-screen");
+          dispatch(showTitles());
+          setTimeout(() => {
+            dispatch(showMenu());
+          }, 6000);
+        }, 100);
+      }, 10);
     } else {
       dispatch(stopSound());
       dispatch(hideTitles());
       dispatch(hideMenu());
+      setStartAnimation("");
     }
   };
 
@@ -208,6 +259,15 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     }
   }, [poweredOn, soundPlaying]);
 
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
   return (
     <div className={`gameboy ${poweredOn ? "gameboy-on" : ""}`}>
       <ImageUploaderModal
@@ -235,7 +295,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
         <div className="big-horizontal-line"></div>
         <div className="big-horizontal-line-bottom"></div>
         <div className="notch"></div>
-        <div className="glass-screen">
+        <div className={`glass-screen ${startAnimation}`}>
           <div className="glass-screen-line">
             <div className="glass-screen-line-l"></div>
             <div className="glass-screen-line-l"></div>
@@ -250,7 +310,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           </div>
 
           <div
-            className={`glass-screen-matrix ${menuVisible ? "glass-screen-matrix-on" : ""}`}
+            className={`glass-screen-matrix ${startAnimation} ${menuVisible ? "glass-screen-matrix-on" : ""}`}
           >
             {titlesShown && (
               <div className="titles" onAnimationEnd={handleAnimationEnd}>
