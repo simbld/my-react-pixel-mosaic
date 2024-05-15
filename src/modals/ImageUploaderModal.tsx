@@ -3,8 +3,7 @@ import type { ImageUploaderModalProps } from "../interfaces/types";
 
 const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   isOpen,
-  onClose,
-  onUpload
+  onClose
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
