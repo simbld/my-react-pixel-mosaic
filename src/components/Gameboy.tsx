@@ -28,6 +28,8 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUpload, setImageUpload] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const padRef = useRef(null);
+
   const [startAnimation, setStartAnimation] = useState<string>("");
 
   const [vPadStyle, setVPadStyle] = useState<PadStyle>({
@@ -243,6 +245,14 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     dispatch(resetToFirstOption());
   };
 
+  const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
+    event.currentTarget.style.backgroundColor = "";
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    event.currentTarget.style.backgroundColor = "";
+  };
+
   useEffect(() => {
     if (poweredOn && soundPlaying) {
       audioRef.current = new Audio("/src/assets/gameboy-sound.mp3");
@@ -265,6 +275,25 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (
+        padRef.current &&
+        (padRef.current as HTMLElement).contains(event.target as Node)
+      ) {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("mouseup", handleClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("mouseup", handleClick);
     };
   }, []);
 
@@ -387,24 +416,32 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
               onMouseDown={() => handlePress("up")}
               onMouseUp={handleRelease}
               onMouseLeave={handleRelease}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             ></div>
             <div
               className="controlP down"
               onMouseDown={() => handlePress("down")}
               onMouseUp={handleRelease}
               onMouseLeave={handleRelease}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             ></div>
             <div
               className="controlP left"
               onMouseDown={() => handlePress("left")}
               onMouseUp={handleRelease}
               onMouseLeave={handleRelease}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             ></div>
             <div
               className="controlP right"
               onMouseDown={() => handlePress("right")}
               onMouseUp={handleRelease}
               onMouseLeave={handleRelease}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             ></div>
           </div>
         </div>

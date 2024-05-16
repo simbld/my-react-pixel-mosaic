@@ -369,6 +369,12 @@
       }
     }
 
+    .glass-screen,
+    .glass-screen-matrix {
+      transition: none;
+      outline: none;
+    }
+
     .pad {
       position: relative;
       left: 23.5%;
@@ -427,9 +433,15 @@
         z-index: 2;
         background: @pad;
         transform: translate(-50%, -50%);
-        transition: transform 0.3s ease;
         transform-origin: center;
         transform-style: preserve-3d;
+        transition: none;
+
+        &:active,
+        &:focus {
+          background: @pad;
+          outline: none;
+        }
       }
 
       &-v-btn {
@@ -439,6 +451,7 @@
         box-shadow:
           0px 0px 0px 0px @pad inset,
           -0.5px 1px 1px 0.5px @padReflect inset;
+        transition: none;
 
         &-grips {
           width: 40px;
@@ -448,12 +461,20 @@
           border-radius: 8px;
           border-right: 0.5px @padReflect solid;
           border-top: 0.5px @padReflect solid;
+          transition: none;
+
+          &:active,
+          &:focus {
+            background: @pad;
+            outline: none;
+          }
         }
 
         &-center {
           height: 55px;
           width: 55px;
           background: transparent;
+          transition: none;
         }
       }
 
@@ -464,6 +485,7 @@
         box-shadow:
           0px -1px 0px 0px @pad inset,
           -0.5px 0.5px 0.5px 1px @padReflect inset;
+        transition: none;
 
         &-grips {
           width: 13px;
@@ -472,12 +494,25 @@
           background: @pad;
           border-right: 0.5px @padReflect solid;
           border-top: 0.5px @padReflect solid;
+          transition: none;
+
+          &:active,
+          &:focus {
+            background: @pad;
+            outline: none;
+          }
         }
 
         &-center {
           width: 55px;
           height: 55px;
           background: @pad;
+
+          &:active,
+          &:focus {
+            background: @pad;
+            outline: none;
+          }
         }
       }
 
@@ -495,6 +530,7 @@
         box-shadow:
           inset 0px 0px 30px 0px @pad,
           inset 0px 0px 30px 0px @pad;
+        transition: none;
 
         &-cir {
           width: 48px;
@@ -615,6 +651,12 @@
       user-select: none;
       pointer-events: auto;
       z-index: 2;
+    }
+
+    .controlP:focus,
+    .controlP:active {
+      outline: none;
+      background: inherit;
     }
 
     .up {
