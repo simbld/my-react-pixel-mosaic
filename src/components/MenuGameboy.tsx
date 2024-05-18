@@ -85,7 +85,6 @@ const MenuGameboy: React.FC<MenuGameboyProps> = ({ menuOptions }) => {
       onKeyDown={() => {
         handleKeyDown;
       }}
-      onBlur={() => containerRef.current?.focus()}
       tabIndex={0}
     >
       <div className="menu-title">Use Pad or </div>

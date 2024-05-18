@@ -248,11 +248,6 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
     event.currentTarget.style.backgroundColor = "";
   };
-
-  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
-    event.currentTarget.style.backgroundColor = "";
-  };
-
   useEffect(() => {
     if (poweredOn && soundPlaying) {
       audioRef.current = new Audio("/src/assets/gameboy-sound.mp3");
@@ -417,7 +412,6 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
               onMouseUp={handleRelease}
               onMouseLeave={handleRelease}
               onFocus={handleFocus}
-              onBlur={handleBlur}
             ></div>
             <div
               className="controlP down"
@@ -425,7 +419,6 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
               onMouseUp={handleRelease}
               onMouseLeave={handleRelease}
               onFocus={handleFocus}
-              onBlur={handleBlur}
             ></div>
             <div
               className="controlP left"
@@ -433,7 +426,6 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
               onMouseUp={handleRelease}
               onMouseLeave={handleRelease}
               onFocus={handleFocus}
-              onBlur={handleBlur}
             ></div>
             <div
               className="controlP right"
@@ -441,7 +433,6 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
               onMouseUp={handleRelease}
               onMouseLeave={handleRelease}
               onFocus={handleFocus}
-              onBlur={handleBlur}
             ></div>
           </div>
         </div>
