@@ -24,7 +24,7 @@ const MyComponent = () => {
 */
 
 import { useState, useCallback } from "react";
-import { UseErrorReturnProps } from "../interfaces/types";
+import { UseErrorReturnProps } from "../../interfaces/types";
 import { toast } from "react-toastify";
 
 const useError = (): UseErrorReturnProps => {

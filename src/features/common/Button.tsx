@@ -1,4 +1,4 @@
-import type { ButtonProps } from "../interfaces/types";
+import type { ButtonProps } from "../../interfaces/types";
 import { useState } from "react";
 
 const Button: React.FC<ButtonProps> = ({ text, onClick, loading = false }) => {

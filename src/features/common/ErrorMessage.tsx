@@ -1,4 +1,4 @@
-import { useErrorContext } from "../contexts/ErrorContext";
+import { useErrorContext } from "../../contexts/ErrorContext";
 
 const ErrorMessage: React.FC = () => {
   const { error, clearError } = useErrorContext();

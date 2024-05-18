@@ -24,7 +24,7 @@
   }
 }
 
-.close-button {
+.close-btn {
   .flex-center();
   position: absolute;
   width: 22%;
@@ -45,7 +45,7 @@
   opacity: 0.4;
 }
 
-.close-button:hover {
+.close-btn:hover {
   background-color: @screenOnLight;
   color: @screenOnDark;
   box-shadow: 10px 10px 0px @screenOnOutline;
@@ -56,9 +56,30 @@
   opacity: 1;
 }
 
-.close-button:active {
+.close-btn:active {
   transform: translate(10px, 10px);
   box-shadow: none;
+}
+
+.apply-filter-button {
+  .flex-center();
+  position: absolute;
+  width: 22%;
+  height: 6%;
+  bottom: 3%;
+  right: 3%;
+  z-index: 101;
+  cursor: pointer;
+  border: @screenOnOutline 3px solid;
+  background-color: @screenOnMiddle;
+  color: @screenOnUltraDark;
+  font-size: 25px;
+  font-family: "Early", sans-serif;
+  box-shadow: 10px 10px 0px @screenOnOutline;
+  text-shadow: 2px 2px 2px @b;
+  will-change: transform, box-shadow;
+  transition: opacity 1s ease;
+  opacity: 0.4;
 }
 
 .glass-screen-modal {
@@ -150,7 +171,7 @@
     bottom: 1%;
   }
 
-  .upload-button {
+  .upload-btn {
     .flex-center();
     position: absolute;
     width: 29%;
@@ -172,7 +193,7 @@
     opacity: 0.4;
   }
 
-  .upload-button:hover {
+  .upload-btn:hover {
     box-shadow: 10px 10px 0px 0px @screenOnOutline;
     background-color: @screenOnLight;
     color: @screenOnDark;
@@ -183,7 +204,7 @@
     opacity: 1;
   }
 
-  .upload-button:active {
+  .upload-btn:active {
     transform: translate(10px, 10px);
     transition:
       box-shadow 0.1s,

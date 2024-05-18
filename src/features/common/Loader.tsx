@@ -1,4 +1,4 @@
-import type { LoaderProps } from "../interfaces/types";
+import type { LoaderProps } from "../../interfaces/types";
 
 const Loader: React.FC<LoaderProps> = ({
   barCount = 9,

@@ -5,9 +5,16 @@ import {
   TARGET_WIDTH,
   TARGET_HEIGHT
 } from "../../config/config";
-import { AsciiArtFilterProps } from "../../interfaces/types";
+import { FilterProps } from "../../interfaces/types";
 
-const AsciiArtFilter: React.FC<AsciiArtFilterProps> = ({ imageSrc }) => {
+/**
+ * AsciiArtFilter is a React component that applies an ASCII art filter to an image.
+ * @param {FilterProps} props - The properties for the component.
+ * @param {string} props.imageSrc - The source of the image to filter.
+ * @returns {JSX.Element} The canvas element with the filtered image.
+ */
+
+const AsciiArtFilter: React.FC<FilterProps> = ({ imageSrc }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -50,7 +57,7 @@ const AsciiArtFilter: React.FC<AsciiArtFilterProps> = ({ imageSrc }) => {
           let b = data[pixelIndex + 2];
 
           // Modifier la luminosité
-          const brightness = 0.7; // Augmenter ou diminuer cette valeur pour ajuster la luminosité
+          const brightness = 0.7; // Augmenter ou diminuer la luminosité
           r *= brightness;
           g *= brightness;
           b *= brightness;

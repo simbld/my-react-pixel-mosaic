@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from "react";
-import useError from "../common/useError";
+import useError from "../features/common/useError";
 import { ErrorContextTypeProps } from "../interfaces/types";
 
 // Création du contexte avec une valeur par défaut

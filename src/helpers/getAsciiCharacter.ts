@@ -7,7 +7,7 @@
  */
 
 import { densityDot } from "../config/config";
-import mapValue from "../hooks/useMapValue";
+import mapValue from "../features/hooks/useMapValue";
 import { AsciiCharacterProps } from "../interfaces/types";
 
 const getAsciiCharacter: (AsciiCharacterProps) => string = (
