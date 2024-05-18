@@ -1,14 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
-import type { MenuGameboyProps } from "../interfaces/types";
+import type { MenuGameboyProps } from "../../interfaces/types";
 import { memo, useEffect, useRef, useState } from "react";
-import type { RootState } from "../features/reducers/stores/store";
+import type { RootState } from "../reducers/stores/store";
 import {
   nextOption,
   previousOption,
   selectOption,
   resetToFirstOption
-} from "../features/reducers/menugameboy/menuGameboySlice";
-import { defaultImage } from "../config/config";
+} from "../reducers/menugameboy/menuGameboySlice";
+import { defaultImage } from "../../config/config";
 
 const MenuItem = memo(
   ({

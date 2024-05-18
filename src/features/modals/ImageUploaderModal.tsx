@@ -1,11 +1,21 @@
 import { useState, useRef, useEffect } from "react";
-import type { ImageUploaderModalProps } from "../interfaces/types";
+import type { ImageUploaderModalProps } from "../../interfaces/types";
+import AsciiArtFilter from "../filters/AsciiArtFilter";
+
+/**
+ * ImageUploaderModal is a React component for uploading an image and applying an ASCII art filter.
+ * @param {ImageUploaderModalProps} props - The properties for the component.
+ * @param {boolean} props.isOpen - Whether the modal is open.
+ * @param {() => void} props.onClose - Function to close the modal.
+ * @returns {JSX.Element | null} The modal element.
+ */
 
 const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   isOpen,
   onClose
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement | null>(null);
@@ -18,6 +28,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreviewUrl(reader.result as string);
+        setFilteredImageUrl(null);
       };
       reader.readAsDataURL(file);
     } else {
@@ -26,8 +37,13 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     event.target.value = "";
   };
 
+  const handleApplyFilter = () => {
+    setFilteredImageUrl(imagePreviewUrl);
+  };
+
   const handleModalClose = () => {
     setImagePreviewUrl(null);
+    setFilteredImageUrl(null);
     setFileName("");
     onClose();
   };
@@ -52,7 +68,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
         </div>
         <div className="glass-screen-matrix-modal">
           <div className="title-modal">{fileName || "Aucune image"}</div>
-          <button className="upload-button inline">mes images en ligne</button>
+          <button className="upload-btn inline">mes images en ligne</button>
           <input
             type="file"
             id="file"
@@ -61,11 +77,17 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             onChange={handleImageChange}
             ref={fileInputRef}
           />
-          <label className="upload-button local" htmlFor="file" ref={labelRef}>
+          <label className="upload-btn local" htmlFor="file" ref={labelRef}>
             mes images en local
           </label>
-          {imagePreviewUrl && <img src={imagePreviewUrl} alt="Preview" />}
-          <button onClick={handleModalClose} className="close-button">
+          {imagePreviewUrl && !filteredImageUrl && (
+            <img src={imagePreviewUrl} alt="Preview" />
+          )}
+          {filteredImageUrl && <AsciiArtFilter imageSrc={filteredImageUrl} />}
+          <button onClick={handleApplyFilter} className="apply-filter-button">
+            Filtrer
+          </button>
+          <button onClick={handleModalClose} className="close-btn">
             Menu
           </button>
         </div>

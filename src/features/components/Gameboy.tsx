@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../features/reducers/stores/store";
+import type { AppDispatch, RootState } from "../reducers/stores/store";
 import {
   togglePower,
   playSound,
@@ -9,19 +9,19 @@ import {
   showMenu,
   hideMenu,
   showTitles
-} from "../features/reducers/gameboy/gameboySlice";
+} from "../reducers/gameboy/gameboySlice";
 import MenuGameboy from "./MenuGameboy";
 import {
   GameboyProps,
   type MenuOption,
   type PadStyle
-} from "../interfaces/types";
+} from "../../interfaces/types";
 import ImageUploaderModal from "../modals/ImageUploaderModal";
 import {
   nextOption,
   previousOption,
   resetToFirstOption
-} from "../features/reducers/menugameboy/menuGameboySlice";
+} from "../reducers/menugameboy/menuGameboySlice";
 
 const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const dispatch: AppDispatch = useDispatch();

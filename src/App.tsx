@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { defaultImage } from "./config/config";
 import { ErrorProvider } from "./contexts/ErrorContext";
-import ErrorMessage from "./common/ErrorMessage";
-import Gameboy from "./components/Gameboy";
-import MenuGameboy from "./components/MenuGameboy";
-import Button from "./common/Button";
-import Loader from "./common/Loader";
+import ErrorMessage from "./features/common/ErrorMessage";
+import Gameboy from "./features/components/Gameboy";
+import MenuGameboy from "./features/components/MenuGameboy";
+import Button from "./features/common/Button";
+import Loader from "./features/common/Loader";
 import "./styles/less/index.less";
 
 const App: React.FC = () => {
