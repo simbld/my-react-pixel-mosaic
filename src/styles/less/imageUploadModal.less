@@ -61,34 +61,13 @@
   box-shadow: none;
 }
 
-.apply-filter-button {
-  .flex-center();
-  position: absolute;
-  width: 22%;
-  height: 6%;
-  bottom: 3%;
-  right: 3%;
-  z-index: 101;
-  cursor: pointer;
-  border: @screenOnOutline 3px solid;
-  background-color: @screenOnMiddle;
-  color: @screenOnUltraDark;
-  font-size: 25px;
-  font-family: "Early", sans-serif;
-  box-shadow: 10px 10px 0px @screenOnOutline;
-  text-shadow: 2px 2px 2px @b;
-  will-change: transform, box-shadow;
-  transition: opacity 1s ease;
-  opacity: 0.4;
-}
-
 .glass-screen-modal {
   .flex-center();
   position: absolute;
   z-index: 101;
   padding: 50px;
-  width: 120rem;
-  height: 100rem;
+  width: 145rem;
+  height: 115rem;
   background: @glass;
   margin: auto;
   border-radius: 50px 50px 150px 50px;
@@ -101,21 +80,21 @@
   .text-indication-modal {
     .battery-text-modal {
       color: @textGColor;
-      font-size: 3rem;
+      font-size: 3.6rem;
       font-family: @lavigne;
       transform: scaleX(1.5);
       position: absolute;
       z-index: 20;
       display: inline-block;
-      left: 5%;
+      left: 4%;
       top: 43%;
     }
     .indicator-light-modal {
       position: absolute;
-      top: 37rem;
-      left: 6rem;
-      width: 25px;
-      height: 25px;
+      top: 44rem;
+      left: 7rem;
+      width: 30px;
+      height: 30px;
       border-radius: 50px;
       background: @batteryOn;
       box-shadow: 0px 0px 25px 5px #f50f36;
@@ -130,7 +109,7 @@
       width: 45%;
       background: @glass;
       color: @textGColor;
-      font-size: 4rem;
+      font-size: 4.8rem;
       font-family: @lavigne;
       transform: scale(1.05, 0.8);
       z-index: 20;
@@ -141,10 +120,10 @@
     top: 5.5%;
     left: 4%;
     &-l {
-      height: 12px;
-      width: 110rem;
+      height: 15px;
+      width: 132rem;
       background: @topLineScreen;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       &:nth-child(2) {
         background: @bottomLineScreen;
       }
@@ -156,19 +135,36 @@
     position: relative;
     top: 1%;
     left: -2%;
-    width: 65%;
+    width: 70%;
     height: 85%;
-    background-color: @screenOnLight;
+    background-image: @bgMenu;
+    background-size: cover;
     color: @screenOnDark;
-    font-family: "Early", sans-serif;
-    border: @b 2.59px solid;
+    border: @b 2.6px solid;
     z-index: 20;
   }
+
+  .whiteboard-container {
+    .flex-center();
+    transform: translate(0%, 0%);
+    margin: 2%;
+  }
+
+  .whiteboard {
+    .flex-center();
+    border: 2px solid #000;
+    background: @w;
+    border-radius: 7px;
+    box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.5);
+  }
+
   .title-modal {
     position: absolute;
-    font-size: 20px;
-    right: 1%;
-    bottom: 1%;
+    font-family: "Early", sans-serif;
+    opacity: 0.5;
+    font-size: 15px;
+    right: 0.5%;
+    bottom: 0.5%;
   }
 
   .upload-btn {
@@ -223,45 +219,46 @@
   img {
     width: 100%;
     height: auto;
+    display: block;
   }
 
   .file-input {
     display: none;
   }
 
-  .filter-button {
+  .filter-btn {
     .flex-center();
-    width: 30rem;
-    height: 10rem;
-    bottom: 25%;
-    z-index: 101;
     position: absolute;
+    width: 22%;
+    height: 6%;
+    bottom: 3%;
+    right: 3%;
+    z-index: 101;
     cursor: pointer;
     border: @screenOnOutline 3px solid;
+    background-color: @screenOnMiddle;
     color: @screenOnUltraDark;
     font-size: 25px;
     font-family: "Early", sans-serif;
+    box-shadow: 10px 10px 0px @screenOnOutline;
     text-shadow: 2px 2px 2px @b;
-    background-color: @screenOnMiddle;
     will-change: transform, box-shadow;
+    transition: opacity 1s ease;
     opacity: 0.4;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
   }
 
-  .filter-button:hover {
+  .filter-btn:hover {
     box-shadow: 10px 10px 0px 0px @screenOnOutline;
     background-color: @screenOnLight;
     color: @screenOnDark;
-    box-shadow: 10px 10px 0px 0px @screenOnOutline;
     text-shadow: 2px 2px 2px @b;
     transition:
       transform 0.2s ease,
       box-shadow 0.2s ease;
+    opacity: 1;
   }
 
-  .filter-button:active {
+  .filter-btn:active {
     transform: translate(10px, 10px);
     transition:
       box-shadow 0.1s,

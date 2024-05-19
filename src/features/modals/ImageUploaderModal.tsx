@@ -20,6 +20,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
@@ -38,7 +39,31 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   };
 
   const handleApplyFilter = () => {
-    setFilteredImageUrl(imagePreviewUrl);
+    if (canvasRef.current && imagePreviewUrl) {
+      const context = canvasRef.current.getContext("2d");
+      const image = new Image();
+      image.onload = () => {
+        const canvasWidth = canvasRef.current!.width;
+        const canvasHeight = canvasRef.current!.height;
+        const aspectRatio = image.width / image.height;
+        let imageWidth = canvasWidth;
+        let imageHeight = canvasHeight;
+
+        if (canvasWidth / canvasHeight > aspectRatio) {
+          imageWidth = canvasHeight * aspectRatio;
+        } else {
+          imageHeight = canvasWidth / aspectRatio;
+        }
+
+        const x = (canvasWidth - imageWidth) / 2;
+        const y = (canvasHeight - imageHeight) / 2;
+
+        context!.clearRect(0, 0, canvasWidth, canvasHeight);
+        context!.drawImage(image, x, y, imageWidth, imageHeight);
+      };
+      image.src = imagePreviewUrl;
+      setFilteredImageUrl(imagePreviewUrl);
+    }
   };
 
   const handleModalClose = () => {
@@ -80,11 +105,21 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <label className="upload-btn local" htmlFor="file" ref={labelRef}>
             mes images en local
           </label>
-          {imagePreviewUrl && !filteredImageUrl && (
-            <img src={imagePreviewUrl} alt="Preview" />
+          {filteredImageUrl ? (
+            <AsciiArtFilter imageSrc={filteredImageUrl} />
+          ) : (
+            imagePreviewUrl && (
+              <div className="whiteboard-container">
+                <canvas
+                  className="whiteboard"
+                  width={1080}
+                  height={720}
+                  ref={canvasRef}
+                ></canvas>
+              </div>
+            )
           )}
-          {filteredImageUrl && <AsciiArtFilter imageSrc={filteredImageUrl} />}
-          <button onClick={handleApplyFilter} className="apply-filter-button">
+          <button onClick={handleApplyFilter} className="filter-btn">
             Filtrer
           </button>
           <button onClick={handleModalClose} className="close-btn">
