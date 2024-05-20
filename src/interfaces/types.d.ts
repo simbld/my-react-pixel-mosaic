@@ -172,6 +172,7 @@ export interface PadStyle {
 // features
 export interface FilterProps {
   imageSrc: string;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
 // modals

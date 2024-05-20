@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import useLoading from "../common/useLoading";
-import type { FilterProps } from "../../interfaces/types";
+import useLoading from "../../common/useLoading";
+import type { FilterProps } from "../../../interfaces/types";
 
 const StipplingArtFilter: React.FC<FilterProps> = ({ imageSrc }) => {
   const { startLoading, endLoading, loading, error } = useLoading();
