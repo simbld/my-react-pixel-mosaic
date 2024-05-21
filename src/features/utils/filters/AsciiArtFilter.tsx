@@ -10,6 +10,7 @@ import { FilterProps } from "../../../interfaces/types";
  * AsciiArtFilter est un composant React qui applique un filtre ASCII art à une image.
  * @param {FilterProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - La source de l'image à filtrer.
+ * @param {React.RefObject<HTMLCanvasElement>} [props.canvasRef] - La référence du canvas pour dessiner l'image filtrée.
  * @returns {JSX.Element} L'élément canvas avec l'image filtrée.
  */
 const AsciiArtFilter: React.FC<FilterProps> = ({ imageSrc, canvasRef }) => {
@@ -22,12 +23,28 @@ const AsciiArtFilter: React.FC<FilterProps> = ({ imageSrc, canvasRef }) => {
 
     if (canvas && context && image) {
       image.onload = () => {
+        const imgWidth = image.width;
+        const imgHeight = image.height;
+        const aspectRatio = imgWidth / imgHeight;
+
+        let drawWidth = TARGET_WIDTH;
+        let drawHeight = TARGET_HEIGHT;
+
+        if (TARGET_WIDTH / TARGET_HEIGHT > aspectRatio) {
+          drawWidth = TARGET_HEIGHT * aspectRatio;
+        } else {
+          drawHeight = TARGET_WIDTH / aspectRatio;
+        }
+
+        const offsetX = (TARGET_WIDTH - drawWidth) / 2;
+        const offsetY = (TARGET_HEIGHT - drawHeight) / 2;
+
         canvas.width = TARGET_WIDTH;
         canvas.height = TARGET_HEIGHT;
 
         // Dessiner l'image redimensionnée sur le canvas
         context.clearRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
-        context.drawImage(image, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+        context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
         // Récupérer les données de l'image et appliquer le filtre ASCII
         const imageData = context.getImageData(
@@ -71,13 +88,22 @@ const AsciiArtFilter: React.FC<FilterProps> = ({ imageSrc, canvasRef }) => {
     }
   }, [imageSrc, canvasRef]);
 
+  /**
+   * Mappe une valeur d'un intervalle à un autre.
+   * @param {number} value - La valeur à mapper.
+   * @param {number} start1 - Début de l'intervalle d'origine.
+   * @param {number} stop1 - Fin de l'intervalle d'origine.
+   * @param {number} start2 - Début du nouvel intervalle.
+   * @param {number} stop2 - Fin du nouvel intervalle.
+   * @returns {number} - La valeur mappée.
+   */
   const map = (
     value: number,
     start1: number,
     stop1: number,
     start2: number,
     stop2: number
-  ) => {
+  ): number => {
     return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
   };
 
