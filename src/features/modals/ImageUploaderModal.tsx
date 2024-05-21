@@ -22,6 +22,10 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
 
+  /**
+   * Gère le changement de l'image sélectionnée.
+   * @param {React.ChangeEvent<HTMLInputElement>} event - L'événement de changement de l'input file.
+   */
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
@@ -38,10 +42,16 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     event.target.value = "";
   };
 
+  /**
+   * Applique le filtre ASCII à l'image sélectionnée.
+   */
   const handleApplyFilter = () => {
     setFilteredImageUrl(imagePreviewUrl);
   };
 
+  /**
+   * Ferme la modal et réinitialise l'état.
+   */
   const handleModalClose = () => {
     setImagePreviewUrl(null);
     setFilteredImageUrl(null);
@@ -61,10 +71,27 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
       const context = canvas.getContext("2d")!;
       const image = new Image();
       image.onload = () => {
+        const imgWidth = image.width;
+        const imgHeight = image.height;
+        const aspectRatio = imgWidth / imgHeight;
+
+        let drawWidth = TARGET_WIDTH;
+        let drawHeight = TARGET_HEIGHT;
+
+        if (TARGET_WIDTH / TARGET_HEIGHT > aspectRatio) {
+          drawWidth = TARGET_HEIGHT * aspectRatio;
+        } else {
+          drawHeight = TARGET_WIDTH / aspectRatio;
+        }
+
+        const offsetX = (TARGET_WIDTH - drawWidth) / 2;
+        const offsetY = (TARGET_HEIGHT - drawHeight) / 2;
+
         canvas.width = TARGET_WIDTH;
         canvas.height = TARGET_HEIGHT;
+
         context.clearRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
-        context.drawImage(image, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+        context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
       };
       image.src = imagePreviewUrl;
     }
