@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import type { ImageUploaderModalProps } from "../../interfaces/types";
 import AsciiArtFilter from "../utils/filters/AsciiArtFilter";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "../../config/config";
+import Loader from "../common/Loader";
 
 /**
  * ImageUploaderModal est un composant React pour télécharger une image et appliquer un filtre ASCII art.
@@ -21,6 +22,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const labelRef = useRef<HTMLLabelElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   /**
    * Gère le changement de l'image sélectionnée.
@@ -29,11 +31,13 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
+      setIsLoading(true);
       setFileName(file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreviewUrl(reader.result as string);
         setFilteredImageUrl(null); // Réinitialiser l'image filtrée
+        setIsLoading(false);
       };
       reader.readAsDataURL(file);
     } else {
@@ -46,7 +50,11 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
    * Applique le filtre ASCII à l'image sélectionnée.
    */
   const handleApplyFilter = () => {
-    setFilteredImageUrl(imagePreviewUrl);
+    setIsLoading(true);
+    setTimeout(() => {
+      setFilteredImageUrl(imagePreviewUrl);
+      setIsLoading(false);
+    }, 1000);
   };
 
   /**
@@ -99,6 +107,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 
   return isOpen ? (
     <div className="overlay" role="dialog" ref={modalRef} tabIndex={0}>
+      {isLoading && <Loader />}
       <div className="glass-screen-modal">
         <div className="glass-screen-modal-line">
           <div className="glass-screen-modal-line-l"></div>
