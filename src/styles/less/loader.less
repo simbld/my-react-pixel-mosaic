@@ -1,9 +1,10 @@
-.loader {
+.loader-container {
   .flex-center();
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2000;
 }
 
 .loader-bar {
@@ -73,7 +74,7 @@
 
 @keyframes scale-up4 {
   20% {
-    background: linear-gradient(to top, #7c095087, #5353542e, #7c095084);
+    background: linear-gradient(to top, #b8a3af87, #5353542e, #b8a3af87);
     transform: scaleY(2);
   }
 

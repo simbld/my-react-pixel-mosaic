@@ -4,6 +4,8 @@ import AsciiArtFilter from "../utils/filters/AsciiArtFilter";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "../../config/config";
 import Loader from "../common/Loader";
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms)); // Délai asynchrone
+
 /**
  * ImageUploaderModal est un composant React pour télécharger une image et appliquer un filtre ASCII art.
  * @param {ImageUploaderModalProps} props - Les propriétés du composant.
@@ -28,13 +30,16 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
    * Gère le changement de l'image sélectionnée.
    * @param {React.ChangeEvent<HTMLInputElement>} event - L'événement de changement de l'input file.
    */
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
       setIsLoading(true);
       setFileName(file.name);
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
+        await delay(500);
         setImagePreviewUrl(reader.result as string);
         setFilteredImageUrl(null); // Réinitialiser l'image filtrée
         setIsLoading(false);
@@ -49,12 +54,11 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   /**
    * Applique le filtre ASCII à l'image sélectionnée.
    */
-  const handleApplyFilter = () => {
+  const handleApplyFilter = async () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setFilteredImageUrl(imagePreviewUrl);
-      setIsLoading(false);
-    }, 1000);
+    await delay(500);
+    setFilteredImageUrl(imagePreviewUrl);
+    setIsLoading(false);
   };
 
   /**
@@ -107,7 +111,11 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 
   return isOpen ? (
     <div className="overlay" role="dialog" ref={modalRef} tabIndex={0}>
-      {isLoading && <Loader />}
+      {isLoading && (
+        <div className="loader-container">
+          <Loader />
+        </div>
+      )}
       <div className="glass-screen-modal">
         <div className="glass-screen-modal-line">
           <div className="glass-screen-modal-line-l"></div>
