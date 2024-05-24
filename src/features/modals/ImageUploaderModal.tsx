@@ -42,7 +42,6 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
         await delay(500);
         setImagePreviewUrl(reader.result as string);
         setFilteredImageUrl(null); // Réinitialiser l'image filtrée
-        setIsLoading(false);
       };
       reader.readAsDataURL(file);
     } else {
@@ -56,9 +55,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
    */
   const handleApplyFilter = async () => {
     setIsLoading(true);
-    await delay(500);
     setFilteredImageUrl(imagePreviewUrl);
-    setIsLoading(false);
   };
 
   /**
@@ -104,6 +101,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 
         context.clearRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+        setIsLoading(false);
       };
       image.src = imagePreviewUrl;
     }
@@ -149,7 +147,11 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             ></canvas>
           </div>
           {filteredImageUrl && (
-            <AsciiArtFilter imageSrc={filteredImageUrl} canvasRef={canvasRef} />
+            <AsciiArtFilter
+              imageSrc={filteredImageUrl}
+              canvasRef={canvasRef}
+              onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+            />
           )}
           <button onClick={handleApplyFilter} className="filter-btn">
             Filtrer
