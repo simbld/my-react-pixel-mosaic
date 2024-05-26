@@ -1,9 +1,5 @@
 import { useRef, useEffect } from "react";
-import {
-  densityDot,
-  TARGET_WIDTH,
-  TARGET_HEIGHT
-} from "../../../config/config";
+import { TARGET_WIDTH, TARGET_HEIGHT } from "../../../config/config";
 import { FilterProps } from "../../../interfaces/types";
 
 /**
@@ -11,12 +7,14 @@ import { FilterProps } from "../../../interfaces/types";
  * @param {FilterProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - La source de l'image à filtrer.
  * @param {React.RefObject<HTMLCanvasElement>} props.canvasRef - Référence du canvas où appliquer le filtre.
+ * @param {string} props.density - La densité de caractères à utiliser pour le filtre.
  * @param {() => void} props.onFilterComplete - Callback appelée lorsque le filtrage est terminé.
  * @returns {JSX.Element} L'élément JSX du filtre ASCII art.
  */
 const AsciiArtFilter: React.FC<FilterProps> = ({
   imageSrc,
   canvasRef,
+  density,
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
@@ -79,11 +77,11 @@ const AsciiArtFilter: React.FC<FilterProps> = ({
             b = Math.min(255, Math.max(0, b));
 
             const avg = (r + g + b) / 3;
-            const len = densityDot.length;
+            const len = density.length;
             const charIndex = Math.floor(map(avg, 0, 255, len, 0));
 
             context.font = `10px sans-serif`;
-            context.fillText(densityDot.charAt(charIndex), i, j);
+            context.fillText(density.charAt(charIndex), i, j);
           }
         }
         if (onFilterComplete) {
@@ -94,7 +92,7 @@ const AsciiArtFilter: React.FC<FilterProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef]);
+  }, [imageSrc, canvasRef, density]);
 
   /**
    * Mappe une valeur d'un intervalle à un autre.
