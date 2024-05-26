@@ -173,7 +173,8 @@ export interface PadStyle {
 export interface FilterProps {
   imageSrc: string;
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  onFilterComplete?: () => void;
+  density: string;
+  onFilterComplete: () => void;
 }
 
 // modals

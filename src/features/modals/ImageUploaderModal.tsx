@@ -1,10 +1,17 @@
 import { useState, useRef, useEffect } from "react";
 import type { ImageUploaderModalProps } from "../../interfaces/types";
 import AsciiArtFilter from "../utils/filters/AsciiArtFilter";
-import { TARGET_WIDTH, TARGET_HEIGHT } from "../../config/config";
+import {
+  TARGET_WIDTH,
+  TARGET_HEIGHT,
+  densityExtended,
+  densitySimple,
+  densityDot
+} from "../../config/config";
 import Loader from "../common/Loader";
+import "./loader.less"; // Assure-toi d'importer le fichier LESS
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms)); // Délai asynchrone
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * ImageUploaderModal est un composant React pour télécharger une image et appliquer un filtre ASCII art.
@@ -19,6 +26,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
+  const [density, setDensity] = useState<string>(densityExtended);
   const modalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
@@ -39,9 +47,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
       setFileName(file.name);
       const reader = new FileReader();
       reader.onloadend = async () => {
-        await delay(500);
         setImagePreviewUrl(reader.result as string);
         setFilteredImageUrl(null); // Réinitialiser l'image filtrée
+        setIsLoading(false);
       };
       reader.readAsDataURL(file);
     } else {
@@ -53,9 +61,18 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   /**
    * Applique le filtre ASCII à l'image sélectionnée.
    */
-  const handleApplyFilter = async () => {
+  const handleApplyFilter = () => {
     setIsLoading(true);
     setFilteredImageUrl(imagePreviewUrl);
+  };
+
+  /**
+   * Change la densité utilisée pour le filtre ASCII.
+   * @param {string} newDensity - La nouvelle densité à appliquer.
+   */
+  const handleDensityChange = (newDensity: string) => {
+    setDensity(newDensity);
+    setFilteredImageUrl(imagePreviewUrl); // Réappliquer le filtre avec la nouvelle densité
   };
 
   /**
@@ -101,11 +118,16 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 
         context.clearRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
-        setIsLoading(false);
       };
       image.src = imagePreviewUrl;
     }
   }, [imagePreviewUrl, filteredImageUrl]);
+
+  useEffect(() => {
+    if (filteredImageUrl) {
+      setIsLoading(false);
+    }
+  }, [filteredImageUrl]);
 
   return isOpen ? (
     <div className="overlay" role="dialog" ref={modalRef} tabIndex={0}>
@@ -147,11 +169,25 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             ></canvas>
           </div>
           {filteredImageUrl && (
-            <AsciiArtFilter
-              imageSrc={filteredImageUrl}
-              canvasRef={canvasRef}
-              onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
-            />
+            <>
+              <AsciiArtFilter
+                imageSrc={filteredImageUrl}
+                canvasRef={canvasRef}
+                density={density}
+                onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+              />
+              <div className="density-buttons">
+                <button onClick={() => handleDensityChange(densityExtended)}>
+                  Extended
+                </button>
+                <button onClick={() => handleDensityChange(densitySimple)}>
+                  Simple
+                </button>
+                <button onClick={() => handleDensityChange(densityDot)}>
+                  Dot
+                </button>
+              </div>
+            </>
           )}
           <button onClick={handleApplyFilter} className="filter-btn">
             Filtrer
