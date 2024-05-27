@@ -38,7 +38,6 @@
   color: @screenOnUltraDark;
   font-size: 25px;
   font-family: "Early", sans-serif;
-  box-shadow: 10px 10px 0px @screenOnOutline;
   text-shadow: 2px 2px 2px @b;
   will-change: transform, box-shadow;
   transition: opacity 1s ease;
@@ -241,18 +240,17 @@
     height: 6%;
     bottom: 3%;
     right: 3%;
-    z-index: 101;
     cursor: pointer;
     border: @screenOnOutline 3px solid;
     background-color: @screenOnMiddle;
     color: @screenOnUltraDark;
     font-size: 25px;
     font-family: "Early", sans-serif;
-    box-shadow: 10px 10px 0px @screenOnOutline;
     text-shadow: 2px 2px 2px @b;
     will-change: transform, box-shadow;
     transition: opacity 1s ease;
     opacity: 0.4;
+    z-index: 101;
   }
 
   .filter-btn:hover {
@@ -274,24 +272,94 @@
     box-shadow: none;
   }
 
-  .density-buttons {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
+  .filter-buttons-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 8px;
+    position: absolute;
+    bottom: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
   }
 
-  .density-buttons button {
-    margin: 0 5px;
-    padding: 10px 15px;
-    border: none;
-    background-color: #007bff;
-    color: white;
+  .density-btn {
+    .flex-center();
+    border: @screenOnOutline 3px solid;
+    background-color: @screenOnMiddle;
+    color: @screenOnUltraDark;
+    font-size: 13px;
+    font-family: "Early", sans-serif;
+    text-shadow: 2px 2px 2px @b;
+    will-change: transform, box-shadow;
+    transition: opacity 1s ease;
+    opacity: 0.8;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    transition:
+      background-color 0.3s,
+      transform 0.3s;
+    width: 12rem;
+    height: 2.5rem;
+    grid-column: 1;
   }
 
-  .density-buttons button:hover {
-    background-color: #0056b3;
+  .density-btn:hover {
+    box-shadow: 5px 5px 0px 0px @screenOnOutline;
+    background-color: @screenOnLight;
+    color: @screenOnDark;
+    text-shadow: 2px 2px 2px @b;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    opacity: 1;
+  }
+
+  .density-btn:active {
+    transform: translate(10px, 10px);
+    transition:
+      box-shadow 0.1s,
+      transform 0.1s ease;
+    box-shadow: none;
+  }
+
+  .remove-filter-btn {
+    .flex-center();
+    border: @screenOnOutline 3px solid;
+    background-color: @removeBtn;
+    color: @screenOnUltraDark;
+    font-size: 15px;
+    font-family: "Early", sans-serif;
+    text-shadow: 2px 2px 2px @b;
+    will-change: transform, box-shadow;
+    transition: opacity 1s ease;
+    opacity: 0.8;
+    cursor: pointer;
+    transition:
+      background-color 0.3s,
+      transform 0.3s;
+    width: 12rem;
+    height: 4rem;
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+  }
+
+  .remove-filter-btn:hover {
+    box-shadow: 5px 5px 0px 0px @screenOnOutline;
+    background-color: @removeBtnHover;
+    color: @screenOnDark;
+    text-shadow: 2px 2px 2px @b;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    opacity: 1;
+  }
+
+  .remove-filter-btn:active {
+    transform: translate(10px, 10px);
+    transition:
+      box-shadow 0.1s,
+      transform 0.1s ease;
+    box-shadow: none;
   }
 }

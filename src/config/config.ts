@@ -1,9 +1,9 @@
 // export const density = `${"\u2591"}${"\u2592"}${"\u2593"}${"\u2588"}`;
 
 export const defaultImage: string = "/src/assets/default.png";
-export const densityExtended: string = "Ñ@#W$9876543210?!abc;:+=-,._          ";
-export const densitySimple: string = " .:-i|=+╦%O#@";
-export const densityDot: string = " .:░▒▓█";
+export const densityExtended: string = "  .,-_=+:;cba!?0123456789$W#@Ñ";
+export const densitySimple: string = "  .:-i|=+╦%O#@";
+export const densityBlock: string = " .:░▒▓█";
 export const TARGET_WIDTH: number = 1020;
 export const TARGET_HEIGHT: number = 820;
 export const MAX_IMAGE_SIZE: number = 6000;
