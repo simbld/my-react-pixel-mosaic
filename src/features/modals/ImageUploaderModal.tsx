@@ -6,10 +6,9 @@ import {
   TARGET_HEIGHT,
   densityExtended,
   densitySimple,
-  densityDot
+  densityBlock
 } from "../../config/config";
 import Loader from "../common/Loader";
-import "./loader.less"; // Assure-toi d'importer le fichier LESS
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -73,6 +72,40 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const handleDensityChange = (newDensity: string) => {
     setDensity(newDensity);
     setFilteredImageUrl(imagePreviewUrl); // Réappliquer le filtre avec la nouvelle densité
+  };
+
+  /**
+   * Enlève le filtre et affiche l'image originale.
+   */
+  const handleRemoveFilter = () => {
+    setFilteredImageUrl(null);
+    const canvas = canvasRef.current;
+    if (canvas && imagePreviewUrl) {
+      const context = canvas.getContext("2d");
+      if (!context) return;
+      const image = new Image();
+      image.onload = () => {
+        const imgWidth = image.width;
+        const imgHeight = image.height;
+        const aspectRatio = imgWidth / imgHeight;
+
+        let drawWidth = TARGET_WIDTH;
+        let drawHeight = TARGET_HEIGHT;
+
+        if (TARGET_WIDTH / TARGET_HEIGHT > aspectRatio) {
+          drawWidth = TARGET_HEIGHT * aspectRatio;
+        } else {
+          drawHeight = TARGET_WIDTH / aspectRatio;
+        }
+
+        const offsetX = (TARGET_WIDTH - drawWidth) / 2;
+        const offsetY = (TARGET_HEIGHT - drawHeight) / 2;
+
+        context.clearRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+        context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+      };
+      image.src = imagePreviewUrl;
+    }
   };
 
   /**
@@ -176,15 +209,30 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                 density={density}
                 onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
               />
-              <div className="density-buttons">
-                <button onClick={() => handleDensityChange(densityExtended)}>
-                  Extended
+              <div className="filter-buttons-container">
+                <button
+                  onClick={() => handleDensityChange(densitySimple)}
+                  className="density-btn"
+                >
+                  ascii -
                 </button>
-                <button onClick={() => handleDensityChange(densitySimple)}>
-                  Simple
+                <button
+                  onClick={() => handleDensityChange(densityExtended)}
+                  className="density-btn"
+                >
+                  ascii +
                 </button>
-                <button onClick={() => handleDensityChange(densityDot)}>
-                  Dot
+                <button
+                  onClick={() => handleDensityChange(densityBlock)}
+                  className="density-btn"
+                >
+                  block
+                </button>
+                <button
+                  onClick={handleRemoveFilter}
+                  className="remove-filter-btn"
+                >
+                  Remove Filter
                 </button>
               </div>
             </>
