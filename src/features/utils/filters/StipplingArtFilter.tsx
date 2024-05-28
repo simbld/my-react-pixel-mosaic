@@ -56,7 +56,7 @@ const StipplingArtFilter: React.FC<StipplingFilterProps> = ({
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
           brightness = (r + g + b) / 3;
-        } while (brightness > 100); // Adjust the brightness threshold as needed
+        } while (Math.random() > 0.5 - brightness / 255); // Adjust the brightness threshold as needed
         points.push([x, y]);
       }
 
