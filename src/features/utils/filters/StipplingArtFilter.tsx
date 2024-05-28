@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "../../../config/config";
 import { FilterProps } from "../../../interfaces/types";
 
@@ -16,6 +16,7 @@ const StipplingArtFilter: React.FC<FilterProps> = ({
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+  const [points, setPoints] = useState<[number, number][]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,6 +47,8 @@ const StipplingArtFilter: React.FC<FilterProps> = ({
         context.clearRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
+        generateRandomPoints(context, drawWidth, drawHeight, offsetX, offsetY);
+
         if (onFilterComplete) {
           onFilterComplete();
         }
@@ -56,13 +59,70 @@ const StipplingArtFilter: React.FC<FilterProps> = ({
     }
   }, [imageSrc, canvasRef, onFilterComplete]);
 
+  /**
+   * Génère des points aléatoires en évitant les zones lumineuses de l'image.
+   * @param {CanvasRenderingContext2D} context - Le contexte du canevas.
+   * @param {number} width - La largeur du canevas.
+   * @param {number} height - La hauteur du canevas.
+   * @param {number} offsetX - L'offset X du dessin de l'image.
+   * @param {number} offsetY - L'offset Y du dessin de l'image.
+   */
+  const generateRandomPoints = (
+    context: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    offsetX: number,
+    offsetY: number
+  ) => {
+    const newPoints: [number, number][] = [];
+    const imgData = context.getImageData(offsetX, offsetY, width, height).data;
+
+    for (let i = 0; i < 1000; i++) {
+      const x = Math.random() * width + offsetX;
+      const y = Math.random() * height + offsetY;
+      const pixelIndex = ((y | 0) * width + (x | 0)) * 4;
+      const [r, g, b] = [
+        imgData[pixelIndex],
+        imgData[pixelIndex + 1],
+        imgData[pixelIndex + 2]
+      ];
+      const brightness = (r + g + b) / 3;
+
+      if (Math.random() * 255 > brightness) {
+        newPoints.push([x, y]);
+      } else {
+        i--;
+      }
+    }
+
+    setPoints(newPoints);
+    drawPoints(context, newPoints);
+  };
+
+  /**
+   * Dessine les points sur le canevas.
+   * @param {CanvasRenderingContext2D} context - Le contexte du canevas.
+   * @param {[number, number][]} points - Les points à dessiner.
+   */
+  const drawPoints = (
+    context: CanvasRenderingContext2D,
+    points: [number, number][]
+  ) => {
+    context.fillStyle = "black";
+    points.forEach(([x, y]) => {
+      context.fillRect(x, y, 2, 2);
+    });
+  };
+
   return (
-    <img
-      ref={imageRef}
-      src={imageSrc}
-      style={{ display: "none" }}
-      alt="hidden"
-    />
+    <>
+      <img
+        ref={imageRef}
+        src={imageSrc}
+        style={{ display: "none" }}
+        alt="hidden"
+      />
+    </>
   );
 };
 
