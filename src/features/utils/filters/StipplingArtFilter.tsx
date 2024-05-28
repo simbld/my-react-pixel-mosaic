@@ -1,54 +1,69 @@
 import { useEffect, useRef } from "react";
-import useLoading from "../../common/useLoading";
-import type { FilterProps } from "../../../interfaces/types";
+import { TARGET_WIDTH, TARGET_HEIGHT } from "../../../config/config";
+import { FilterProps } from "../../../interfaces/types";
 
-const StipplingArtFilter: React.FC<FilterProps> = ({ imageSrc }) => {
-  const { startLoading, endLoading, loading, error } = useLoading();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+/**
+ * Composant pour appliquer un filtre d'art stippling sur une image.
+ * @param {FilterProps} props - Les propriétés du composant.
+ * @param {string} props.imageSrc - La source de l'image à filtrer.
+ * @param {React.RefObject<HTMLCanvasElement>} props.canvasRef - Référence au canevas où dessiner le filtre.
+ * @param {() => void} props.onFilterComplete - Callback appelé lorsque le filtrage est terminé.
+ * @returns {JSX.Element} - Composant JSX.
+ */
+const StipplingArtFilter: React.FC<FilterProps> = ({
+  imageSrc,
+  canvasRef,
+  onFilterComplete
+}) => {
+  const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    startLoading();
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    const image = imageRef.current;
 
-    const img = new Image();
-    img.onload = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
+    if (canvas && context && image) {
+      image.onload = () => {
+        const imgWidth = image.width;
+        const imgHeight = image.height;
+        const aspectRatio = imgWidth / imgHeight;
 
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
+        let drawWidth = TARGET_WIDTH;
+        let drawHeight = TARGET_HEIGHT;
 
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+        if (TARGET_WIDTH / TARGET_HEIGHT > aspectRatio) {
+          drawWidth = TARGET_HEIGHT * aspectRatio;
+        } else {
+          drawHeight = TARGET_WIDTH / aspectRatio;
+        }
 
-      applyStipplingEffect(ctx, img);
+        const offsetX = (TARGET_WIDTH - drawWidth) / 2;
+        const offsetY = (TARGET_HEIGHT - drawHeight) / 2;
 
-      endLoading();
-    };
-    img.src = imageSrc;
-  }, [imageSrc, startLoading, endLoading]);
+        canvas.width = TARGET_WIDTH;
+        canvas.height = TARGET_HEIGHT;
 
-  function applyStipplingEffect(
-    ctx: CanvasRenderingContext2D,
-    img: HTMLImageElement
-  ) {
-    const imageData = ctx.getImageData(0, 0, img.width, img.height);
-    const data = imageData.data;
+        context.clearRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+        context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-    for (let i = 0; i < data.length; i += 4) {
-      const brightness =
-        0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
-      // Apply your logic to apply the effect based on brightness
-      // This may involve drawing points on the canvas based on brightness
+        if (onFilterComplete) {
+          onFilterComplete();
+        }
+      };
+
+      image.crossOrigin = "Anonymous";
+      image.src = imageSrc;
     }
+  }, [imageSrc, canvasRef, onFilterComplete]);
 
-    ctx.putImageData(imageData, 0, 0);
-  }
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  return <canvas ref={canvasRef}></canvas>;
+  return (
+    <img
+      ref={imageRef}
+      src={imageSrc}
+      style={{ display: "none" }}
+      alt="hidden"
+    />
+  );
 };
 
 export default StipplingArtFilter;
