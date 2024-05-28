@@ -14,7 +14,7 @@ import { FilterProps } from "../../../interfaces/types";
 const AsciiArtFilter: React.FC<FilterProps> = ({
   imageSrc,
   canvasRef,
-  density,
+  density = "",
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);

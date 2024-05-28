@@ -1,54 +1,86 @@
-import { useEffect, useRef } from "react";
-import useLoading from "../../common/useLoading";
-import type { FilterProps } from "../../../interfaces/types";
+import { useEffect, useRef, useState } from "react";
+import { StipplingFilterProps } from "../../../interfaces/types";
+import * as d3 from "d3-delaunay";
 
-const StipplingArtFilter: React.FC<FilterProps> = ({ imageSrc }) => {
-  const { startLoading, endLoading, loading, error } = useLoading();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+/**
+ * Composant pour appliquer un filtre d'art stippling sur une image.
+ * @param {StipplingFilterProps} props - Les propriétés du composant.
+ * @returns {JSX.Element} - Composant JSX.
+ */
+const StipplingArtFilter: React.FC<StipplingFilterProps> = ({
+  imageSrc,
+  canvasRef,
+  onFilterComplete
+}) => {
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    startLoading();
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
 
-    const img = new Image();
-    img.onload = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
+    const image = new Image();
+    image.crossOrigin = "Anonymous";
+    image.src = imageSrc;
 
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
+    image.onload = () => {
+      // Ajuster la taille du canevas à la taille de l'image
+      canvas.width = image.width;
+      canvas.height = image.height;
 
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+      // Créer un canevas temporaire pour traiter l'image
+      const tempCanvas = document.createElement("canvas");
+      const tempContext = tempCanvas.getContext("2d");
+      if (!tempContext) return;
 
-      applyStipplingEffect(ctx, img);
+      tempCanvas.width = image.width;
+      tempCanvas.height = image.height;
+      tempContext.drawImage(image, 0, 0);
 
-      endLoading();
+      const imageData = tempContext.getImageData(
+        0,
+        0,
+        image.width,
+        image.height
+      );
+      const points: [number, number][] = [];
+      const numPoints = 10000; // Adjust the number of points as needed
+
+      for (let i = 0; i < numPoints; i++) {
+        let x, y, brightness;
+        do {
+          x = Math.floor(Math.random() * image.width);
+          y = Math.floor(Math.random() * image.height);
+          const pixelIndex = (y * image.width + x) * 4;
+          const r = imageData.data[pixelIndex];
+          const g = imageData.data[pixelIndex + 1];
+          const b = imageData.data[pixelIndex + 2];
+          brightness = (r + g + b) / 3;
+        } while (Math.random() > 0.5 - brightness / 255); // Adjust the brightness threshold as needed
+        points.push([x, y]);
+      }
+
+      const delaunay = d3.Delaunay.from(points);
+      const voronoi = delaunay.voronoi([0, 0, canvas.width, canvas.height]);
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      const pointSize = 1; // Adjust the point size as needed
+
+      for (const point of points) {
+        context.beginPath();
+        context.arc(point[0], point[1], pointSize, 0, 2 * Math.PI); // Adjust the radius as needed
+        context.fillStyle = "#000";
+        context.fill();
+      }
+
+      onFilterComplete();
     };
-    img.src = imageSrc;
-  }, [imageSrc, startLoading, endLoading]);
 
-  function applyStipplingEffect(
-    ctx: CanvasRenderingContext2D,
-    img: HTMLImageElement
-  ) {
-    const imageData = ctx.getImageData(0, 0, img.width, img.height);
-    const data = imageData.data;
+    imageRef.current = image;
+  }, [imageSrc, canvasRef, onFilterComplete]);
 
-    for (let i = 0; i < data.length; i += 4) {
-      const brightness =
-        0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
-      // Apply your logic to apply the effect based on brightness
-      // This may involve drawing points on the canvas based on brightness
-    }
-
-    ctx.putImageData(imageData, 0, 0);
-  }
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  return <canvas ref={canvasRef}></canvas>;
+  return null;
 };
 
 export default StipplingArtFilter;
