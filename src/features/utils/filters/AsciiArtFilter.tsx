@@ -1,17 +1,17 @@
 import { useRef, useEffect } from "react";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "../../../config/config";
-import { FilterProps } from "../../../interfaces/types";
+import { AsciiFilterProps } from "../../../interfaces/types";
 
 /**
  * AsciiArtFilter est un composant React qui applique un filtre ASCII art à une image.
- * @param {FilterProps} props - Les propriétés du composant.
+ * @param {AsciiFilterProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - La source de l'image à filtrer.
  * @param {React.RefObject<HTMLCanvasElement>} props.canvasRef - Référence du canvas où appliquer le filtre.
  * @param {string} props.density - La densité de caractères à utiliser pour le filtre.
  * @param {() => void} props.onFilterComplete - Callback appelée lorsque le filtrage est terminé.
  * @returns {JSX.Element} L'élément JSX du filtre ASCII art.
  */
-const AsciiArtFilter: React.FC<FilterProps> = ({
+const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
   imageSrc,
   canvasRef,
   density = "",
