@@ -61,10 +61,6 @@ export interface AsciiCharacterProps {
   brightness: number;
 }
 
-export interface AsciiFilterProps {
-  asciiFilter: ImageData;
-}
-
 // context providers
 export interface ErrorContextTypeProps {
   error: Error | null;
@@ -169,11 +165,17 @@ export interface PadStyle {
   transition: string;
 }
 
-// features
-export interface FilterProps {
+// features/filters
+export interface AsciiFilterProps {
   imageSrc: string;
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  density?: string;
+  density: string;
+  onFilterComplete: () => void;
+}
+
+export interface StipplingFilterProps {
+  imageSrc: string;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
   onFilterComplete: () => void;
 }
 
