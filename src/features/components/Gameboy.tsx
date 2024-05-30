@@ -28,6 +28,7 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUpload, setImageUpload] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false); // État local pour suivre l'état de lecture de l'audio
   const padRef = useRef(null);
 
   const [startAnimation, setStartAnimation] = useState<string>("");
@@ -171,30 +172,30 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
     (state: RootState) => state.menuGameboy.selectedOptionIndex
   );
 
-  const handleUploadImage = () => {
+  const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleChooseFilter = () => {
+  const handleDisplayTips = () => {
     // TODO
   };
 
-  const handleDisplaySettings = () => {
+  const handleOpenSettings = () => {
     // TODO
   };
 
-  const handleDownloadImage = () => {
+  const handleOpenProfile = () => {
     // TODO
   };
 
   const menuOptions: MenuOption[] = [
-    { name: "open file", action: handleUploadImage },
-    { name: "filters", action: handleChooseFilter },
-    { name: "settings", action: handleDisplaySettings },
-    { name: "download", action: handleDownloadImage }
+    { name: "pixel art", action: handleOpenModal },
+    { name: "tips", action: handleDisplayTips },
+    { name: "settings", action: handleOpenSettings },
+    { name: "profil", action: handleOpenProfile }
   ];
 
-  const handleSwitchClick = () => {
+  const handleSwitchClick = async () => {
     dispatch(togglePower(!poweredOn));
 
     if (!poweredOn) {
@@ -213,11 +214,37 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
           }, 6000);
         }, 100);
       }, 10);
+
+      try {
+        await playAudio();
+      } catch (error) {
+        console.error("Error playing audio:", error);
+      }
     } else {
       dispatch(stopSound());
       dispatch(hideTitles());
       dispatch(hideMenu());
       setStartAnimation("");
+      stopAudio();
+    }
+  };
+
+  const playAudio = async () => {
+    if (audioRef.current && !isPlaying) {
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+      } catch (error) {
+        console.error("Error playing audio:", error);
+      }
+    }
+  };
+
+  const stopAudio = () => {
+    if (audioRef.current && isPlaying) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
     }
   };
 
@@ -248,30 +275,20 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
     event.currentTarget.style.backgroundColor = "";
   };
-  useEffect(() => {
-    if (poweredOn && soundPlaying) {
-      audioRef.current = new Audio("/src/assets/gameboy-sound.mp3");
-      audioRef.current
-        .play()
-        .catch((err) => console.error("Error playing audio:", err));
-      return () => {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.currentTime = 0;
-          audioRef.current = null;
-        }
-      };
-    }
-  }, [poweredOn, soundPlaying]);
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
+    if (poweredOn && soundPlaying) {
+      if (!audioRef.current) {
+        audioRef.current = new Audio("/src/assets/gameboy-sound.mp3");
+      }
+      playAudio().catch((err) => console.error("Error playing audio:", err));
+    } else {
+      stopAudio();
+    }
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
+      stopAudio();
     };
-  }, []);
+  }, [poweredOn, soundPlaying]);
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
@@ -362,10 +379,10 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
               <MenuGameboy
                 menuOptions={menuOptions}
                 onSelectOption={handleConfirmSelection}
-                onUploadImage={handleUploadImage}
-                onChooseFilter={handleChooseFilter}
-                onDisplaySettings={handleDisplaySettings}
-                onDownloadImage={handleDownloadImage}
+                onOpenModal={handleOpenModal}
+                onDisplayTips={handleDisplayTips}
+                onOpenSettings={handleOpenSettings}
+                onOpenProfile={handleOpenProfile}
               />
             )}
           </div>

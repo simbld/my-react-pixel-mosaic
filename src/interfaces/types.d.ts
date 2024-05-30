@@ -61,10 +61,6 @@ export interface AsciiCharacterProps {
   brightness: number;
 }
 
-export interface AsciiFilterProps {
-  asciiFilter: ImageData;
-}
-
 // context providers
 export interface ErrorContextTypeProps {
   error: Error | null;
@@ -137,14 +133,6 @@ export interface GameboyProps {
   onGameboyHome: () => void;
 }
 
-export interface MenuGameboyProps {
-  onUploadImage: () => void;
-  onChooseFilter: () => void;
-  onDisplaySettings: () => void;
-  onDownloadImage: () => void;
-  onSelectOption: (index: number) => void;
-}
-
 export interface MenuOption {
   name: string;
   action: () => void;
@@ -153,10 +141,10 @@ export interface MenuOption {
 export interface MenuGameboyProps {
   menuOptions: MenuOption[];
   onSelectOption: (index: number) => void;
-  onUploadImage: () => void;
-  onChooseFilter: () => void;
-  onDisplaySettings: () => void;
-  onDownloadImage: () => void;
+  onOpenModal: () => void;
+  onDisplayTips: () => void;
+  onOpenSettings: () => void;
+  onOpenProfile: () => void;
 }
 
 export interface DirectionProps {
@@ -169,11 +157,17 @@ export interface PadStyle {
   transition: string;
 }
 
-// features
-export interface FilterProps {
+// features/filters
+export interface AsciiFilterProps {
   imageSrc: string;
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  density?: string;
+  density: string;
+  onFilterComplete: () => void;
+}
+
+export interface StipplingFilterProps {
+  imageSrc: string;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
   onFilterComplete: () => void;
 }
 

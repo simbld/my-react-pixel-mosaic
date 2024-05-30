@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import type { ImageUploaderModalProps } from "../../interfaces/types";
 import AsciiArtFilter from "../utils/filters/AsciiArtFilter";
+import StipplingArtFilter from "../utils/filters/StipplingArtFilter";
 import {
   TARGET_WIDTH,
   TARGET_HEIGHT,
@@ -12,20 +13,14 @@ import Loader from "../common/Loader";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/**
- * ImageUploaderModal est un composant React pour télécharger une image et appliquer un filtre ASCII art.
- * @param {ImageUploaderModalProps} props - Les propriétés du composant.
- * @param {boolean} props.isOpen - Indique si le modal est ouvert.
- * @param {() => void} props.onClose - Fonction pour fermer le modal.
- * @returns {JSX.Element | null} L'élément du modal.
- */
 const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   isOpen,
   onClose
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
-  const [density, setDensity] = useState<string>(densityExtended);
+  const [density, setDensity] = useState<string | null>(null);
+  const [filterType, setFilterType] = useState<string>("ascii");
   const modalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
@@ -33,10 +28,6 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const [fileName, setFileName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  /**
-   * Gère le changement de l'image sélectionnée.
-   * @param {React.ChangeEvent<HTMLInputElement>} event - L'événement de changement de l'input file.
-   */
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -47,7 +38,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
       const reader = new FileReader();
       reader.onloadend = async () => {
         setImagePreviewUrl(reader.result as string);
-        setFilteredImageUrl(null); // Réinitialiser l'image filtrée
+        setFilteredImageUrl(null); // Reset filtered image
         setIsLoading(false);
       };
       reader.readAsDataURL(file);
@@ -57,28 +48,19 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     event.target.value = "";
   };
 
-  /**
-   * Applique le filtre ASCII à l'image sélectionnée.
-   */
   const handleApplyFilter = () => {
     setIsLoading(true);
     setFilteredImageUrl(imagePreviewUrl);
   };
 
-  /**
-   * Change la densité utilisée pour le filtre ASCII.
-   * @param {string} newDensity - La nouvelle densité à appliquer.
-   */
   const handleDensityChange = (newDensity: string) => {
-    setDensity(newDensity);
-    setFilteredImageUrl(imagePreviewUrl); // Réappliquer le filtre avec la nouvelle densité
+    setDensity(density === newDensity ? null : newDensity); // Toggle the density
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new density
   };
 
-  /**
-   * Enlève le filtre et affiche l'image originale.
-   */
   const handleRemoveFilter = () => {
     setFilteredImageUrl(null);
+    setDensity(null);
     const canvas = canvasRef.current;
     if (canvas && imagePreviewUrl) {
       const context = canvas.getContext("2d");
@@ -108,13 +90,16 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     }
   };
 
-  /**
-   * Ferme la modal et réinitialise l'état.
-   */
+  const handleFilterTypeChange = (type: string) => {
+    setFilterType(type);
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+  };
+
   const handleModalClose = () => {
     setImagePreviewUrl(null);
     setFilteredImageUrl(null);
     setFileName("");
+    setDensity(null);
     onClose();
   };
 
@@ -181,7 +166,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
         </div>
         <div className="glass-screen-matrix-modal">
           <div className="title-modal">{fileName || "Aucune image"}</div>
-          <button className="upload-btn inline">mes images en ligne</button>
+          <button className="upload-btn inline">IN LINE</button>
           <input
             type="file"
             id="file"
@@ -191,7 +176,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             ref={fileInputRef}
           />
           <label className="upload-btn local" htmlFor="file" ref={labelRef}>
-            mes images en local
+            LOCAL
           </label>
           <div className="whiteboard-container">
             <canvas
@@ -201,47 +186,67 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               ref={canvasRef}
             ></canvas>
           </div>
-          {filteredImageUrl && (
+          {filteredImageUrl && filterType === "ascii" && (
             <>
               <AsciiArtFilter
                 imageSrc={filteredImageUrl}
                 canvasRef={canvasRef}
-                density={density}
+                density={density || ""}
                 onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
               />
-              <div className="filter-buttons-container">
-                <button
-                  onClick={() => handleDensityChange(densitySimple)}
-                  className="density-btn"
-                >
-                  ascii -
-                </button>
+              <div className="filter-btns-ascii">
                 <button
                   onClick={() => handleDensityChange(densityExtended)}
-                  className="density-btn"
+                  className={`density-btn ${density === densityExtended ? "active" : ""}`}
                 >
-                  ascii +
+                  EXTENDED
+                </button>
+                <button
+                  onClick={() => handleDensityChange(densitySimple)}
+                  className={`density-btn ${density === densitySimple ? "active" : ""}`}
+                >
+                  SIMPLE
                 </button>
                 <button
                   onClick={() => handleDensityChange(densityBlock)}
-                  className="density-btn"
+                  className={`density-btn ${density === densityBlock ? "active" : ""}`}
                 >
-                  block
-                </button>
-                <button
-                  onClick={handleRemoveFilter}
-                  className="remove-filter-btn"
-                >
-                  Remove Filter
+                  BLOCK
                 </button>
               </div>
+              <button
+                onClick={handleRemoveFilter}
+                className="remove-filter-btn"
+              >
+                NO FILTER
+              </button>
             </>
           )}
-          <button onClick={handleApplyFilter} className="filter-btn">
-            Filtrer
-          </button>
+          {filteredImageUrl && filterType === "stippling" && (
+            <>
+              <StipplingArtFilter
+                imageSrc={filteredImageUrl}
+                canvasRef={canvasRef}
+                onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+              />
+            </>
+          )}
+          <div className="filter-selection-btn">
+            <button
+              onClick={() => handleFilterTypeChange("ascii")}
+              className={`ascii-btn ${filterType === "ascii" ? "active" : ""}`}
+            >
+              ASCII
+            </button>
+            <button
+              onClick={() => handleFilterTypeChange("stippling")}
+              className={`stippling-btn ${filterType === "stippling" ? "active" : ""}`}
+            >
+              STIPPLING
+            </button>
+          </div>
           <button onClick={handleModalClose} className="close-btn">
-            Menu
+            CLOSE
           </button>
         </div>
       </div>

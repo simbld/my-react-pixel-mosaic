@@ -21,7 +21,7 @@ const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
 
   useEffect(() => {
     const canvas = canvasRef?.current;
-    const context = canvas?.getContext("2d");
+    const context = canvas?.getContext("2d", { willReadFrequently: true });
     const image = imageRef.current;
 
     if (canvas && context && image) {
@@ -59,6 +59,9 @@ const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
         const data = imageData.data;
 
         context.clearRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+        context.fillStyle = "black";
+        context.fillRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+        context.fillStyle = "white";
 
         for (let i = 0; i < TARGET_WIDTH; i += 9) {
           for (let j = 0; j < TARGET_HEIGHT; j += 9) {
@@ -67,7 +70,7 @@ const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
             let g = data[pixelIndex + 1];
             let b = data[pixelIndex + 2];
 
-            const brightness = 0.7;
+            const brightness = 1.1; // Adjust the brightness as needed
             r *= brightness;
             g *= brightness;
             b *= brightness;
@@ -80,7 +83,7 @@ const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
             const len = density.length;
             const charIndex = Math.floor(map(avg, 0, 255, len, 0));
 
-            context.font = `10px sans-serif`;
+            context.font = `11px sans-serif`;
             context.fillText(density.charAt(charIndex), i, j);
           }
         }

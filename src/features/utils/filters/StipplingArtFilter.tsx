@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { StipplingFilterProps } from "../../../interfaces/types";
 import * as d3 from "d3-delaunay";
 
@@ -64,13 +64,15 @@ const StipplingArtFilter: React.FC<StipplingFilterProps> = ({
       const voronoi = delaunay.voronoi([0, 0, canvas.width, canvas.height]);
 
       context.clearRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = "white";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = "black";
 
       const pointSize = 1; // Adjust the point size as needed
 
       for (const point of points) {
         context.beginPath();
         context.arc(point[0], point[1], pointSize, 0, 2 * Math.PI); // Adjust the radius as needed
-        context.fillStyle = "#000";
         context.fill();
       }
 
@@ -80,7 +82,14 @@ const StipplingArtFilter: React.FC<StipplingFilterProps> = ({
     imageRef.current = image;
   }, [imageSrc, canvasRef, onFilterComplete]);
 
-  return null;
+  return (
+    <img
+      ref={imageRef}
+      src={imageSrc}
+      style={{ display: "none" }}
+      alt="hidden"
+    />
+  );
 };
 
 export default StipplingArtFilter;
