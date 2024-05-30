@@ -19,7 +19,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
-  const [density, setDensity] = useState<string>(densityExtended);
+  const [density, setDensity] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<string>("ascii");
   const modalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -38,7 +38,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
       const reader = new FileReader();
       reader.onloadend = async () => {
         setImagePreviewUrl(reader.result as string);
-        setFilteredImageUrl(null); // Réinitialiser l'image filtrée
+        setFilteredImageUrl(null); // Reset filtered image
         setIsLoading(false);
       };
       reader.readAsDataURL(file);
@@ -54,12 +54,13 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   };
 
   const handleDensityChange = (newDensity: string) => {
-    setDensity(newDensity);
-    setFilteredImageUrl(imagePreviewUrl); // Réappliquer le filtre avec la nouvelle densité
+    setDensity(density === newDensity ? null : newDensity); // Toggle the density
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new density
   };
 
   const handleRemoveFilter = () => {
     setFilteredImageUrl(null);
+    setDensity(null);
     const canvas = canvasRef.current;
     if (canvas && imagePreviewUrl) {
       const context = canvas.getContext("2d");
@@ -91,13 +92,14 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 
   const handleFilterTypeChange = (type: string) => {
     setFilterType(type);
-    setFilteredImageUrl(imagePreviewUrl); // Réappliquer le filtre avec le nouveau type
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
   };
 
   const handleModalClose = () => {
     setImagePreviewUrl(null);
     setFilteredImageUrl(null);
     setFileName("");
+    setDensity(null);
     onClose();
   };
 
@@ -189,25 +191,25 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               <AsciiArtFilter
                 imageSrc={filteredImageUrl}
                 canvasRef={canvasRef}
-                density={density}
+                density={density || ""}
                 onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
               />
               <div className="filter-btns-ascii">
                 <button
                   onClick={() => handleDensityChange(densityExtended)}
-                  className="density-btn"
+                  className={`density-btn ${density === densityExtended ? "active" : ""}`}
                 >
                   EXTENDED
                 </button>
                 <button
                   onClick={() => handleDensityChange(densitySimple)}
-                  className="density-btn"
+                  className={`density-btn ${density === densitySimple ? "active" : ""}`}
                 >
                   SIMPLE
                 </button>
                 <button
                   onClick={() => handleDensityChange(densityBlock)}
-                  className="density-btn"
+                  className={`density-btn ${density === densityBlock ? "active" : ""}`}
                 >
                   BLOCK
                 </button>
@@ -232,19 +234,19 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <div className="filter-selection-btn">
             <button
               onClick={() => handleFilterTypeChange("ascii")}
-              className="ascii-btn"
+              className={`ascii-btn ${filterType === "ascii" ? "active" : ""}`}
             >
               ASCII
             </button>
             <button
               onClick={() => handleFilterTypeChange("stippling")}
-              className="stippling-btn"
+              className={`stippling-btn ${filterType === "stippling" ? "active" : ""}`}
             >
-              Stippling
+              STIPPLING
             </button>
           </div>
           <button onClick={handleModalClose} className="close-btn">
-            HOME
+            CLOSE
           </button>
         </div>
       </div>
