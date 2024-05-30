@@ -21,7 +21,7 @@ const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
 
   useEffect(() => {
     const canvas = canvasRef?.current;
-    const context = canvas?.getContext("2d");
+    const context = canvas?.getContext("2d", { willReadFrequently: true });
     const image = imageRef.current;
 
     if (canvas && context && image) {
