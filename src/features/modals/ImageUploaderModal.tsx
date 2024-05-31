@@ -19,7 +19,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
-  const [density, setDensity] = useState<string | null>(null);
+  const [density, setDensity] = useState<string | null>(densitySimple);
   const [filterType, setFilterType] = useState<string>("ascii");
   const modalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -63,7 +63,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     setDensity(null);
     const canvas = canvasRef.current;
     if (canvas && imagePreviewUrl) {
-      const context = canvas.getContext("2d");
+      const context = canvas.getContext("2d", { willReadFrequently: true });
       if (!context) return;
       const image = new Image();
       image.onload = () => {
@@ -112,7 +112,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   useEffect(() => {
     if (canvasRef.current && imagePreviewUrl && !filteredImageUrl) {
       const canvas = canvasRef.current!;
-      const context = canvas.getContext("2d")!;
+      const context = canvas.getContext("2d", { willReadFrequently: true })!;
       const image = new Image();
       image.onload = () => {
         const imgWidth = image.width;
@@ -191,21 +191,21 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               <AsciiArtFilter
                 imageSrc={filteredImageUrl}
                 canvasRef={canvasRef}
-                density={density || ""}
+                density={density || densitySimple}
                 onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
               />
               <div className="filter-btns-ascii">
-                <button
-                  onClick={() => handleDensityChange(densityExtended)}
-                  className={`density-btn ${density === densityExtended ? "active" : ""}`}
-                >
-                  EXTENDED
-                </button>
                 <button
                   onClick={() => handleDensityChange(densitySimple)}
                   className={`density-btn ${density === densitySimple ? "active" : ""}`}
                 >
                   SIMPLE
+                </button>
+                <button
+                  onClick={() => handleDensityChange(densityExtended)}
+                  className={`density-btn ${density === densityExtended ? "active" : ""}`}
+                >
+                  EXTENDED
                 </button>
                 <button
                   onClick={() => handleDensityChange(densityBlock)}
@@ -222,13 +222,41 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               </button>
             </>
           )}
+
           {filteredImageUrl && filterType === "stippling" && (
             <>
               <StipplingArtFilter
                 imageSrc={filteredImageUrl}
                 canvasRef={canvasRef}
+                density={density as "simple" | "extended" | "block"}
                 onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
               />
+              <div className="filter-btns-stippling">
+                <button
+                  onClick={() => handleDensityChange("simple")}
+                  className={`density-btn ${density === "simple" ? "active" : ""}`}
+                >
+                  SIMPLE
+                </button>
+                <button
+                  onClick={() => handleDensityChange("extended")}
+                  className={`density-btn ${density === "extended" ? "active" : ""}`}
+                >
+                  EXTENDED
+                </button>
+                <button
+                  onClick={() => handleDensityChange("block")}
+                  className={`density-btn ${density === "block" ? "active" : ""}`}
+                >
+                  BLOCK
+                </button>
+              </div>
+              <button
+                onClick={handleRemoveFilter}
+                className="remove-filter-btn"
+              >
+                NO FILTER
+              </button>
             </>
           )}
           <div className="filter-selection-btn">

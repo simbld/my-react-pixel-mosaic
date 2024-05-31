@@ -8,12 +8,14 @@ import { TARGET_WIDTH, TARGET_HEIGHT } from "../../../config/config";
  * @param {StipplingFilterProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - L'URL de l'image à traiter.
  * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
+ * @param {string} props.density - Le type de densité ("simple", "extended", "block").
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
 const StipplingArtFilter: React.FC<StipplingFilterProps> = ({
   imageSrc,
   canvasRef,
+  density,
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
@@ -89,7 +91,10 @@ const StipplingArtFilter: React.FC<StipplingFilterProps> = ({
 
       for (const point of points) {
         context.beginPath();
-        context.arc(point[0], point[1], pointSize, 0, 2 * Math.PI); // Adjust the radius as needed
+        const radius =
+          density === "extended" ? Math.random() * pointSize * 2 : pointSize;
+        context.arc(point[0], point[1], radius, 0, 2 * Math.PI); // Adjust the radius as needed
+        context.fillStyle = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`; // Colorful points for extended
         context.fill();
       }
 
@@ -97,7 +102,7 @@ const StipplingArtFilter: React.FC<StipplingFilterProps> = ({
     };
 
     imageRef.current = image;
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [imageSrc, canvasRef, onFilterComplete, density]);
 
   return (
     <img
