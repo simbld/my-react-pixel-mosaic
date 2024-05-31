@@ -1,28 +1,102 @@
-<p align="center">
+# GameBoy Visual Filter Application
 
-![using-react-redux-connect-with-typescript-tn2](https://github.com/simbld/my-react-pixel-mosaic/assets/102648783/39814e7e-e6c7-4547-bf93-4e0456a43834)
+Welcome to the GameBoy Visual Filter Application! This project reimagines the classic GameBoy console from the 80s as a powerful photo filter tool. By leveraging the aesthetics and nostalgia of the GameBoy, this application applies various filters to your images, making them look like they were processed by this iconic handheld console.
 
-</p>
-<br>
-Logique du Convertisseur de pixel
----------------------------------------------
+## Features
 
-1. Parcours des Pixels de l'Image
-L'image est parcourue pixel par pixel, de gauche à droite et de haut en bas. Chaque pixel est analysé pour déterminer sa couleur.
+- **ASCII Art Filter**: Converts your images into ASCII art using characters of varying density to represent different shades of gray.
+- **Stippling Art Filter**: Applies a stippling effect, creating images composed of dots, reminiscent of pointillism.
 
-2. Conversion en Nuance de Gris
-Cela est réalisé par l'opération (r + g + b) / 3
-chaque pixel est représenté par une valeur de luminosité
+## Filters
 
-3. Sélection du Caractère ASCII
-La chaîne density est une suite de caractères ASCII ordonnés du plus sombre au plus clair (Ñ@#W$9876543210?!abc;:+=-,._ )
+### ASCII Art Filter
 
-Pour déterminer quel caractère utiliser, nous appliquons une fonction map qui convertit la valeur de luminosité (allant de 0 à 255) en un indice correspondant dans la chaîne density.
+The ASCII Art Filter transforms your image into a representation using ASCII characters. Here's the detailed logic:
 
-4. En répétant ce processus pour chaque pixel de l'image et en plaçant les caractères ASCII correspondants dans un format qui respecte les dimensions de l'image originale, nous créons une représentation de l'image en art ASCII.
+1. **Pixel Traversal**:
 
-5. Créer plusieurs filtres qui possèdent chacun leur bouton et qui donne un aspect entièrement différent de la même image en changeant la logique de conversion.
-<p align="center">
-<img width="137" height="137" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" /> <img width="137" height="137" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/less/less-plain-wordmark.svg" />
-</p>
+   - The image is processed pixel by pixel, from left to right and top to bottom. Each pixel's color is analyzed.
 
+2. **Grayscale Conversion**:
+
+   - Each pixel's color is converted to grayscale using the formula: `(r + g + b) / 3`. This formula calculates the average brightness of the pixel, representing it as a single grayscale value.
+
+3. **Character Selection**:
+
+   - The `density` string contains a sequence of ASCII characters ordered from darkest to lightest: `"Ñ@#W$9876543210?!abc;:+=-,._ "`.
+   - The brightness value of each pixel (ranging from 0 to 255) is mapped to an index in the `density` string using a mapping function. This determines the character that best represents the pixel's brightness.
+
+4. **Image Representation**:
+   - By repeating this process for each pixel and placing the corresponding ASCII characters in a grid format, we create an ASCII art representation of the original image.
+
+### Stippling Art Filter
+
+The Stippling Art Filter uses points to represent the image, creating a stippling effect. Here's how it works:
+
+1. **Random Point Generation**:
+
+   - The filter generates random points across the image, avoiding bright areas. This ensures that more points are placed in darker regions.
+
+2. **Delaunay Triangulation and Voronoi Diagram**:
+
+   - The generated points are used to calculate the Delaunay triangulation and Voronoi diagram, which help in determining the placement and density of the points.
+
+3. **Centroid Calculation and Update**:
+
+   - For each cell in the Voronoi diagram, the centroid (geometric center) is calculated and updated based on the brightness of the underlying pixels. This process iterates to refine the placement of the points.
+
+4. **Final Drawing**:
+   - The points are drawn on the canvas. Darker areas have a higher density of points, creating a stippled effect that represents the image.
+
+## Usage
+
+1. **Upload Your Image**:
+
+   - Use the file input to upload the image you want to filter.
+
+2. **Choose a Filter**:
+
+   - Select either the ASCII Art Filter or the Stippling Art Filter.
+
+3. **Apply the Filter**:
+
+   - Click the "Apply Filter" button to see your image transformed by the selected filter.
+
+4. **Save or Share**:
+   - Once processed, you can save or share your filtered image.
+
+## Technologies Used
+
+- **React**: For building the user interface.
+- **TypeScript**: For type-safe JavaScript.
+- **Vite**: For fast development and build process.
+- **d3-delaunay**: For computational geometry used in the stippling filter.
+- **Redux Toolkit**: For state management.
+- **React Redux**: For integrating Redux with React.
+- **Redux Thunk**: For asynchronous actions in Redux.
+- **Redux Logger**: For logging Redux actions.
+- **Redux Persist**: For persisting Redux state.
+- **React Toastify**: For toast notifications.
+- **LocalForage**: For offline storage.
+
+Installation
+Clone the repository:
+
+sh
+Copier le code
+git clone <https://github.com/your-username/gameboy-visual-filter.git>
+cd gameboy-visual-filter
+Install dependencies:
+
+sh
+Copier le code
+yarn install
+Start the development server:
+
+sh
+Copier le code
+yarn dev
+Contributing
+Contributions are welcome! Please fork the repository and submit a pull request with your changes. Ensure your code follows the existing style and passes all tests.
+
+**_Enjoy transforming your photos with the nostalgic charm of the GameBoy Visual Filter Application!_**

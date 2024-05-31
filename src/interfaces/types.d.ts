@@ -168,6 +168,7 @@ export interface AsciiFilterProps {
 export interface StipplingFilterProps {
   imageSrc: string;
   canvasRef: React.RefObject<HTMLCanvasElement>;
+  density: string;
   onFilterComplete: () => void;
 }
 
