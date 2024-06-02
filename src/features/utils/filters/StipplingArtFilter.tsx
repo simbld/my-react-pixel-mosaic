@@ -63,8 +63,8 @@ const StipplingArtFilter: React.FC<StipplingFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      const numPoints = 300000; // Adjust the number of points as needed
-      const brightnessSize = 0.5; // Adjust the brightness size as needed
+      const numPoints = 500000; // Adjust the number of points as needed
+      const brightnessSize = 0.4; // Adjust the brightness size as needed
       const pointSize = 0.7; // Adjust the point size as needed
 
       for (let i = 0; i < numPoints; i++) {
