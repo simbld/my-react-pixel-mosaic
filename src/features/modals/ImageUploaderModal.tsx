@@ -1,15 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import type { ImageUploaderModalProps } from "../../interfaces/types";
 import AsciiArtFilter from "../utils/filters/AsciiArtFilter";
-import StipplingArtFilter from "../utils/filters/StipplingArtFilter";
+import StipplingArtFilterExtended from "../utils/filters/StipplingArtFilter/StipplingArtFilterExtended";
+import StipplingArtFilterSimple from "../utils/filters/StipplingArtFilter/StipplingArtFilterSimple";
 import {
   TARGET_WIDTH,
   TARGET_HEIGHT,
-  densityExtended,
-  densitySimple,
-  densityBlock
+  asciiDensityExtended,
+  asciiDensitySimple,
+  asciiDensityBlock,
+  stipplingDensityExtended,
+  stipplingDensitySimple,
+  stipplingDensityBlock
 } from "../../config/config";
 import Loader from "../common/Loader";
+import { getDefaultDensity } from "../utils/density/GetDefaultDensity";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -19,7 +24,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
-  const [density, setDensity] = useState<string | null>(densitySimple);
+  const [density, setDensity] = useState<string | null>(
+    getDefaultDensity("ascii")
+  );
   const [filterType, setFilterType] = useState<string>("ascii");
   const modalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -63,7 +70,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     setDensity(null);
     const canvas = canvasRef.current;
     if (canvas && imagePreviewUrl) {
-      const context = canvas.getContext("2d", { willReadFrequently: true });
+      const context = canvas.getContext("2d");
       if (!context) return;
       const image = new Image();
       image.onload = () => {
@@ -92,6 +99,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 
   const handleFilterTypeChange = (type: string) => {
     setFilterType(type);
+    setDensity(getDefaultDensity(type));
     setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
   };
 
@@ -112,7 +120,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   useEffect(() => {
     if (canvasRef.current && imagePreviewUrl && !filteredImageUrl) {
       const canvas = canvasRef.current!;
-      const context = canvas.getContext("2d", { willReadFrequently: true })!;
+      const context = canvas.getContext("2d")!;
       const image = new Image();
       image.onload = () => {
         const imgWidth = image.width;
@@ -191,25 +199,25 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               <AsciiArtFilter
                 imageSrc={filteredImageUrl}
                 canvasRef={canvasRef}
-                density={density || densitySimple}
+                density={density || ""}
                 onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
               />
               <div className="filter-btns-ascii">
                 <button
-                  onClick={() => handleDensityChange(densitySimple)}
-                  className={`density-btn ${density === densitySimple ? "active" : ""}`}
+                  onClick={() => handleDensityChange(asciiDensitySimple)}
+                  className={`density-btn ${density === asciiDensitySimple ? "active" : ""}`}
                 >
                   SIMPLE
                 </button>
                 <button
-                  onClick={() => handleDensityChange(densityExtended)}
-                  className={`density-btn ${density === densityExtended ? "active" : ""}`}
+                  onClick={() => handleDensityChange(asciiDensityExtended)}
+                  className={`density-btn ${density === asciiDensityExtended ? "active" : ""}`}
                 >
                   EXTENDED
                 </button>
                 <button
-                  onClick={() => handleDensityChange(densityBlock)}
-                  className={`density-btn ${density === densityBlock ? "active" : ""}`}
+                  onClick={() => handleDensityChange(asciiDensityBlock)}
+                  className={`density-btn ${density === asciiDensityBlock ? "active" : ""}`}
                 >
                   BLOCK
                 </button>
@@ -222,31 +230,40 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               </button>
             </>
           )}
-
           {filteredImageUrl && filterType === "stippling" && (
             <>
-              <StipplingArtFilter
-                imageSrc={filteredImageUrl}
-                canvasRef={canvasRef}
-                density={density as "simple" | "extended" | "block"}
-                onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
-              />
-              <div className="filter-btns-stippling">
+              {density === stipplingDensitySimple && (
+                <StipplingArtFilterSimple
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  density={density}
+                  onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+                />
+              )}
+              {density === stipplingDensityExtended && (
+                <StipplingArtFilterExtended
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  density={density}
+                  onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+                />
+              )}
+              <div className="filter-btns-ascii">
                 <button
-                  onClick={() => handleDensityChange("simple")}
-                  className={`density-btn ${density === "simple" ? "active" : ""}`}
+                  onClick={() => handleDensityChange(stipplingDensitySimple)}
+                  className={`density-btn ${density === stipplingDensitySimple ? "active" : ""}`}
                 >
                   SIMPLE
                 </button>
                 <button
-                  onClick={() => handleDensityChange("extended")}
-                  className={`density-btn ${density === "extended" ? "active" : ""}`}
+                  onClick={() => handleDensityChange(stipplingDensityExtended)}
+                  className={`density-btn ${density === stipplingDensityExtended ? "active" : ""}`}
                 >
                   EXTENDED
                 </button>
                 <button
-                  onClick={() => handleDensityChange("block")}
-                  className={`density-btn ${density === "block" ? "active" : ""}`}
+                  onClick={() => handleDensityChange(stipplingDensityBlock)}
+                  className={`density-btn ${density === stipplingDensityBlock ? "active" : ""}`}
                 >
                   BLOCK
                 </button>
