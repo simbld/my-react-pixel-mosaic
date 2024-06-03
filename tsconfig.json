@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
     "strict": true,
-    "allowJs": false,
     "target": "esnext",
     "baseUrl": ".",
     "paths": {
-      "*": ["src/*"],
       "@assets/*": ["src/assets/*"],
       "@common/*": ["src/features/common/*"],
       "@components/*": ["src/features/components/*"],
@@ -20,17 +18,17 @@
       "@fonts/*": ["src/fonts/*"],
       "@helpers/*": ["src/helpers/*"],
       "@hooks/*": ["src/features/hooks/*"],
-      "@interfaces/*": ["src/interfaces/*"],
+      "@interfaces/*": ["src/interfaces/types/*"],
       "@layouts/*": ["src/layouts/*"],
       "@services/*": ["src/services/*"],
-      "@less/*": ["src/styles/less/*"],
+      "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"]
     },
     "module": "ESNext",
     "moduleResolution": "Node",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "typeRoots": ["./src/@types", "./node_modules/@types", "./src/@interfaces"],
+    "typeRoots": ["./src/@types", "./node_modules/@types"],
     "outDir": "./build",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -42,7 +40,6 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx"
   },
-  "include": ["types.d.ts", "index.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules"]
 }
