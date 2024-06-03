@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import store, { persistor } from "./features/reducers/stores/store";
+import store, { persistor } from "@reducers/stores/store";
 import App from "./App";
-import "@/styles/less/index.less";
+import "@styles/less/index.less";
 import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(
