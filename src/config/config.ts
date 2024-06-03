@@ -8,9 +8,16 @@
 // density = "█▓▓▒▒▒░░░░░::::::.......";
 
 export const defaultImage: string = "/src/assets/default.png";
-export const densityExtended: string = "@WÑ#$9876543210/?!abc;:+=_-,.   ";
-export const densitySimple: string = "@%@O#╦o+=|i-:.      ";
-export const densityBlock: string = "█▓▒░:. ";
+// ASCII
+export const asciiDensitySimple: string = "@%@O#╦o+=|i-:.      ";
+export const asciiDensityExtended: string = "@WÑ#$9876543210/?!abc;:+=_-,.   ";
+export const asciiDensityBlock: string = "█▓▒░:. ";
+
+// Stippling
+export const stipplingDensitySimple: string = "simple";
+export const stipplingDensityExtended: string = "extended";
+export const stipplingDensityBlock: string = "block";
+
 export const TARGET_WIDTH: number = 1020;
 export const TARGET_HEIGHT: number = 820;
 export const MAX_IMAGE_SIZE: number = 6000;
@@ -23,3 +30,9 @@ export const IMAGE_RENDER_ERROR_DESCRIPTION: string =
   "Veuillez vérifier que l'image est accessible et réessayez.";
 export const IMAGE_RENDER_ERROR_DESCRIPTION_2: string =
   "Si le problème persiste, veuillez contacter le support.";
+
+export const FILTERS: string[] = ["ascii", "stippling"];
+
+export const FILTERS_OPTIONS: string[] = ["simple", "extended", "block"];
+
+// Path: src/config/config.ts
