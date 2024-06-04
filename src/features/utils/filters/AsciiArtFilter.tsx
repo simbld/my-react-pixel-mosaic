@@ -66,7 +66,7 @@ const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
         for (let i = 0; i < TARGET_WIDTH; i += 9) {
           for (let j = 0; j < TARGET_HEIGHT; j += 9) {
             const pixelIndex = (i + j * TARGET_WIDTH) * 4;
-            let r = data[pixelIndex];
+            let r = data[pixelIndex + 0];
             let g = data[pixelIndex + 1];
             let b = data[pixelIndex + 2];
 
