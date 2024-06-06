@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
+import type { StipplingFilterProps } from "src/interfaces/types";
 import * as d3 from "d3-delaunay";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
-import type { StipplingFilterProps } from "src/interfaces/types";
 
 /**
  * Composant pour appliquer un filtre d'art stippling en blocs sur une image.
@@ -89,21 +89,22 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
       ]);
       const weights: number[] = new Array(polygons.length).fill(0);
 
-      imageData.data.forEach((_, i) => {
-        const x = i % drawWidth;
-        const y = Math.floor(i / drawWidth);
-        const pixelIndex = (y * drawWidth + x) * 4;
-        const r = imageData.data[pixelIndex];
-        const g = imageData.data[pixelIndex + 1];
-        const b = imageData.data[pixelIndex + 2];
-        const brightness = (r + g + b) / 3;
-        const weight = 1 - brightness / 255;
-        const delaunayIndex = delaunay.find(x, y);
+      // Calculer les centroïdes et les poids
+      for (let i = 0; i < drawWidth; i++) {
+        for (let j = 0; j < drawHeight; j++) {
+          const pixelIndex = (j * drawWidth + i) * 4;
+          const r = imageData.data[pixelIndex];
+          const g = imageData.data[pixelIndex + 1];
+          const b = imageData.data[pixelIndex + 2];
+          const brightness = (r + g + b) / 3;
+          const weight = 1 - brightness / 255;
+          const delaunayIndex = delaunay.find(i, j);
 
-        centroids[delaunayIndex][0] += x * weight;
-        centroids[delaunayIndex][1] += y * weight;
-        weights[delaunayIndex] += weight;
-      });
+          centroids[delaunayIndex][0] += i * weight;
+          centroids[delaunayIndex][1] += j * weight;
+          weights[delaunayIndex] += weight;
+        }
+      }
 
       centroids.forEach((centroid, i) => {
         if (weights[i] > 0) {
@@ -115,7 +116,7 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
         }
       });
 
-      // Dessine les blocs
+      // Dessiner les blocs
       for (let i = 0; i < polygons.length; i++) {
         const poly = polygons[i];
         const [cx, cy] = centroids[i];
