@@ -61,7 +61,7 @@ const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      const numPoints = 20000; // Augmenter le nombre de points pour un effet plus dense
+      const numPoints = 5000;
       for (let i = 0; i < numPoints; i++) {
         let x, y, brightness;
         do {

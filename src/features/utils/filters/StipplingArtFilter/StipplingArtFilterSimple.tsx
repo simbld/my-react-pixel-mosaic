@@ -53,7 +53,7 @@ const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      const numPoints = 50000;
+      const numPoints = 5000;
 
       for (let i = 0; i < numPoints; i++) {
         let x, y, brightness;
@@ -70,9 +70,9 @@ const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
       }
 
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = "white";
-      context.fillRect(0, 0, canvas.width, canvas.height);
       context.fillStyle = "black";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = "white";
 
       for (const point of points) {
         context.beginPath();
