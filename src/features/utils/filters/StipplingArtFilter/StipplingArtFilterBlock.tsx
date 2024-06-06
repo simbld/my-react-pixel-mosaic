@@ -1,17 +1,17 @@
 import { useEffect, useRef } from "react";
+import type { StipplingFilterProps } from "src/interfaces/types";
 import * as d3 from "d3-delaunay";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
-import type { StipplingFilterProps } from "src/interfaces/types";
 
 /**
- * Composant pour appliquer un filtre d'art stippling avancé sur une image.
+ * Composant pour appliquer un filtre d'art stippling en blocs sur une image.
  * @param {StipplingFilterProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - L'URL de l'image à traiter.
  * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
-const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
+const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete
@@ -61,7 +61,8 @@ const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      const numPoints = 5000;
+      const numPoints = 1000;
+
       for (let i = 0; i < numPoints; i++) {
         let x, y, brightness;
         do {
@@ -72,7 +73,7 @@ const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
           brightness = (r + g + b) / 3;
-        } while (Math.random() > 1 - brightness / 255); // Adjust the brightness threshold as needed
+        } while (Math.random() > 1 - brightness / 255);
         points.push([x + offsetX, y + offsetY]);
       }
 
@@ -83,17 +84,69 @@ const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
       context.fillStyle = "white";
       context.fillRect(0, 0, canvas.width, canvas.height);
 
-      for (const point of points) {
-        const [x, y] = point;
-        const pixelIndex = ((y - offsetY) * drawWidth + (x - offsetX)) * 4;
-        const r = imageData.data[pixelIndex];
-        const g = imageData.data[pixelIndex + 1];
-        const b = imageData.data[pixelIndex + 2];
-        const brightness = (r + g + b) / 3;
-        const pointSize = 8 * (1 - brightness / 255); // Accentuer la différence de taille des points
-        context.fillStyle = `rgb(${r}, ${g}, ${b})`;
+      const cells = Array.from(voronoi.cellPolygons());
+      const centroids = new Array(cells.length);
+      const weights = new Array(cells.length).fill(0);
+      const counts = new Array(cells.length).fill(0);
+      const avgWeights = new Array(cells.length).fill(0);
+      for (let i = 0; i < centroids.length; i++) {
+        centroids[i] = [0, 0];
+      }
+
+      let delaunayIndex = 0;
+      for (let i = 0; i < drawWidth; i++) {
+        for (let j = 0; j < drawHeight; j++) {
+          const pixelIndex = (i + j * drawWidth) * 4;
+          const r = imageData.data[pixelIndex + 0];
+          const g = imageData.data[pixelIndex + 1];
+          const b = imageData.data[pixelIndex + 2];
+          const bright = (r + g + b) / 3;
+          const weight = 1 - bright / 255;
+          delaunayIndex = delaunay.find(i, j, delaunayIndex);
+          centroids[delaunayIndex][0] += i * weight;
+          centroids[delaunayIndex][1] += j * weight;
+          weights[delaunayIndex] += weight;
+          counts[delaunayIndex]++;
+        }
+      }
+
+      let maxWeight = 0;
+      for (let i = 0; i < centroids.length; i++) {
+        if (weights[i] > 0) {
+          centroids[i][0] /= weights[i];
+          centroids[i][1] /= weights[i];
+          avgWeights[i] = weights[i] / (counts[i] || 1);
+          if (avgWeights[i] > maxWeight) {
+            maxWeight = avgWeights[i];
+          }
+        } else {
+          centroids[i] = points[i];
+        }
+      }
+
+      for (let i = 0; i < points.length; i++) {
+        points[i][0] = points[i][0] * 0.5 + centroids[i][0] * 0.5;
+        points[i][1] = points[i][1] * 0.5 + centroids[i][1] * 0.5;
+      }
+
+      for (let i = 0; i < cells.length; i++) {
+        const poly = cells[i];
+        const centroid = centroids[i];
+        const col = tempContext.getImageData(
+          centroid[0] - offsetX,
+          centroid[1] - offsetY,
+          1,
+          1
+        ).data;
+        context.strokeStyle = `rgb(${col[0]}, ${col[1]}, ${col[2]})`;
+        context.fillStyle = `rgb(${col[0]}, ${col[1]}, ${col[2]})`;
         context.beginPath();
-        context.arc(x, y, pointSize, 0, 2 * Math.PI);
+        for (let j = 0; j < poly.length; j++) {
+          const [x, y] = poly[j];
+          context.lineTo(x, y);
+        }
+        context.closePath();
+        context.stroke();
         context.fill();
       }
 
@@ -113,4 +166,4 @@ const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
   );
 };
 
-export default StipplingArtFilterExtended;
+export default StipplingArtFilterBlock;
