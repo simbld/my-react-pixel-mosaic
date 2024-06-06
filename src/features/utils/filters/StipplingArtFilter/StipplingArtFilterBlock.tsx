@@ -61,7 +61,8 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      const numPoints = 5000; // Ajuste ce nombre selon les besoins
+      const numPoints = 1000;
+
       for (let i = 0; i < numPoints; i++) {
         let x, y, brightness;
         do {
@@ -83,62 +84,70 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
       context.fillStyle = "white";
       context.fillRect(0, 0, canvas.width, canvas.height);
 
-      const polygons = Array.from(voronoi.cellPolygons());
-      const centroids: [number, number][] = new Array(polygons.length).fill([
-        0, 0
-      ]);
-      const weights: number[] = new Array(polygons.length).fill(0);
+      const cells = Array.from(voronoi.cellPolygons());
+      const centroids = new Array(cells.length);
+      const weights = new Array(cells.length).fill(0);
+      const counts = new Array(cells.length).fill(0);
+      const avgWeights = new Array(cells.length).fill(0);
+      for (let i = 0; i < centroids.length; i++) {
+        centroids[i] = [0, 0];
+      }
 
-      // Calculer les centroïdes et les poids
+      let delaunayIndex = 0;
       for (let i = 0; i < drawWidth; i++) {
         for (let j = 0; j < drawHeight; j++) {
-          const pixelIndex = (j * drawWidth + i) * 4;
-          const r = imageData.data[pixelIndex];
+          const pixelIndex = (i + j * drawWidth) * 4;
+          const r = imageData.data[pixelIndex + 0];
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
-          const brightness = (r + g + b) / 3;
-          const weight = 1 - brightness / 255;
-          const delaunayIndex = delaunay.find(i, j);
-
+          const bright = (r + g + b) / 3;
+          const weight = 1 - bright / 255;
+          delaunayIndex = delaunay.find(i, j, delaunayIndex);
           centroids[delaunayIndex][0] += i * weight;
           centroids[delaunayIndex][1] += j * weight;
           weights[delaunayIndex] += weight;
+          counts[delaunayIndex]++;
         }
       }
 
-      centroids.forEach((centroid, i) => {
+      let maxWeight = 0;
+      for (let i = 0; i < centroids.length; i++) {
         if (weights[i] > 0) {
-          centroid[0] /= weights[i];
-          centroid[1] /= weights[i];
-        } else {
-          centroid[0] = points[i][0];
-          centroid[1] = points[i][1];
-        }
-      });
-
-      // Dessiner les blocs
-      for (let i = 0; i < polygons.length; i++) {
-        const poly = polygons[i];
-        const [cx, cy] = centroids[i];
-        const pixelIndex = ((cy - offsetY) * drawWidth + (cx - offsetX)) * 4;
-        const r = imageData.data[pixelIndex];
-        const g = imageData.data[pixelIndex + 1];
-        const b = imageData.data[pixelIndex + 2];
-        context.fillStyle = `rgb(${r}, ${g}, ${b})`;
-        context.strokeStyle = "black";
-        context.lineWidth = 0.5;
-
-        context.beginPath();
-        poly.forEach(([x, y], i) => {
-          if (i === 0) {
-            context.moveTo(x, y);
-          } else {
-            context.lineTo(x, y);
+          centroids[i][0] /= weights[i];
+          centroids[i][1] /= weights[i];
+          avgWeights[i] = weights[i] / (counts[i] || 1);
+          if (avgWeights[i] > maxWeight) {
+            maxWeight = avgWeights[i];
           }
-        });
+        } else {
+          centroids[i] = points[i];
+        }
+      }
+
+      for (let i = 0; i < points.length; i++) {
+        points[i][0] = points[i][0] * 0.5 + centroids[i][0] * 0.5;
+        points[i][1] = points[i][1] * 0.5 + centroids[i][1] * 0.5;
+      }
+
+      for (let i = 0; i < cells.length; i++) {
+        const poly = cells[i];
+        const centroid = centroids[i];
+        const col = tempContext.getImageData(
+          centroid[0] - offsetX,
+          centroid[1] - offsetY,
+          1,
+          1
+        ).data;
+        context.strokeStyle = `rgb(${col[0]}, ${col[1]}, ${col[2]})`;
+        context.fillStyle = `rgb(${col[0]}, ${col[1]}, ${col[2]})`;
+        context.beginPath();
+        for (let j = 0; j < poly.length; j++) {
+          const [x, y] = poly[j];
+          context.lineTo(x, y);
+        }
         context.closePath();
-        context.fill();
         context.stroke();
+        context.fill();
       }
 
       onFilterComplete();

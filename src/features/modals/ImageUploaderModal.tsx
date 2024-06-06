@@ -15,6 +15,7 @@ import {
 } from "../../config/config";
 import Loader from "../common/Loader";
 import { getDefaultDensity } from "../utils/density/GetDefaultDensity";
+import StipplingArtFilterBlock from "@features/utils/filters/StipplingArtFilter/StipplingArtFilterBlock";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -248,7 +249,15 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
                 />
               )}
-              <div className="filter-btns-ascii">
+              {density === stipplingDensityBlock && (
+                <StipplingArtFilterBlock
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  density={density}
+                  onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+                />
+              )}
+              <div className="filter-btns-stippling">
                 <button
                   onClick={() => handleDensityChange(stipplingDensitySimple)}
                   className={`density-btn ${density === stipplingDensitySimple ? "active" : ""}`}
