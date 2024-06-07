@@ -18,6 +18,12 @@ const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
 
+  // Variables configurables
+  const gridSpacing = 10;
+  const maxPointSize = 1;
+  const brightnessScaling = 25;
+  const pointDensityScaling = 50;
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
@@ -59,41 +65,41 @@ const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
       tempContext.drawImage(image, 0, 0, drawWidth, drawHeight);
 
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
-      const points: [number, number][] = [];
+      const points: [number, number, number, string][] = [];
 
-      const numPoints = 5000;
-      for (let i = 0; i < numPoints; i++) {
-        let x, y, brightness;
-        do {
-          x = Math.floor(Math.random() * drawWidth);
-          y = Math.floor(Math.random() * drawHeight);
+      for (let y = 0; y < drawHeight; y += gridSpacing) {
+        for (let x = 0; x < drawWidth; x += gridSpacing) {
           const pixelIndex = (y * drawWidth + x) * 4;
           const r = imageData.data[pixelIndex];
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
-          brightness = (r + g + b) / 3;
-        } while (Math.random() > 1 - brightness / 255); // Adjust the brightness threshold as needed
-        points.push([x + offsetX, y + offsetY]);
+          const brightness = (r + g + b) / 3;
+          const pointSize = 1 + (255 - brightness) / brightnessScaling;
+          const numPoints = Math.floor(
+            (255 - brightness) / pointDensityScaling
+          );
+
+          for (let i = 0; i < numPoints; i++) {
+            const offsetXPoint = x + Math.random() * gridSpacing;
+            const offsetYPoint = y + Math.random() * gridSpacing;
+            points.push([
+              offsetXPoint + offsetX,
+              offsetYPoint + offsetY,
+              pointSize,
+              `rgb(${r},${g},${b})`
+            ]);
+          }
+        }
       }
 
-      const delaunay = d3.Delaunay.from(points);
-      const voronoi = delaunay.voronoi([0, 0, canvas.width, canvas.height]);
-
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = "white";
+      context.fillStyle = "black";
       context.fillRect(0, 0, canvas.width, canvas.height);
 
       for (const point of points) {
-        const [x, y] = point;
-        const pixelIndex = ((y - offsetY) * drawWidth + (x - offsetX)) * 4;
-        const r = imageData.data[pixelIndex];
-        const g = imageData.data[pixelIndex + 1];
-        const b = imageData.data[pixelIndex + 2];
-        const brightness = (r + g + b) / 3;
-        const pointSize = 8 * (1 - brightness / 255); // Accentuer la différence de taille des points
-        context.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        context.fillStyle = point[3];
         context.beginPath();
-        context.arc(x, y, pointSize, 0, 2 * Math.PI);
+        context.arc(point[0], point[1], point[2], 0, 2 * Math.PI);
         context.fill();
       }
 
@@ -101,7 +107,15 @@ const StipplingArtFilterExtended: React.FC<StipplingFilterProps> = ({
     };
 
     imageRef.current = image;
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    gridSpacing,
+    maxPointSize,
+    brightnessScaling,
+    pointDensityScaling
+  ]);
 
   return (
     <img

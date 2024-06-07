@@ -163,6 +163,7 @@ export interface AsciiFilterProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   density: string;
   onFilterComplete: () => void;
+  filterType: "simple" | "extended" | "block";
 }
 
 export interface StipplingFilterProps {
@@ -170,6 +171,16 @@ export interface StipplingFilterProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   density: string;
   onFilterComplete: () => void;
+  filterType: "simple" | "extended" | "block";
+}
+
+export interface StipplingArtFilterProps extends StipplingFilterProps {
+  filterType: "simple" | "extended" | "block";
+}
+
+export interface Point {
+  x: number;
+  y: number;
 }
 
 // modals
