@@ -1,21 +1,23 @@
 import { useState, useRef, useEffect } from "react";
-import type { ImageUploaderModalProps } from "../../interfaces/types";
-import AsciiArtFilter from "../utils/filters/AsciiArtFilter";
-import StipplingArtFilterExtended from "../utils/filters/StipplingArtFilter/StipplingArtFilterExtended";
-import StipplingArtFilterSimple from "../utils/filters/StipplingArtFilter/StipplingArtFilterSimple";
+import type { ImageUploaderModalProps } from "src/interfaces/types";
+import AsciiArtFilter from "@filters/AsciiArtFilter";
+import {
+  StipplingArtFilterSimple,
+  StipplingArtFilterExtended,
+  StipplingArtFilterBlock
+} from "@filters/StipplingArtFilter";
 import {
   TARGET_WIDTH,
   TARGET_HEIGHT,
-  asciiDensityExtended,
   asciiDensitySimple,
+  asciiDensityExtended,
   asciiDensityBlock,
-  stipplingDensityExtended,
   stipplingDensitySimple,
+  stipplingDensityExtended,
   stipplingDensityBlock
-} from "../../config/config";
+} from "@config/config";
 import Loader from "../common/Loader";
 import { getDefaultDensity } from "../utils/density/GetDefaultDensity";
-import StipplingArtFilterBlock from "@features/utils/filters/StipplingArtFilter/StipplingArtFilterBlock";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -28,7 +30,10 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const [density, setDensity] = useState<string | null>(
     getDefaultDensity("ascii")
   );
-  const [filterType, setFilterType] = useState<string>("ascii");
+  const [filterType, setFilterType] = useState<"ascii" | "stippling">("ascii");
+  const [stipplingType, setStipplingType] = useState<
+    "simple" | "extended" | "block"
+  >("simple");
   const modalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
@@ -54,11 +59,6 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
       setFileName("");
     }
     event.target.value = "";
-  };
-
-  const handleApplyFilter = () => {
-    setIsLoading(true);
-    setFilteredImageUrl(imagePreviewUrl);
   };
 
   const handleDensityChange = (newDensity: string) => {
@@ -98,9 +98,15 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     }
   };
 
-  const handleFilterTypeChange = (type: string) => {
+  const handleFilterTypeChange = (type: "ascii" | "stippling") => {
     setFilterType(type);
     setDensity(getDefaultDensity(type));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+  };
+
+  const handleStipplingTypeChange = (type: "simple" | "extended" | "block") => {
+    setStipplingType(type);
+    setDensity(getDefaultDensity("stippling"));
     setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
   };
 
@@ -202,23 +208,30 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                 canvasRef={canvasRef}
                 density={density || ""}
                 onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+                filterType={"simple"}
               />
               <div className="filter-btns-ascii">
                 <button
                   onClick={() => handleDensityChange(asciiDensitySimple)}
-                  className={`density-btn ${density === asciiDensitySimple ? "active" : ""}`}
+                  className={`density-btn ${
+                    density === asciiDensitySimple ? "active" : ""
+                  }`}
                 >
                   SIMPLE
                 </button>
                 <button
                   onClick={() => handleDensityChange(asciiDensityExtended)}
-                  className={`density-btn ${density === asciiDensityExtended ? "active" : ""}`}
+                  className={`density-btn ${
+                    density === asciiDensityExtended ? "active" : ""
+                  }`}
                 >
                   EXTENDED
                 </button>
                 <button
                   onClick={() => handleDensityChange(asciiDensityBlock)}
-                  className={`density-btn ${density === asciiDensityBlock ? "active" : ""}`}
+                  className={`density-btn ${
+                    density === asciiDensityBlock ? "active" : ""
+                  }`}
                 >
                   BLOCK
                 </button>
@@ -233,46 +246,55 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           )}
           {filteredImageUrl && filterType === "stippling" && (
             <>
-              {density === stipplingDensitySimple && (
+              {stipplingType === "simple" && (
                 <StipplingArtFilterSimple
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
-                  density={density}
-                  onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+                  density={density || ""}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"simple"}
                 />
               )}
-              {density === stipplingDensityExtended && (
+              {stipplingType === "extended" && (
                 <StipplingArtFilterExtended
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
-                  density={density}
-                  onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+                  density={density || ""}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"simple"}
                 />
               )}
-              {density === stipplingDensityBlock && (
+              {stipplingType === "block" && (
                 <StipplingArtFilterBlock
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
-                  density={density}
-                  onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+                  density={density || ""}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"simple"}
                 />
               )}
               <div className="filter-btns-stippling">
                 <button
-                  onClick={() => handleDensityChange(stipplingDensitySimple)}
-                  className={`density-btn ${density === stipplingDensitySimple ? "active" : ""}`}
+                  onClick={() => handleStipplingTypeChange("simple")}
+                  className={`density-btn ${
+                    stipplingType === "simple" ? "active" : ""
+                  }`}
                 >
                   SIMPLE
                 </button>
                 <button
-                  onClick={() => handleDensityChange(stipplingDensityExtended)}
-                  className={`density-btn ${density === stipplingDensityExtended ? "active" : ""}`}
+                  onClick={() => handleStipplingTypeChange("extended")}
+                  className={`density-btn ${
+                    stipplingType === "extended" ? "active" : ""
+                  }`}
                 >
                   EXTENDED
                 </button>
                 <button
-                  onClick={() => handleDensityChange(stipplingDensityBlock)}
-                  className={`density-btn ${density === stipplingDensityBlock ? "active" : ""}`}
+                  onClick={() => handleStipplingTypeChange("block")}
+                  className={`density-btn ${
+                    stipplingType === "block" ? "active" : ""
+                  }`}
                 >
                   BLOCK
                 </button>
@@ -294,7 +316,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             </button>
             <button
               onClick={() => handleFilterTypeChange("stippling")}
-              className={`stippling-btn ${filterType === "stippling" ? "active" : ""}`}
+              className={`stippling-btn ${
+                filterType === "stippling" ? "active" : ""
+              }`}
             >
               STIPPLING
             </button>
