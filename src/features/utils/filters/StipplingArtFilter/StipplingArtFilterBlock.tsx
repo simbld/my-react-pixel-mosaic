@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { StipplingFilterProps } from "src/interfaces/types";
 import * as d3 from "d3-delaunay";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
@@ -17,6 +17,11 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const [isRendered, setIsRendered] = useState(false);
+
+  // Variables configurables
+  const numPoints = 1500; // Ajuster pour changer le nombre de points
+  const lerpFactor = 0.5; // Facteur de lissage pour ajuster les positions des points vers les centroids
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -28,6 +33,8 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
     image.src = imageSrc;
 
     image.onload = () => {
+      setIsRendered(true);
+
       const imgWidth = image.width;
       const imgHeight = image.height;
       const aspectRatio = imgWidth / imgHeight;
@@ -61,8 +68,6 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      const numPoints = 1000;
-
       for (let i = 0; i < numPoints; i++) {
         let x, y, brightness;
         do {
@@ -85,13 +90,10 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
       context.fillRect(0, 0, canvas.width, canvas.height);
 
       const cells = Array.from(voronoi.cellPolygons());
-      const centroids = new Array(cells.length);
+      const centroids = new Array(cells.length).fill(null).map(() => [0, 0]);
       const weights = new Array(cells.length).fill(0);
       const counts = new Array(cells.length).fill(0);
       const avgWeights = new Array(cells.length).fill(0);
-      for (let i = 0; i < centroids.length; i++) {
-        centroids[i] = [0, 0];
-      }
 
       let delaunayIndex = 0;
       for (let i = 0; i < drawWidth; i++) {
@@ -103,10 +105,12 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
           const bright = (r + g + b) / 3;
           const weight = 1 - bright / 255;
           delaunayIndex = delaunay.find(i, j, delaunayIndex);
-          centroids[delaunayIndex][0] += i * weight;
-          centroids[delaunayIndex][1] += j * weight;
-          weights[delaunayIndex] += weight;
-          counts[delaunayIndex]++;
+          if (centroids[delaunayIndex]) {
+            centroids[delaunayIndex][0] += i * weight;
+            centroids[delaunayIndex][1] += j * weight;
+            weights[delaunayIndex] += weight;
+            counts[delaunayIndex]++;
+          }
         }
       }
 
@@ -125,36 +129,42 @@ const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
       }
 
       for (let i = 0; i < points.length; i++) {
-        points[i][0] = points[i][0] * 0.5 + centroids[i][0] * 0.5;
-        points[i][1] = points[i][1] * 0.5 + centroids[i][1] * 0.5;
+        if (centroids[i]) {
+          points[i][0] =
+            points[i][0] * (1 - lerpFactor) + centroids[i][0] * lerpFactor;
+          points[i][1] =
+            points[i][1] * (1 - lerpFactor) + centroids[i][1] * lerpFactor;
+        }
       }
 
       for (let i = 0; i < cells.length; i++) {
         const poly = cells[i];
         const centroid = centroids[i];
-        const col = tempContext.getImageData(
-          centroid[0] - offsetX,
-          centroid[1] - offsetY,
-          1,
-          1
-        ).data;
-        context.strokeStyle = `rgb(${col[0]}, ${col[1]}, ${col[2]})`;
-        context.fillStyle = `rgb(${col[0]}, ${col[1]}, ${col[2]})`;
-        context.beginPath();
-        for (let j = 0; j < poly.length; j++) {
-          const [x, y] = poly[j];
-          context.lineTo(x, y);
+        if (centroid) {
+          const col = tempContext.getImageData(
+            Math.floor(centroid[0] - offsetX),
+            Math.floor(centroid[1] - offsetY),
+            1,
+            1
+          ).data;
+          context.strokeStyle = `rgb(${col[0]}, ${col[1]}, ${col[2]})`;
+          context.fillStyle = `rgb(${col[0]}, ${col[1]}, ${col[2]})`;
+          context.beginPath();
+          for (let j = 0; j < poly.length; j++) {
+            const [x, y] = poly[j];
+            context.lineTo(x, y);
+          }
+          context.closePath();
+          context.stroke();
+          context.fill();
         }
-        context.closePath();
-        context.stroke();
-        context.fill();
       }
 
       onFilterComplete();
     };
 
     imageRef.current = image;
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [imageSrc, canvasRef, onFilterComplete, isRendered]);
 
   return (
     <img

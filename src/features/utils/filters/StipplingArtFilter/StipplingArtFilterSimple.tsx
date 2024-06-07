@@ -1,14 +1,26 @@
 import { useEffect, useRef } from "react";
-import { StipplingFilterProps } from "../../../../interfaces/types";
-import * as d3 from "d3-delaunay";
-import { TARGET_WIDTH, TARGET_HEIGHT } from "../../../../config/config";
+import { StipplingFilterProps } from "src/interfaces/types";
+import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 
+/**
+ * Composant pour appliquer un filtre d'art stippling simple sur une image.
+ * @param {StipplingFilterProps} props - Les propriétés du composant.
+ * @param {string} props.imageSrc - L'URL de l'image à traiter.
+ * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
+ * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
+ * @returns {JSX.Element} - Composant JSX.
+ */
 const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
+
+  // Variables configurables
+  const numPoints = 2000;
+  const pointRadius = 2;
+  const brightnessThreshold = 0.6;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -39,7 +51,6 @@ const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
       canvas.width = TARGET_WIDTH;
       canvas.height = TARGET_HEIGHT;
 
-      // Créer un canevas temporaire pour traiter l'image
       const tempCanvas = document.createElement("canvas");
       const tempContext = tempCanvas.getContext("2d", {
         willReadFrequently: true
@@ -53,8 +64,6 @@ const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      const numPoints = 5000;
-
       for (let i = 0; i < numPoints; i++) {
         let x, y, brightness;
         do {
@@ -64,19 +73,19 @@ const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
           const r = imageData.data[pixelIndex];
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
-          brightness = (r + g + b) / 3;
-        } while (Math.random() > brightness / 255);
+          brightness = (r + g + b) / 3 / 255;
+        } while (brightness > brightnessThreshold);
         points.push([x + offsetX, y + offsetY]);
       }
 
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = "black";
-      context.fillRect(0, 0, canvas.width, canvas.height);
       context.fillStyle = "white";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = "black";
 
       for (const point of points) {
         context.beginPath();
-        context.arc(point[0], point[1], 5, 0, 2 * Math.PI);
+        context.arc(point[0], point[1], pointRadius, 0, 2 * Math.PI);
         context.fill();
       }
 
@@ -84,7 +93,14 @@ const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
     };
 
     imageRef.current = image;
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    numPoints,
+    pointRadius,
+    brightnessThreshold
+  ]);
 
   return (
     <img
