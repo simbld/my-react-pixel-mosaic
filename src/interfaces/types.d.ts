@@ -174,7 +174,7 @@ export interface StipplingFilterProps {
   filterType: "simple" | "extended" | "block";
 }
 
-export interface StipplingArtFilterProps extends StipplingFilterProps {
+export interface StipplingArtFilterTypeProps extends StipplingFilterProps {
   filterType: "simple" | "extended" | "block";
 }
 
