@@ -1,6 +1,7 @@
-import { useRef, useEffect } from "react";
-import { TARGET_WIDTH, TARGET_HEIGHT } from "../../../config/config";
-import { AsciiFilterProps } from "../../../interfaces/types";
+import React, { useEffect, useRef } from "react";
+import * as d3 from "d3-delaunay";
+import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
+import type { StipplingArtFilterTypeProps } from "@interfaces/types";
 
 /**
  * AsciiArtFilter est un composant React qui applique un filtre ASCII art à une image.
@@ -9,13 +10,15 @@ import { AsciiFilterProps } from "../../../interfaces/types";
  * @param {React.RefObject<HTMLCanvasElement>} props.canvasRef - Référence du canvas où appliquer le filtre.
  * @param {string} props.density - La densité de caractères à utiliser pour le filtre.
  * @param {() => void} props.onFilterComplete - Callback appelée lorsque le filtrage est terminé.
+ * @param {"simple" | "extended" | "block"} props.filterType - Type de filtre à appliquer.
  * @returns {JSX.Element} L'élément JSX du filtre ASCII art.
  */
-const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
+const AsciiArtFilter: React.FC<StipplingArtFilterTypeProps> = ({
   imageSrc,
   canvasRef,
   density = "",
-  onFilterComplete
+  onFilterComplete,
+  filterType
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -95,7 +98,7 @@ const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef, density]);
+  }, [imageSrc, canvasRef, density, filterType]);
 
   /**
    * Mappe une valeur d'un intervalle à un autre.
