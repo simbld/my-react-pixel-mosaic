@@ -290,7 +290,8 @@
   }
 
   .filter-btns-ascii,
-  .filter-btns-stippling {
+  .filter-btns-stippling,
+  .filter-btns-rope {
     display: grid;
     grid-template-columns: auto;
     gap: 8px;
@@ -348,6 +349,7 @@
 
   .ascii-btn,
   .stippling-btn,
+  .rope-btn,
   .remove-filter-btn {
     display: flex;
     align-items: center;
@@ -367,6 +369,7 @@
 
   .ascii-btn:hover,
   .stippling-btn:hover,
+  .rope-btn:hover,
   .remove-filter-btn:hover {
     box-shadow: 5px 5px 0px 0px @screenOnOutline;
     background-color: @screenOnLight;
@@ -379,6 +382,7 @@
   }
 
   .ascii-btn:active,
+  .rope-btn:active,
   .stippling-btn:active {
     transform: translate(5px, 5px);
     transition:

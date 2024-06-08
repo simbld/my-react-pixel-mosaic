@@ -178,6 +178,14 @@ export interface StipplingArtFilterTypeProps extends StipplingFilterProps {
   filterType: "simple" | "extended" | "block";
 }
 
+export interface RopeArtFilterProps {
+  imageSrc: string;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  density: string;
+  onFilterComplete: () => void;
+  filterType: "simple" | "extended" | "block";
+}
+
 export interface Point {
   x: number;
   y: number;
