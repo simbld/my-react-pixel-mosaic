@@ -2,9 +2,9 @@ import { useEffect, useRef } from "react";
 import { RopeArtFilterProps } from "@interfaces/types";
 
 /**
- * RopeArtFilterExtended est un composant React qui applique un filtre Rope Art avancé à une image.
+ * RopeArtFilterExtended est un composant React qui applique un filtre Rope Art en mode étendu à une image.
  * @param {RopeArtFilterProps} props - Les propriétés du composant.
- * @returns {JSX.Element} L'élément JSX du filtre Rope Art avancé.
+ * @returns {JSX.Element} L'élément JSX du filtre Rope Art étendu.
  */
 const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
   imageSrc,
@@ -54,6 +54,7 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         const step = 10; // Distance entre les lignes
+        const angleSteps = 12; // Nombre de directions des lignes (12 pour 30 degrés entre chaque ligne)
         for (let y = 0; y < canvas.height; y += step) {
           for (let x = 0; x < canvas.width; x += step) {
             const pixelIndex = (x + y * canvas.width) * 4;
@@ -61,19 +62,25 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
             const brightness = (r + g + b) / 3;
-            const lineDensity = map(brightness, 0, 255, 10, 2); // Plus c'est sombre, plus il y a de lignes
+            const lineDensity = map(brightness, 0, 255, 5, 15); // Plus c'est sombre, plus il y a de lignes
 
-            for (let i = 0; i < lineDensity; i++) {
-              const x1 = x + Math.random() * step;
-              const y1 = y + Math.random() * step;
-              const x2 = x + Math.random() * step;
-              const y2 = y + Math.random() * step;
+            for (let angleIndex = 0; angleIndex < angleSteps; angleIndex++) {
+              const angle = (Math.PI * 2 * angleIndex) / angleSteps;
+              const dx = Math.cos(angle) * step;
+              const dy = Math.sin(angle) * step;
 
-              context.strokeStyle = `rgb(${r},${g},${b})`;
-              context.beginPath();
-              context.moveTo(x1, y1);
-              context.lineTo(x2, y2);
-              context.stroke();
+              for (let i = 0; i < lineDensity; i++) {
+                const x1 = x;
+                const y1 = y;
+                const x2 = x1 + dx;
+                const y2 = y1 + dy;
+
+                context.strokeStyle = `rgb(${r},${g},${b})`;
+                context.beginPath();
+                context.moveTo(x1, y1);
+                context.lineTo(x2, y2);
+                context.stroke();
+              }
             }
           }
         }
