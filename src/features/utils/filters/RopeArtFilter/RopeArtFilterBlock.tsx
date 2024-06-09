@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { RopeArtFilterProps } from "@interfaces/types";
 
 /**
- * RopeArtFilterBlock est un composant React qui applique un filtre Rope Art en blocs à une image.
+ * RopeArtFilterBlock est un composant React qui applique un filtre Rope Art en texture de filet à une image.
  * @param {RopeArtFilterProps} props - Les propriétés du composant.
  * @returns {JSX.Element} L'élément JSX du filtre Rope Art en blocs.
  */
@@ -53,7 +53,11 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
         context.fillStyle = "white";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
+        // Variables configurables
         const step = 10; // Distance entre les lignes
+        const minLineDensity = 4; // Densité minimale de lignes
+        const maxLineDensity = 10; // Densité maximale de lignes
+
         for (let y = 0; y < canvas.height; y += step) {
           for (let x = 0; x < canvas.width; x += step) {
             const pixelIndex = (x + y * canvas.width) * 4;
@@ -61,13 +65,34 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
             const brightness = (r + g + b) / 3;
-            const lineDensity = map(brightness, 0, 255, 10, 2); // Plus c'est sombre, plus il y a de lignes
+            const lineDensity = map(
+              brightness,
+              0,
+              255,
+              minLineDensity,
+              maxLineDensity
+            ); // Plus c'est sombre, plus il y a de lignes
 
+            // Dessiner les lignes horizontales
             for (let i = 0; i < lineDensity; i++) {
-              const x1 = x + Math.random() * step;
-              const y1 = y + Math.random() * step;
-              const x2 = x + Math.random() * step;
-              const y2 = y + Math.random() * step;
+              const x1 = x;
+              const y1 = y + (i * step) / lineDensity;
+              const x2 = x + step;
+              const y2 = y + (i * step) / lineDensity;
+
+              context.strokeStyle = `rgb(${r},${g},${b})`;
+              context.beginPath();
+              context.moveTo(x1, y1);
+              context.lineTo(x2, y2);
+              context.stroke();
+            }
+
+            // Dessiner les lignes verticales
+            for (let i = 0; i < lineDensity; i++) {
+              const x1 = x + (i * step) / lineDensity;
+              const y1 = y;
+              const x2 = x + (i * step) / lineDensity;
+              const y2 = y + step;
 
               context.strokeStyle = `rgb(${r},${g},${b})`;
               context.beginPath();
