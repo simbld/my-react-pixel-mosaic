@@ -14,9 +14,9 @@ export const asciiDensityExtended: string = "@WÑ#$9876543210/?!abc;:+=_-,.   ";
 export const asciiDensityBlock: string = "█▓▒░:. ";
 
 // Stippling
-export const stipplingDensitySimple: string = "simple";
-export const stipplingDensityExtended: string = "extended";
-export const stipplingDensityBlock: string = "block";
+export const DensitySimple: string = "simple";
+export const DensityExtended: string = "extended";
+export const DensityBlock: string = "block";
 
 export const TARGET_WIDTH: number = 1020;
 export const TARGET_HEIGHT: number = 820;

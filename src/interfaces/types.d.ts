@@ -104,6 +104,11 @@ export interface ArtCanvasProps {
   };
 }
 
+export interface ImageComparisonSliderProps {
+  leftImage: string;
+  rightImage: string;
+}
+
 // common
 export interface ButtonProps {
   onClick: () => void;
@@ -158,33 +163,38 @@ export interface PadStyle {
 }
 
 // features/filters
-export interface AsciiFilterProps {
+export interface ArtFilterProps {
   imageSrc: string;
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  density: string;
-  onFilterComplete: () => void;
   filterType: "simple" | "extended" | "block";
+  onFilterComplete: () => void;
 }
 
-export interface StipplingFilterProps {
+export interface AsciiFilterProps extends ArtFilterProps {
+  density: string;
+}
+
+export interface StipplingArtProps extends ArtFilterProps {
+  density: string;
+}
+
+export interface StipplingArtFilterProps extends StipplingArtProps {}
+
+export interface RopeArtFilterProps extends ArtFilterProps {
+  density: string;
+}
+
+export interface SignArtFilterProps extends ArtFilterProps {}
+
+export interface StringArtProps {
   imageSrc: string;
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  density: string;
   onFilterComplete: () => void;
-  filterType: "simple" | "extended" | "block";
 }
 
-export interface StipplingArtFilterTypeProps extends StipplingFilterProps {
-  filterType: "simple" | "extended" | "block";
-}
+export interface StringArtProps extends ArtFilterProps {}
 
-export interface RopeArtFilterProps {
-  imageSrc: string;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  density: string;
-  onFilterComplete: () => void;
-  filterType: "simple" | "extended" | "block";
-}
+export interface StringArtFilterProps extends StringArtProps {}
 
 export interface Point {
   x: number;
