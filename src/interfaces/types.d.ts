@@ -56,7 +56,6 @@ export interface UseErrorReturnProps {
 }
 
 // utils
-
 export interface AsciiCharacterProps {
   brightness: number;
 }
@@ -184,7 +183,9 @@ export interface RopeArtFilterProps extends ArtFilterProps {
   density: string;
 }
 
-export interface SignArtFilterProps extends ArtFilterProps {}
+export interface SignArtFilterProps extends ArtFilterProps {
+  shape: string;
+}
 
 export interface StringArtProps {
   imageSrc: string;
@@ -192,14 +193,7 @@ export interface StringArtProps {
   onFilterComplete: () => void;
 }
 
-export interface StringArtProps extends ArtFilterProps {}
-
 export interface StringArtFilterProps extends StringArtProps {}
-
-export interface Point {
-  x: number;
-  y: number;
-}
 
 // modals
 export interface ImageUploaderModalProps {
