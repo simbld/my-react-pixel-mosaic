@@ -55,12 +55,6 @@ export interface UseErrorReturnProps {
   clearError: () => void;
 }
 
-// utils
-
-export interface AsciiCharacterProps {
-  brightness: number;
-}
-
 // context providers
 export interface ErrorContextTypeProps {
   error: Error | null;
@@ -70,6 +64,17 @@ export interface ErrorContextTypeProps {
 }
 
 // components
+export interface ArtCanvasProps {
+  artCanvas: string;
+  imageProcessingState: {
+    url: string;
+    filters: {
+      ascii: boolean;
+    };
+    error: string | null;
+  };
+}
+
 export interface ArtCanvasPropsWithFilter extends ArtCanvasProps {
   filter: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => void;
 }
@@ -91,17 +96,6 @@ export interface CanvasComponentProps {
   image: string;
   width: number;
   height: number;
-}
-
-export interface ArtCanvasProps {
-  artCanvas: string;
-  imageProcessingState: {
-    url: string;
-    filters: {
-      ascii: boolean;
-    };
-    error: string | null;
-  };
 }
 
 export interface ImageComparisonSliderProps {
@@ -174,32 +168,21 @@ export interface AsciiFilterProps extends ArtFilterProps {
   density: string;
 }
 
-export interface StipplingArtProps extends ArtFilterProps {
+export interface StipplingArtFilterProps extends ArtFilterProps {
   density: string;
 }
-
-export interface StipplingArtFilterProps extends StipplingArtProps {}
 
 export interface RopeArtFilterProps extends ArtFilterProps {
   density: string;
 }
 
-export interface SignArtFilterProps extends ArtFilterProps {}
-
-export interface StringArtProps {
-  imageSrc: string;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  onFilterComplete: () => void;
+export interface SignArtFilterProps extends ArtFilterProps {
+  shape: string;
 }
 
 export interface StringArtProps extends ArtFilterProps {}
 
 export interface StringArtFilterProps extends StringArtProps {}
-
-export interface Point {
-  x: number;
-  y: number;
-}
 
 // modals
 export interface ImageUploaderModalProps {
