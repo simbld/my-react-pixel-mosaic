@@ -190,3 +190,22 @@ export interface ImageUploaderModalProps {
   onClose: () => void;
   onUpload: (file: File) => void;
 }
+
+export interface ErrorModalProps {
+  error: Error;
+  onClose: () => void;
+}
+
+export interface ImageProcessingModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface RangeSliderProps {
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (value: number) => void;
+}
