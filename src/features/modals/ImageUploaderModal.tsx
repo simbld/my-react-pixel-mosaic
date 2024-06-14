@@ -26,10 +26,7 @@ import {
   TARGET_HEIGHT,
   asciiDensitySimple,
   asciiDensityExtended,
-  asciiDensityBlock,
-  DensitySimple,
-  DensityExtended,
-  DensityBlock
+  asciiDensityBlock
 } from "@config/config";
 import Loader from "../common/Loader";
 import { getDefaultDensity } from "../utils/density/GetDefaultDensity";
