@@ -228,7 +228,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <label className="upload-btn local" htmlFor="file" ref={labelRef}>
             LOCAL
           </label>
-          <div className="whiteboard-container">
+          <div className="whiteboard-ctn">
             <canvas
               className="whiteboard"
               width={1020}
