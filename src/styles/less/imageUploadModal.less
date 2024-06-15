@@ -1,3 +1,5 @@
+/* imageuploadermodal.less */
+
 .overlay {
   .flex-center();
   position: fixed;
@@ -145,7 +147,7 @@
     z-index: 20;
   }
 
-  .whiteboard-container {
+  .whiteboard-ctn {
     .flex-center();
     position: absolute;
     width: 80%;
@@ -415,4 +417,28 @@
     left: 72%;
     z-index: 2000;
   }
+}
+
+/* Ajout des styles pour StipplingArtFilterSimple */
+.stippling-art-filter-ctn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.original-image {
+  max-width: 100%;
+}
+
+.filtered-canvas {
+  display: block;
+  margin-top: 20px;
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+.controls .range-slider {
+  margin-bottom: 10px;
 }
