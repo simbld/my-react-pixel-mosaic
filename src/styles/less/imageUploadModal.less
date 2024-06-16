@@ -1,5 +1,3 @@
-/* imageuploadermodal.less */
-
 .overlay {
   .flex-center();
   position: fixed;
@@ -151,7 +149,7 @@
     .flex-center();
     position: absolute;
     width: 80%;
-    height: 830px;
+    height: 80%;
     border-radius: 10px;
     box-shadow: 5px 5px 30px 10px @b;
     transform: translate(0%, 2%);
@@ -181,6 +179,7 @@
     background: none;
     color: @w;
     z-index: 2;
+    object-fit: contain;
   }
 
   .title-modal {
@@ -245,7 +244,7 @@
   img {
     width: 100%;
     height: auto;
-    display: block;
+    display: none;
   }
 
   .file-input {
@@ -300,8 +299,8 @@
     grid-template-columns: auto;
     gap: 8px;
     position: relative;
-    bottom: -27%;
-    right: 28%;
+    bottom: 15%;
+    right: 36%;
     z-index: 2000;
   }
 
@@ -419,26 +418,92 @@
   }
 }
 
-/* Ajout des styles pour StipplingArtFilterSimple */
-.stippling-art-filter-ctn {
+.stippling-art-filter-ctn,
+.ascii-art-filter-ctn,
+.string-art-filter-ctn,
+.rope-art-filter-ctn,
+.sign-art-filter-ctn {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.original-image {
-  max-width: 100%;
-}
-
-.filtered-canvas {
-  display: block;
-  margin-top: 20px;
+  position: relative;
+  height: 100%;
 }
 
 .controls {
-  margin-top: 20px;
+  z-index: 20;
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  display: flex;
+  flex-direction: column;
 }
 
 .controls .range-slider {
-  margin-bottom: 10px;
+  margin-bottom: 10%;
+}
+
+.controls .range-slider input[type="range"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5%;
+  background: #ddd;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.controls .range-slider input[type="range"]:hover {
+  opacity: 1;
+}
+
+.controls .range-slider input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 5%;
+  cursor: pointer;
+  background: #ddd;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+.controls .range-slider input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 5%;
+  cursor: pointer;
+  background: #ddd;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+/* Style du "handle" du slider */
+.controls .range-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  cursor: ew-resize; /* Curseur en forme de flèche gauche-droite */
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease-in-out;
+}
+
+.controls .range-slider input[type="range"]::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  cursor: ew-resize;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease-in-out;
+}
+
+.controls .range-slider input[type="range"]::-webkit-slider-thumb:hover {
+  background: #45a049;
+}
+
+.controls .range-slider input[type="range"]::-moz-range-thumb:hover {
+  background: #45a049;
 }
