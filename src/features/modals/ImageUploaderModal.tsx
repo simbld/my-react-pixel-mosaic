@@ -245,7 +245,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                 onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
                 filterType={"simple"}
               />
-              <div className="filter-btns-ascii">
+              <div className="controls filter-btns-ascii">
                 <button
                   onClick={() => handleDensityChange(asciiDensitySimple)}
                   className={`density-btn ${
@@ -308,7 +308,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={"simple"}
                 />
               )}
-              <div className="filter-btns-stippling">
+              <div className="controls filter-btns-stippling">
                 <button
                   onClick={() => handleStipplingTypeChange("simple")}
                   className={`density-btn ${type === "simple" ? "active" : ""}`}
@@ -367,7 +367,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={"simple"}
                 />
               )}
-              <div className="filter-btns-rope">
+              <div className="controls filter-btns-rope">
                 <button
                   onClick={() => handleRopeTypeChange("simple")}
                   className={`density-btn ${type === "simple" ? "active" : ""}`}
@@ -421,7 +421,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={"simple"}
                 />
               )}
-              <div className="filter-btns-string">
+              <div className="controls filter-btns-string">
                 <button
                   onClick={() => handleStringTypeChange("simple")}
                   className={`density-btn ${shape === "simple" ? "active" : ""}`}
@@ -477,7 +477,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={"simple"}
                 />
               )}
-              <div className="filter-btns-sign">
+              <div className="controls filter-btns-sign">
                 <button
                   onClick={() => handleSignTypeChange("simple")}
                   className={`density-btn ${shape === "simple" ? "active" : ""}`}
