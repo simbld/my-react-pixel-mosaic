@@ -39,9 +39,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
-  const [density, setDensity] = useState<string | null>(
-    getDefaultDensity("ascii")
-  );
+  const [density, setDensity] = useState<string | null>(getDefaultDensity(""));
   const [filterType, setFilterType] = useState<
     "ascii" | "stippling" | "rope" | "string" | "sign"
   >("ascii");
