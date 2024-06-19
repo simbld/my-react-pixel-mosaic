@@ -207,5 +207,6 @@ export interface RangeSliderProps {
   max: number;
   step: number;
   value: number;
+  className: string;
   onChange: (value: number) => void;
 }
