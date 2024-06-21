@@ -162,6 +162,7 @@ export interface ArtFilterProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   filterType: "simple" | "extended" | "block";
   onFilterComplete: () => void;
+  density?: string;
 }
 
 export interface AsciiFilterProps extends ArtFilterProps {
@@ -209,4 +210,9 @@ export interface RangeSliderProps {
   value: number;
   className: string;
   onChange: (value: number) => void;
+}
+
+export interface FilterOptionsProps {
+  activeFilter: "simple" | "extended" | "block";
+  onFilterChange: (filter: "simple" | "extended" | "block") => void;
 }
