@@ -1,28 +1,33 @@
-import { useEffect, useRef } from "react";
-import { StipplingFilterProps } from "src/interfaces/types";
+import React, { useState } from "react";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
+import type { StipplingArtFilterProps } from "@interfaces/types";
+import RangeSlider from "@features/modals/RangeSlider";
 
 /**
  * Composant pour appliquer un filtre d'art stippling simple sur une image.
- * @param {StipplingFilterProps} props - Les propriétés du composant.
+ * @param {StipplingArtFilterProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - L'URL de l'image à traiter.
  * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
-const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
+const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete
 }) => {
-  const imageRef = useRef<HTMLImageElement | null>(null);
+  const [numPoints, setNumPoints] = useState(50000);
+  const [pointRadius, setPointRadius] = useState(0.8);
+  const [brightnessThreshold, setBrightnessThreshold] = useState(0.8);
+  const [activeFilter, setActiveFilter] = useState<
+    "simple" | "extended" | "block" | null
+  >(null);
 
-  // Variables configurables
-  const numPoints = 2000;
-  const pointRadius = 2;
-  const brightnessThreshold = 0.6;
+  const handleFilterClick = (filter: "simple" | "extended" | "block") => {
+    setActiveFilter(activeFilter === filter ? null : filter);
+  };
 
-  useEffect(() => {
+  const applyFilter = () => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
     if (!canvas || !context) return;
@@ -75,6 +80,7 @@ const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
           const b = imageData.data[pixelIndex + 2];
           brightness = (r + g + b) / 3 / 255;
         } while (brightness > brightnessThreshold);
+
         points.push([x + offsetX, y + offsetY]);
       }
 
@@ -91,24 +97,78 @@ const StipplingArtFilterSimple: React.FC<StipplingFilterProps> = ({
 
       onFilterComplete();
     };
-
-    imageRef.current = image;
-  }, [
-    imageSrc,
-    canvasRef,
-    onFilterComplete,
-    numPoints,
-    pointRadius,
-    brightnessThreshold
-  ]);
+  };
 
   return (
-    <img
-      ref={imageRef}
-      src={imageSrc}
-      style={{ display: "none" }}
-      alt="hidden"
-    />
+    <div className="stippling-art-filter-ctn">
+      <div className="filter-container">
+        <button
+          className={`stippling-btn active ${activeFilter ? "active" : ""}`}
+          onClick={() => handleFilterClick("simple")}
+        >
+          Stippling
+        </button>
+        {activeFilter && (
+          <div className="filter-options active">
+            <button
+              className={`filter-option ${activeFilter === "simple" ? "active" : ""}`}
+              onClick={() => handleFilterClick("simple")}
+            >
+              Simple
+            </button>
+            <button
+              className={`filter-option ${activeFilter === "extended" ? "active" : ""}`}
+              onClick={() => handleFilterClick("extended")}
+            >
+              Extended
+            </button>
+            <button
+              className={`filter-option ${activeFilter === "block" ? "active" : ""}`}
+              onClick={() => handleFilterClick("block")}
+            >
+              Block
+            </button>
+          </div>
+        )}
+      </div>
+      {activeFilter && (
+        <div className="filter-settings active">
+          <RangeSlider
+            className="glow"
+            label="Number of Points"
+            min={1000}
+            max={100000}
+            step={1000}
+            value={numPoints}
+            onChange={setNumPoints}
+          />
+          <RangeSlider
+            className="glow"
+            label="Point Radius"
+            min={0.1}
+            max={5.0}
+            step={0.1}
+            value={pointRadius}
+            onChange={setPointRadius}
+          />
+          <RangeSlider
+            className="glow"
+            label="Brightness Threshold"
+            min={0.1}
+            max={1.0}
+            step={0.01}
+            value={brightnessThreshold}
+            onChange={setBrightnessThreshold}
+          />
+        </div>
+      )}
+      <button
+        className={`stippling-btn apply-btn ${activeFilter ? "active" : ""}`}
+        onClick={applyFilter}
+      >
+        Apply Filter
+      </button>
+    </div>
   );
 };
 

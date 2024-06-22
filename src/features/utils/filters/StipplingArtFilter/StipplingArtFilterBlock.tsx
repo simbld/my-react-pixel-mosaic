@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import type { StipplingFilterProps } from "src/interfaces/types";
+import type { StipplingArtProps } from "src/interfaces/types";
 import * as d3 from "d3-delaunay";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 
 /**
  * Composant pour appliquer un filtre d'art stippling en blocs sur une image.
- * @param {StipplingFilterProps} props - Les propriétés du composant.
+ * @param {StipplingArtProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - L'URL de l'image à traiter.
  * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
-const StipplingArtFilterBlock: React.FC<StipplingFilterProps> = ({
+const StipplingArtFilterBlock: React.FC<StipplingArtProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete
