@@ -336,12 +336,44 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  z-index: 2000;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+  transform: translateX(0, -50%);
+  z-index: 2000;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: #17190e 3px solid;
+  background-color: #8c8c37;
+  color: #4d4f1f;
+  font-size: 15px;
+  font-family: "Early", sans-serif;
+  text-shadow: 2px 2px 2px black;
+  transition: opacity 1s ease;
+  opacity: 0.8;
+  cursor: pointer;
+  width: 14rem;
+  height: 3.5rem;
+}
+
+.filter-option.active {
+  background-color: #6c6c2f;
 }
 
 .controls {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  transform: translate(0, 450%);
+  z-index: 2000;
 }
 
 .controls .range-slider {
