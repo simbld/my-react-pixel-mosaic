@@ -1,5 +1,10 @@
 import type { FilterOptionsProps } from "@interfaces/types";
 
+/**
+ * Composant pour afficher les options de filtre.
+ * @param {FilterOptionsProps} props - Les propriétés du composant.
+ * @returns {JSX.Element} - Composant JSX des options de filtre.
+ */
 const FilterOptions: React.FC<FilterOptionsProps> = ({
   activeFilter,
   onFilterChange
