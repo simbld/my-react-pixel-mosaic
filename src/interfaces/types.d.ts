@@ -214,7 +214,8 @@ export interface RangeSliderProps {
 }
 
 export interface FilterOptionsProps {
-  activeFilter: "simple" | "extended" | "block" | "ascii" | null;
-  onFilterChange: (type: "simple" | "extended" | "block") => void;
-  handleDensityChange: (density: string) => void; // Add this prop to handle density changes
+  activeFilter: string;
+  onFilterChange: (newFilter: "simple" | "extended" | "block") => void;
+  density: string | null;
+  handleDensityChange: (newDensity: string) => void;
 }
