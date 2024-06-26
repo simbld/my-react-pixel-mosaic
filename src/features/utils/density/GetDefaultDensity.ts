@@ -1,6 +1,6 @@
 import { asciiDensitySimple, DensitySimple } from "@config/config";
 
-export const getDefaultDensity = (filterType: string): string => {
+const getDefaultDensity = (filterType: string): string => {
   if (filterType === "ascii") return asciiDensitySimple;
   if (filterType === "stippling") return DensitySimple;
   if (filterType === "sign") return DensitySimple;
@@ -8,5 +8,7 @@ export const getDefaultDensity = (filterType: string): string => {
   if (filterType === "ropeArt") return DensitySimple;
   return asciiDensitySimple;
 };
+
+export default getDefaultDensity;
 
 // Path: src/features/utils/density/GetDefaultDensity.ts
