@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import AsciiArtFilter from "@filters/AsciiArtFilter";
 import RangeSlider from "@features/modals/RangeSlider";
 import FilterOptions from "./FilterOptions";
-import { getDefaultDensity } from "../utils/density/GetDefaultDensity";
+import getDefaultDensity from "../utils/density/GetDefaultDensity";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 import type { ImageUploaderModalProps } from "@interfaces/types";
 import {
@@ -19,7 +19,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
-  const [density, setDensity] = useState<string | null>(getDefaultDensity(""));
+  const [density, setDensity] = useState<string>(getDefaultDensity("ascii"));
   const [filterType, setFilterType] = useState<
     "ascii" | "stippling" | "rope" | "string" | "sign"
   >("ascii");
@@ -57,13 +57,13 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   };
 
   const handleDensityChange = (newDensity: string) => {
-    setDensity(density === newDensity ? null : newDensity); // Toggle the density
+    setDensity(density === newDensity ? "" : newDensity); // Toggle the density
     setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new density
   };
 
   const clearFilter = () => {
     setFilteredImageUrl(null);
-    setDensity(null);
+    setDensity("");
     const canvas = canvasRef.current;
     if (canvas && imagePreviewUrl) {
       const context = canvas.getContext("2d", { willReadFrequently: true });
@@ -209,8 +209,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       pointRadius={pointRadius}
                       brightnessThreshold={brightnessThreshold}
                       onFilterComplete={() => setIsLoading(false)}
-                      density={""}
-                      filterType={"simple"}
+                      density={density || ""}
+                      filterType={type}
                     />
                   )}
                   {type === "extended" && (
@@ -221,6 +221,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       pointRadius={pointRadius}
                       brightnessThreshold={brightnessThreshold}
                       onFilterComplete={() => setIsLoading(false)}
+                      density={density || ""}
+                      filterType={type}
                     />
                   )}
                   {type === "block" && (
@@ -231,6 +233,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       pointRadius={pointRadius}
                       brightnessThreshold={brightnessThreshold}
                       onFilterComplete={() => setIsLoading(false)}
+                      density={density || ""}
+                      filterType={type}
                     />
                   )}
                 </>
@@ -239,6 +243,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               <FilterOptions
                 activeFilter={type}
                 onFilterChange={handleTypeChange}
+                density={density}
+                handleDensityChange={handleDensityChange}
               />
               <button onClick={clearFilter} className="remove-filter-btn">
                 NO FILTER
