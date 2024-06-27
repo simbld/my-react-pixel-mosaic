@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import * as d3 from "d3-delaunay";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
-import type { AsciiFilterProps } from "@interfaces/types";
+import type { ArtFilterProps } from "@interfaces/types";
 
 /**
  * AsciiArtFilter est un composant React qui applique un filtre ASCII art à une image.
@@ -13,7 +12,7 @@ import type { AsciiFilterProps } from "@interfaces/types";
  * @param {"simple" | "extended" | "block"} props.filterType - Type de filtre à appliquer.
  * @returns {JSX.Element} L'élément JSX du filtre ASCII art.
  */
-const AsciiArtFilter: React.FC<AsciiFilterProps> = ({
+const AsciiArtFilter: React.FC<ArtFilterProps> = ({
   imageSrc,
   canvasRef,
   density = "",
