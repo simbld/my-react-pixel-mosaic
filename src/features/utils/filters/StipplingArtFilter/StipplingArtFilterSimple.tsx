@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
-import type { StipplingArtFilterProps } from "@interfaces/types";
+import { useEffect, useRef } from "react";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
+import type { ArtFilterProps } from "@interfaces/types";
 
 /**
  * Composant pour appliquer un filtre d'art stippling simple sur une image.
- * @param {StipplingArtFilterProps} props - Les propriétés du composant.
+ * @param {StipplingFilterProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - L'URL de l'image à traiter.
  * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
+ * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
-const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
+const StipplingArtFilterSimple: React.FC<ArtFilterProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete,
-  numPoints,
-  pointRadius,
-  brightnessThreshold
+  onFilterComplete
 }) => {
-  useEffect(() => {
-    applyFilter();
-  }, [numPoints, pointRadius, brightnessThreshold]);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
-  const applyFilter = () => {
+  // Variables configurables
+  const numPoints = 2000;
+  const pointRadius = 2;
+  const brightnessThreshold = 0.6;
+
+  useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
     if (!canvas || !context) return;
@@ -74,7 +75,6 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
           const b = imageData.data[pixelIndex + 2];
           brightness = (r + g + b) / 3 / 255;
         } while (brightness > brightnessThreshold);
-
         points.push([x + offsetX, y + offsetY]);
       }
 
@@ -91,9 +91,25 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
 
       onFilterComplete();
     };
-  };
 
-  return null;
+    imageRef.current = image;
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    numPoints,
+    pointRadius,
+    brightnessThreshold
+  ]);
+
+  return (
+    <img
+      ref={imageRef}
+      src={imageSrc}
+      style={{ display: "none" }}
+      alt="hidden"
+    />
+  );
 };
 
 export default StipplingArtFilterSimple;
