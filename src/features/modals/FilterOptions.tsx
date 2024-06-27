@@ -1,4 +1,10 @@
-import type { FilterOptionsProps } from "@interfaces/types";
+import {
+  asciiDensitySimple,
+  asciiDensityExtended,
+  asciiDensityBlock
+} from "@config/config";
+import React from "react";
+import type { FilterOptionsProps } from "src/interfaces/types";
 
 /**
  * Composant pour afficher les options de filtre.
@@ -34,20 +40,20 @@ const FilterOptions: React.FC<FilterOptionsProps> = ({
       {activeFilter === "ascii" && (
         <>
           <button
-            className={`filter-option ${density === "asciiDensitySimple" ? "active" : ""}`}
-            onClick={() => handleDensityChange("asciiDensitySimple")}
+            className={`filter-option ${density === asciiDensitySimple ? "active" : ""}`}
+            onClick={() => handleDensityChange(asciiDensitySimple)}
           >
             Simple Density
           </button>
           <button
-            className={`filter-option ${density === "asciiDensityExtended" ? "active" : ""}`}
-            onClick={() => handleDensityChange("asciiDensityExtended")}
+            className={`filter-option ${density === asciiDensityExtended ? "active" : ""}`}
+            onClick={() => handleDensityChange(asciiDensityExtended)}
           >
             Extended Density
           </button>
           <button
-            className={`filter-option ${density === "asciiDensityBlock" ? "active" : ""}`}
-            onClick={() => handleDensityChange("asciiDensityBlock")}
+            className={`filter-option ${density === asciiDensityBlock ? "active" : ""}`}
+            onClick={() => handleDensityChange(asciiDensityBlock)}
           >
             Block Density
           </button>
