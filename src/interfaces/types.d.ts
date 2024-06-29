@@ -184,7 +184,7 @@ export interface SignArtFilterProps extends ArtFilterProps {
   shape: string;
 }
 
-export interface StringArtProps extends ArtFilterProps {}
+export interface StringArtFilterProps extends ArtFilterProps {}
 
 // modals
 export interface ImageUploaderModalProps {
