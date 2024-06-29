@@ -13,7 +13,7 @@ export const asciiDensitySimple: string = "@%@O#╦o+=|i-:.      ";
 export const asciiDensityExtended: string = "@WÑ#$9876543210/?!abc;:+=_-,.   ";
 export const asciiDensityBlock: string = "█▓▒░:. ";
 
-// Stippling
+// Filters no ASCII
 export const DensitySimple: string = "simple";
 export const DensityExtended: string = "extended";
 export const DensityBlock: string = "block";

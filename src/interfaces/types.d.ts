@@ -184,7 +184,7 @@ export interface SignArtFilterProps extends ArtFilterProps {
   shape: string;
 }
 
-export interface StringArtProps extends ArtFilterProps {}
+export interface StringArtFilterProps extends ArtFilterProps {}
 
 // modals
 export interface ImageUploaderModalProps {
@@ -214,6 +214,8 @@ export interface RangeSliderProps {
 }
 
 export interface FilterOptionsProps {
-  activeFilter: "simple" | "extended" | "block";
-  onFilterChange: (filter: "simple" | "extended" | "block") => void;
+  activeFilter: string;
+  onFilterChange: (newFilter: "simple" | "extended" | "block") => void;
+  density: string | null;
+  handleDensityChange: (newDensity: string) => void;
 }
