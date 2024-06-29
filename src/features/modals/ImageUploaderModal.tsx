@@ -7,11 +7,29 @@ import {
   StipplingArtFilterBlock
 } from "@filters/StipplingArtFilter";
 import {
+  RopeArtFilterSimple,
+  RopeArtFilterExtended,
+  RopeArtFilterBlock
+} from "@filters/RopeArtFilter";
+import {
+  SignArtFilterSimple,
+  SignArtFilterExtended,
+  SignArtFilterBlock
+} from "@filters/SignArtFilter";
+import {
+  StringArtFilterSimple,
+  StringArtFilterExtended,
+  StringArtFilterBlock
+} from "@filters/StringArtFilter";
+import {
   TARGET_WIDTH,
   TARGET_HEIGHT,
   asciiDensitySimple,
   asciiDensityExtended,
-  asciiDensityBlock
+  asciiDensityBlock,
+  DensitySimple,
+  DensityExtended,
+  DensityBlock
 } from "@config/config";
 import Loader from "../common/Loader";
 import getDefaultDensity from "../utils/density/GetDefaultDensity";
@@ -28,11 +46,20 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     getDefaultDensity("ascii")
   );
   const [filterType, setFilterType] = useState<
-    "ascii" | "stippling" | "rope" | "string" | "sign"
+    "ascii" | "stippling" | "rope" | "sign" | "string"
   >("ascii");
   const [stipplingType, setStipplingType] = useState<
     "simple" | "extended" | "block"
   >("simple");
+  const [ropeType, setRopeType] = useState<"simple" | "extended" | "block">(
+    "simple"
+  );
+  const [signType, setSignType] = useState<"simple" | "extended" | "block">(
+    "simple"
+  );
+  const [stringType, setStringType] = useState<"simple" | "extended" | "block">(
+    "simple"
+  );
   const modalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
@@ -98,7 +125,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   };
 
   const handleFilterTypeChange = (
-    type: "ascii" | "stippling" | "rope" | "string" | "sign"
+    type: "ascii" | "stippling" | "rope" | "sign" | "string"
   ) => {
     setFilterType(type);
     setDensity(getDefaultDensity(type));
@@ -108,6 +135,24 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const handleStipplingTypeChange = (type: "simple" | "extended" | "block") => {
     setStipplingType(type);
     setDensity(getDefaultDensity("stippling"));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+  };
+
+  const handleRopeTypeChange = (type: "simple" | "extended" | "block") => {
+    setRopeType(type);
+    setDensity(getDefaultDensity("rope"));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+  };
+
+  const handleSignTypeChange = (type: "simple" | "extended" | "block") => {
+    setSignType(type);
+    setDensity(getDefaultDensity("sign"));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+  };
+
+  const handleStringTypeChange = (type: "simple" | "extended" | "block") => {
+    setStringType(type);
+    setDensity(getDefaultDensity("string"));
     setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
   };
 
@@ -194,7 +239,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <label className="upload-btn local" htmlFor="file" ref={labelRef}>
             LOCAL
           </label>
-          <div className="whiteboard-ctn">
+          <div className="whiteboard-container">
             <canvas
               className="whiteboard"
               width={1020}
@@ -202,109 +247,6 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               ref={canvasRef}
             ></canvas>
           </div>
-          {filteredImageUrl && filterType === "ascii" && (
-            <>
-              <AsciiArtFilter
-                imageSrc={filteredImageUrl}
-                canvasRef={canvasRef}
-                density={density || ""}
-                onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
-                filterType={"simple"}
-              />
-              <div className="filter-options active">
-                <button
-                  onClick={() => handleDensityChange(asciiDensitySimple)}
-                  className={`filter-option ${
-                    density === asciiDensitySimple ? "active" : ""
-                  }`}
-                >
-                  SIMPLE
-                </button>
-                <button
-                  onClick={() => handleDensityChange(asciiDensityExtended)}
-                  className={`filter-option ${
-                    density === asciiDensityExtended ? "active" : ""
-                  }`}
-                >
-                  EXTENDED
-                </button>
-                <button
-                  onClick={() => handleDensityChange(asciiDensityBlock)}
-                  className={`filter-option ${
-                    density === asciiDensityBlock ? "active" : ""
-                  }`}
-                >
-                  BLOCK
-                </button>
-              </div>
-              <button
-                onClick={handleRemoveFilter}
-                className="remove-filter-btn"
-              >
-                NO FILTER
-              </button>
-            </>
-          )}
-          {filteredImageUrl && filterType === "stippling" && (
-            <>
-              {stipplingType === "simple" && (
-                <StipplingArtFilterSimple
-                  imageSrc={filteredImageUrl}
-                  canvasRef={canvasRef}
-                  onFilterComplete={() => setIsLoading(false)}
-                  filterType={"block"}
-                />
-              )}
-              {stipplingType === "extended" && (
-                <StipplingArtFilterExtended
-                  imageSrc={filteredImageUrl}
-                  canvasRef={canvasRef}
-                  onFilterComplete={() => setIsLoading(false)}
-                  filterType={"block"}
-                />
-              )}
-              {stipplingType === "block" && (
-                <StipplingArtFilterBlock
-                  imageSrc={filteredImageUrl}
-                  canvasRef={canvasRef}
-                  onFilterComplete={() => setIsLoading(false)}
-                  filterType={"block"}
-                />
-              )}
-              <div className="filter-options active">
-                <button
-                  onClick={() => handleStipplingTypeChange("simple")}
-                  className={`filter-option ${
-                    stipplingType === "simple" ? "active" : ""
-                  }`}
-                >
-                  SIMPLE
-                </button>
-                <button
-                  onClick={() => handleStipplingTypeChange("extended")}
-                  className={`filter-option ${
-                    stipplingType === "extended" ? "active" : ""
-                  }`}
-                >
-                  EXTENDED
-                </button>
-                <button
-                  onClick={() => handleStipplingTypeChange("block")}
-                  className={`filter-option ${
-                    stipplingType === "block" ? "active" : ""
-                  }`}
-                >
-                  BLOCK
-                </button>
-              </div>
-              <button
-                onClick={handleRemoveFilter}
-                className="remove-filter-btn"
-              >
-                NO FILTER
-              </button>
-            </>
-          )}
           <div className="filter-selection-btn">
             <button
               onClick={() => handleFilterTypeChange("ascii")}
@@ -327,18 +269,315 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               ROPE
             </button>
             <button
-              onClick={() => handleFilterTypeChange("string")}
-              className={`string-btn ${filterType === "string" ? "active" : ""}`}
-            >
-              STRING
-            </button>
-            <button
               onClick={() => handleFilterTypeChange("sign")}
               className={`sign-btn ${filterType === "sign" ? "active" : ""}`}
             >
               SIGN
             </button>
+            <button
+              onClick={() => handleFilterTypeChange("string")}
+              className={`string-btn ${
+                filterType === "string" ? "active" : ""
+              }`}
+            >
+              STRING
+            </button>
           </div>
+          {filteredImageUrl && filterType === "ascii" && (
+            <>
+              <AsciiArtFilter
+                imageSrc={filteredImageUrl}
+                canvasRef={canvasRef}
+                density={density || ""}
+                onFilterComplete={() => setIsLoading(false)} // Callback pour terminer le chargement
+                filterType={"simple"}
+              />
+              <div className="filter-btns-ascii">
+                <button
+                  onClick={() => handleDensityChange(asciiDensitySimple)}
+                  className={`density-btn ${
+                    density === asciiDensitySimple ? "active" : ""
+                  }`}
+                >
+                  SIMPLE
+                </button>
+                <button
+                  onClick={() => handleDensityChange(asciiDensityExtended)}
+                  className={`density-btn ${
+                    density === asciiDensityExtended ? "active" : ""
+                  }`}
+                >
+                  EXTENDED
+                </button>
+                <button
+                  onClick={() => handleDensityChange(asciiDensityBlock)}
+                  className={`density-btn ${
+                    density === asciiDensityBlock ? "active" : ""
+                  }`}
+                >
+                  BLOCK
+                </button>
+              </div>
+              <button
+                onClick={handleRemoveFilter}
+                className="remove-filter-btn"
+              >
+                NO FILTER
+              </button>
+            </>
+          )}
+          {filteredImageUrl && filterType === "stippling" && (
+            <>
+              {stipplingType === "simple" && (
+                <StipplingArtFilterSimple
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  density={density || ""}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"simple"}
+                />
+              )}
+              {stipplingType === "extended" && (
+                <StipplingArtFilterExtended
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  density={density || ""}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"extended"}
+                />
+              )}
+              {stipplingType === "block" && (
+                <StipplingArtFilterBlock
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  density={density || ""}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"block"}
+                />
+              )}
+              <div className="filter-btns-stippling">
+                <button
+                  onClick={() => handleStipplingTypeChange("simple")}
+                  className={`density-btn ${
+                    stipplingType === "simple" ? "active" : ""
+                  }`}
+                >
+                  SIMPLE
+                </button>
+                <button
+                  onClick={() => handleStipplingTypeChange("extended")}
+                  className={`density-btn ${
+                    stipplingType === "extended" ? "active" : ""
+                  }`}
+                >
+                  EXTENDED
+                </button>
+                <button
+                  onClick={() => handleStipplingTypeChange("block")}
+                  className={`density-btn ${
+                    stipplingType === "block" ? "active" : ""
+                  }`}
+                >
+                  BLOCK
+                </button>
+              </div>
+              <button
+                onClick={handleRemoveFilter}
+                className="remove-filter-btn"
+              >
+                NO FILTER
+              </button>
+            </>
+          )}
+          {filteredImageUrl && filterType === "rope" && (
+            <>
+              {ropeType === "simple" && (
+                <RopeArtFilterSimple
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"simple"}
+                  density={""}
+                />
+              )}
+              {ropeType === "extended" && (
+                <RopeArtFilterExtended
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"extended"}
+                  density={""}
+                />
+              )}
+              {ropeType === "block" && (
+                <RopeArtFilterBlock
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"block"}
+                  density={""}
+                />
+              )}
+              <div className="filter-options active">
+                <button
+                  onClick={() => handleRopeTypeChange("simple")}
+                  className={`filter-option ${
+                    ropeType === "simple" ? "active" : ""
+                  }`}
+                >
+                  SIMPLE
+                </button>
+                <button
+                  onClick={() => handleRopeTypeChange("extended")}
+                  className={`filter-option ${
+                    ropeType === "extended" ? "active" : ""
+                  }`}
+                >
+                  EXTENDED
+                </button>
+                <button
+                  onClick={() => handleRopeTypeChange("block")}
+                  className={`filter-option ${
+                    ropeType === "block" ? "active" : ""
+                  }`}
+                >
+                  BLOCK
+                </button>
+              </div>
+              <button
+                onClick={handleRemoveFilter}
+                className="remove-filter-btn"
+              >
+                NO FILTER
+              </button>
+            </>
+          )}
+          {filteredImageUrl && filterType === "sign" && (
+            <>
+              {signType === "simple" && (
+                <SignArtFilterSimple
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"simple"}
+                  density={""}
+                />
+              )}
+              {signType === "extended" && (
+                <SignArtFilterExtended
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"extended"}
+                  density={""}
+                />
+              )}
+              {signType === "block" && (
+                <SignArtFilterBlock
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"block"}
+                  density={""}
+                />
+              )}
+              <div className="filter-options active">
+                <button
+                  onClick={() => handleSignTypeChange("simple")}
+                  className={`filter-option ${
+                    signType === "simple" ? "active" : ""
+                  }`}
+                >
+                  SIMPLE
+                </button>
+                <button
+                  onClick={() => handleSignTypeChange("extended")}
+                  className={`filter-option ${
+                    signType === "extended" ? "active" : ""
+                  }`}
+                >
+                  EXTENDED
+                </button>
+                <button
+                  onClick={() => handleSignTypeChange("block")}
+                  className={`filter-option ${
+                    signType === "block" ? "active" : ""
+                  }`}
+                >
+                  BLOCK
+                </button>
+              </div>
+              <button
+                onClick={handleRemoveFilter}
+                className="remove-filter-btn"
+              >
+                NO FILTER
+              </button>
+            </>
+          )}
+          {filteredImageUrl && filterType === "string" && (
+            <>
+              {stringType === "simple" && (
+                <StringArtFilterSimple
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"simple"}
+                  density={""}
+                />
+              )}
+              {stringType === "extended" && (
+                <StringArtFilterExtended
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"extended"}
+                  density={""}
+                />
+              )}
+              {stringType === "block" && (
+                <StringArtFilterBlock
+                  imageSrc={filteredImageUrl}
+                  canvasRef={canvasRef}
+                  onFilterComplete={() => setIsLoading(false)}
+                  filterType={"block"}
+                  density={""}
+                />
+              )}
+              <div className="filter-options active">
+                <button
+                  onClick={() => handleStringTypeChange("simple")}
+                  className={`filter-option ${
+                    stringType === "simple" ? "active" : ""
+                  }`}
+                >
+                  SIMPLE
+                </button>
+                <button
+                  onClick={() => handleStringTypeChange("extended")}
+                  className={`filter-option ${
+                    stringType === "extended" ? "active" : ""
+                  }`}
+                >
+                  EXTENDED
+                </button>
+                <button
+                  onClick={() => handleStringTypeChange("block")}
+                  className={`filter-option ${
+                    stringType === "block" ? "active" : ""
+                  }`}
+                >
+                  BLOCK
+                </button>
+              </div>
+              <button
+                onClick={handleRemoveFilter}
+                className="remove-filter-btn"
+              >
+                NO FILTER
+              </button>
+            </>
+          )}
           <button onClick={handleModalClose} className="close-btn">
             CLOSE
           </button>
