@@ -160,20 +160,29 @@ export interface PadStyle {
 export interface ArtFilterProps {
   imageSrc: string;
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
-  filterType: "simple" | "extended" | "block";
   onFilterComplete: () => void;
-  density?: string;
 }
 
 export interface AsciiFilterProps extends ArtFilterProps {
   density: string;
 }
 
-export interface StipplingArtFilterProps extends ArtFilterProps {
-  density: string;
+export interface StipplingArtFilterSimpleProps extends ArtFilterProps {
   numPoints: number;
   pointRadius: number;
   brightnessThreshold: number;
+}
+
+export interface StipplingArtFilterExtendedProps extends ArtFilterProps {
+  gridSpacing: number;
+  maxPointSize: number;
+  brightnessScaling: number;
+  pointDensityScaling: number;
+}
+
+export interface StipplingArtFilterBlockProps extends ArtFilterProps {
+  numPoints: number;
+  lerpFactor: number;
 }
 
 export interface RopeArtFilterProps extends ArtFilterProps {
