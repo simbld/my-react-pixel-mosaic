@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { StipplingArtFilterProps } from "@interfaces/types";
+import RangeSlider from "@features/modals/RangeSlider";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
-import type { ArtFilterProps } from "@interfaces/types";
 
 /**
  * Composant pour appliquer un filtre d'art stippling simple sur une image.
@@ -10,17 +11,24 @@ import type { ArtFilterProps } from "@interfaces/types";
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
-const StipplingArtFilterSimple: React.FC<ArtFilterProps> = ({
+const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  density,
+  numPoints,
+  pointRadius,
+  brightnessThreshold
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
-
-  // Variables configurables
-  const numPoints = 2000;
-  const pointRadius = 2;
-  const brightnessThreshold = 0.6;
+  const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(
+    numPoints || 2000
+  );
+  const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(
+    pointRadius || 2
+  );
+  const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
+    useState<number>(brightnessThreshold || 0.6);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -97,9 +105,9 @@ const StipplingArtFilterSimple: React.FC<ArtFilterProps> = ({
     imageSrc,
     canvasRef,
     onFilterComplete,
-    numPoints,
-    pointRadius,
-    brightnessThreshold
+    stipplingNumPoints,
+    stipplingPointRadius,
+    stipplingBrightnessThreshold
   ]);
 
   return (
