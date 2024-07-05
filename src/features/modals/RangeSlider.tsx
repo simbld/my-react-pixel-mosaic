@@ -6,10 +6,11 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   max,
   step,
   value,
-  onChange
+  onChange,
+  className
 }) => {
   return (
-    <div className="range-slider">
+    <div className={`range-slider ${className}`}>
       <label>{label}</label>
       <input
         type="range"
