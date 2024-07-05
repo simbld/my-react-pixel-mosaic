@@ -1,28 +1,22 @@
-import { useEffect, useRef } from "react";
-import * as d3 from "d3-delaunay";
+import { useEffect, useRef, useState } from "react";
+import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
-import type { ArtFilterProps } from "@interfaces/types";
+import RangeSlider from "@features/modals/RangeSlider";
 
-/**
- * Composant pour appliquer un filtre d'art stippling avancé sur une image.
- * @param {StipplingFilterProps} props - Les propriétés du composant.
- * @param {string} props.imageSrc - L'URL de l'image à traiter.
- * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
- * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
- * @returns {JSX.Element} - Composant JSX.
- */
-const StipplingArtFilterExtended: React.FC<ArtFilterProps> = ({
+const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  density
 }) => {
-  const imageRef = useRef<HTMLImageElement | null>(null);
+  const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(10);
+  const [stipplingMaxPointSize, setStipplingMaxPointSize] = useState<number>(1);
+  const [stipplingBrightnessScaling, setStipplingBrightnessScaling] =
+    useState<number>(25);
+  const [stipplingPointDensityScaling, setStipplingPointDensityScaling] =
+    useState<number>(50);
 
-  // Variables configurables
-  const gridSpacing = 10;
-  const maxPointSize = 1;
-  const brightnessScaling = 25;
-  const pointDensityScaling = 50;
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -67,21 +61,21 @@ const StipplingArtFilterExtended: React.FC<ArtFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number, number, string][] = [];
 
-      for (let y = 0; y < drawHeight; y += gridSpacing) {
-        for (let x = 0; x < drawWidth; x += gridSpacing) {
+      for (let y = 0; y < drawHeight; y += stipplingGridSpacing) {
+        for (let x = 0; x < drawWidth; x += stipplingGridSpacing) {
           const pixelIndex = (y * drawWidth + x) * 4;
           const r = imageData.data[pixelIndex];
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
           const brightness = (r + g + b) / 3;
-          const pointSize = 1 + (255 - brightness) / brightnessScaling;
+          const pointSize = 1 + (255 - brightness) / stipplingBrightnessScaling;
           const numPoints = Math.floor(
-            (255 - brightness) / pointDensityScaling
+            (255 - brightness) / stipplingPointDensityScaling
           );
 
           for (let i = 0; i < numPoints; i++) {
-            const offsetXPoint = x + Math.random() * gridSpacing;
-            const offsetYPoint = y + Math.random() * gridSpacing;
+            const offsetXPoint = x + Math.random() * stipplingGridSpacing;
+            const offsetYPoint = y + Math.random() * stipplingGridSpacing;
             points.push([
               offsetXPoint + offsetX,
               offsetYPoint + offsetY,
@@ -111,19 +105,57 @@ const StipplingArtFilterExtended: React.FC<ArtFilterProps> = ({
     imageSrc,
     canvasRef,
     onFilterComplete,
-    gridSpacing,
-    maxPointSize,
-    brightnessScaling,
-    pointDensityScaling
+    stipplingGridSpacing,
+    stipplingMaxPointSize,
+    stipplingBrightnessScaling,
+    stipplingPointDensityScaling
   ]);
 
   return (
-    <img
-      ref={imageRef}
-      src={imageSrc}
-      style={{ display: "none" }}
-      alt="hidden"
-    />
+    <div>
+      <img
+        ref={imageRef}
+        src={imageSrc}
+        style={{ display: "none" }}
+        alt="hidden"
+      />
+      <RangeSlider
+        label="Grid Spacing"
+        min={1}
+        max={20}
+        step={1}
+        value={stipplingGridSpacing}
+        className="range-slider"
+        onChange={setStipplingGridSpacing}
+      />
+      <RangeSlider
+        label="Max Point Size"
+        min={1}
+        max={10}
+        step={1}
+        value={stipplingMaxPointSize}
+        className="range-slider"
+        onChange={setStipplingMaxPointSize}
+      />
+      <RangeSlider
+        label="Brightness Scaling"
+        min={1}
+        max={50}
+        step={1}
+        value={stipplingBrightnessScaling}
+        className="range-slider"
+        onChange={setStipplingBrightnessScaling}
+      />
+      <RangeSlider
+        label="Point Density Scaling"
+        min={1}
+        max={100}
+        step={1}
+        value={stipplingPointDensityScaling}
+        className="range-slider"
+        onChange={setStipplingPointDensityScaling}
+      />
+    </div>
   );
 };
 
