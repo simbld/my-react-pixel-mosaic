@@ -119,42 +119,6 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
         style={{ display: "none" }}
         alt="hidden"
       />
-      <RangeSlider
-        label="Grid Spacing"
-        min={1}
-        max={20}
-        step={1}
-        value={stipplingGridSpacing}
-        className="range-slider"
-        onChange={setStipplingGridSpacing}
-      />
-      <RangeSlider
-        label="Max Point Size"
-        min={1}
-        max={10}
-        step={1}
-        value={stipplingMaxPointSize}
-        className="range-slider"
-        onChange={setStipplingMaxPointSize}
-      />
-      <RangeSlider
-        label="Brightness Scaling"
-        min={1}
-        max={50}
-        step={1}
-        value={stipplingBrightnessScaling}
-        className="range-slider"
-        onChange={setStipplingBrightnessScaling}
-      />
-      <RangeSlider
-        label="Point Density Scaling"
-        min={1}
-        max={100}
-        step={1}
-        value={stipplingPointDensityScaling}
-        className="range-slider"
-        onChange={setStipplingPointDensityScaling}
-      />
     </div>
   );
 };
