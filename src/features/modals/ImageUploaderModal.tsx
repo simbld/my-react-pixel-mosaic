@@ -33,6 +33,7 @@ import {
 } from "@config/config";
 import Loader from "../common/Loader";
 import getDefaultDensity from "../utils/density/GetDefaultDensity";
+import RangeSlider from "./RangeSlider";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -51,6 +52,18 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const [stipplingType, setStipplingType] = useState<
     "simple" | "extended" | "block"
   >("simple");
+  const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(2000);
+  const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(2);
+  const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
+    useState<number>(0.6);
+  const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(10);
+  const [stipplingMaxPointSize, setStipplingMaxPointSize] = useState<number>(1);
+  const [stipplingBrightnessScaling, setStipplingBrightnessScaling] =
+    useState<number>(25);
+  const [stipplingPointDensityScaling, setStipplingPointDensityScaling] =
+    useState<number>(50);
+  const [stipplingLerpFactor, setStipplingLerpFactor] = useState<number>(0.5);
+
   const [ropeType, setRopeType] = useState<"simple" | "extended" | "block">(
     "simple"
   );
@@ -334,6 +347,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   canvasRef={canvasRef}
                   density={density || ""}
                   onFilterComplete={() => setIsLoading(false)}
+                  numPoints={stipplingNumPoints}
+                  pointRadius={stipplingPointRadius}
+                  brightnessThreshold={stipplingBrightnessThreshold}
                   filterType={"simple"}
                 />
               )}
@@ -344,6 +360,10 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   density={density || ""}
                   onFilterComplete={() => setIsLoading(false)}
                   filterType={"extended"}
+                  gridSpacing={stipplingGridSpacing}
+                  maxPointSize={stipplingMaxPointSize}
+                  brightnessScaling={stipplingBrightnessScaling}
+                  pointDensityScaling={stipplingPointDensityScaling}
                 />
               )}
               {stipplingType === "block" && (
@@ -352,13 +372,17 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   canvasRef={canvasRef}
                   density={density || ""}
                   onFilterComplete={() => setIsLoading(false)}
+                  numPoints={stipplingNumPoints}
+                  pointRadius={stipplingPointRadius}
+                  brightnessThreshold={stipplingBrightnessThreshold}
+                  lerpFactor={stipplingLerpFactor}
                   filterType={"block"}
                 />
               )}
-              <div className="filter-btns-stippling">
+              <div className="filter-options active">
                 <button
                   onClick={() => handleStipplingTypeChange("simple")}
-                  className={`density-btn ${
+                  className={`filter-option ${
                     stipplingType === "simple" ? "active" : ""
                   }`}
                 >
@@ -366,7 +390,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                 </button>
                 <button
                   onClick={() => handleStipplingTypeChange("extended")}
-                  className={`density-btn ${
+                  className={`filter-option ${
                     stipplingType === "extended" ? "active" : ""
                   }`}
                 >
@@ -374,7 +398,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                 </button>
                 <button
                   onClick={() => handleStipplingTypeChange("block")}
-                  className={`density-btn ${
+                  className={`filter-option ${
                     stipplingType === "block" ? "active" : ""
                   }`}
                 >
@@ -387,6 +411,119 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               >
                 NO FILTER
               </button>
+              <div className="range-slider-ctn">
+                {stipplingType === "simple" && (
+                  <>
+                    <RangeSlider
+                      label="Number of Points"
+                      min={500}
+                      max={5000}
+                      step={100}
+                      value={stipplingNumPoints}
+                      className="range-slider"
+                      onChange={setStipplingNumPoints}
+                    />
+                    <RangeSlider
+                      label="Point Radius"
+                      min={1}
+                      max={10}
+                      step={1}
+                      value={stipplingPointRadius}
+                      className="range-slider"
+                      onChange={setStipplingPointRadius}
+                    />
+                    <RangeSlider
+                      label="Brightness Threshold"
+                      min={0}
+                      max={1}
+                      step={0.1}
+                      value={stipplingBrightnessThreshold}
+                      className="range-slider"
+                      onChange={setStipplingBrightnessThreshold}
+                    />
+                  </>
+                )}
+                {stipplingType === "extended" && (
+                  <>
+                    <RangeSlider
+                      label="Grid Spacing"
+                      min={1}
+                      max={20}
+                      step={1}
+                      value={stipplingGridSpacing}
+                      className="range-slider"
+                      onChange={setStipplingGridSpacing}
+                    />
+                    <RangeSlider
+                      label="Max Point Size"
+                      min={1}
+                      max={10}
+                      step={1}
+                      value={stipplingMaxPointSize}
+                      className="range-slider"
+                      onChange={setStipplingMaxPointSize}
+                    />
+                    <RangeSlider
+                      label="Brightness Scaling"
+                      min={1}
+                      max={50}
+                      step={1}
+                      value={stipplingBrightnessScaling}
+                      className="range-slider"
+                      onChange={setStipplingBrightnessScaling}
+                    />
+                    <RangeSlider
+                      label="Point Density Scaling"
+                      min={1}
+                      max={100}
+                      step={1}
+                      value={stipplingPointDensityScaling}
+                      className="range-slider"
+                      onChange={setStipplingPointDensityScaling}
+                    />
+                  </>
+                )}
+                {stipplingType === "block" && (
+                  <>
+                    <RangeSlider
+                      label="Number of Points"
+                      min={500}
+                      max={5000}
+                      step={100}
+                      value={stipplingNumPoints}
+                      className="range-slider"
+                      onChange={setStipplingNumPoints}
+                    />
+                    <RangeSlider
+                      label="Point Radius"
+                      min={1}
+                      max={10}
+                      step={1}
+                      value={stipplingPointRadius}
+                      className="range-slider"
+                      onChange={setStipplingPointRadius}
+                    />
+                    <RangeSlider
+                      label="Brightness Threshold"
+                      min={0}
+                      max={1}
+                      step={0.1}
+                      value={stipplingBrightnessThreshold}
+                      className="range-slider"
+                      onChange={setStipplingBrightnessThreshold}
+                    />
+                    <RangeSlider
+                      label="Lerp Factor"
+                      min={0}
+                      max={1}
+                      step={0.1}
+                      value={stipplingLerpFactor}
+                      className="range-slider"
+                      onChange={setStipplingLerpFactor}
+                    />
+                  </>
+                )}
+              </div>
             </>
           )}
           {filteredImageUrl && filterType === "rope" && (

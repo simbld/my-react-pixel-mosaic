@@ -176,6 +176,21 @@ export interface StipplingArtFilterProps extends ArtFilterProps {
   brightnessThreshold: number;
 }
 
+export interface StipplingArtFilterExtendedProps extends ArtFilterProps {
+  density: string;
+  gridSpacing: number;
+  maxPointSize: number;
+  brightnessScaling: number;
+  pointDensityScaling: number;
+}
+
+export interface StipplingArtFilterBlockProps extends ArtFilterProps {
+  numPoints: number;
+  pointRadius: number;
+  brightnessThreshold: number;
+  lerpFactor: number;
+}
+
 export interface RopeArtFilterProps extends ArtFilterProps {
   density: string;
 }

@@ -1,4 +1,5 @@
-.title-btn {
+.title-btn,
+.title-btn:active {
   .flex-center();
   position: relative;
   display: inline-block;
@@ -12,6 +13,10 @@
   width: 600px;
   height: 200px;
   overflow: visible;
+}
+
+.title-btn:active {
+  animation: slideFullLeft 0.1s linear;
 }
 
 .button-text {
@@ -30,21 +35,6 @@
 .title-btn:hover .button-text-hover {
   opacity: 1;
   animation: blink 1s infinite;
-}
-
-.title-btn:active {
-  .flex-center();
-  display: inline-block;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  background: none;
-  border-radius: 12px;
-  padding: 0px;
-  width: 600px;
-  height: 200px;
-  overflow: visible;
 }
 
 .text-svg {
@@ -96,5 +86,14 @@
   }
   100% {
     transform: translateX(-10%;);
+  }
+}
+
+@keyframes slideFullLeft {
+  0% {
+    transform: translateX(0%;);
+  }
+  100% {
+    transform: translateX(-500%;);
   }
 }
