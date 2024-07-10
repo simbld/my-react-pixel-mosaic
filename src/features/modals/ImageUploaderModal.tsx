@@ -416,21 +416,27 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   <>
                     <RangeSlider
                       label="Number of Points"
-                      min={500}
-                      max={5000}
-                      step={100}
+                      min={1000}
+                      max={500000}
+                      step={1000}
                       value={stipplingNumPoints}
                       className="range-slider"
-                      onChange={setStipplingNumPoints}
+                      onChange={(value) => {
+                        setStipplingNumPoints(value);
+                        setFilteredImageUrl(imagePreviewUrl); // Forcer la mise à jour du filtre
+                      }}
                     />
                     <RangeSlider
                       label="Point Radius"
                       min={1}
-                      max={10}
-                      step={1}
+                      max={100}
+                      step={10}
                       value={stipplingPointRadius}
                       className="range-slider"
-                      onChange={setStipplingPointRadius}
+                      onChange={(value) => {
+                        setStipplingPointRadius(value);
+                        setFilteredImageUrl(imagePreviewUrl); // Forcer la mise à jour du filtre
+                      }}
                     />
                     <RangeSlider
                       label="Brightness Threshold"
@@ -439,7 +445,10 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       step={0.1}
                       value={stipplingBrightnessThreshold}
                       className="range-slider"
-                      onChange={setStipplingBrightnessThreshold}
+                      onChange={(value) => {
+                        setStipplingBrightnessThreshold(value);
+                        setFilteredImageUrl(imagePreviewUrl); // Forcer la mise à jour du filtre
+                      }}
                     />
                   </>
                 )}
@@ -448,7 +457,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                     <RangeSlider
                       label="Grid Spacing"
                       min={1}
-                      max={20}
+                      max={200}
                       step={1}
                       value={stipplingGridSpacing}
                       className="range-slider"
@@ -487,8 +496,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   <>
                     <RangeSlider
                       label="Number of Points"
-                      min={500}
-                      max={5000}
+                      min={1000}
+                      max={500000}
                       step={100}
                       value={stipplingNumPoints}
                       className="range-slider"
@@ -507,7 +516,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       label="Brightness Threshold"
                       min={0}
                       max={1}
-                      step={0.1}
+                      step={0.05}
                       value={stipplingBrightnessThreshold}
                       className="range-slider"
                       onChange={setStipplingBrightnessThreshold}
@@ -516,7 +525,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       label="Lerp Factor"
                       min={0}
                       max={1}
-                      step={0.1}
+                      step={0.05}
                       value={stipplingLerpFactor}
                       className="range-slider"
                       onChange={setStipplingLerpFactor}
