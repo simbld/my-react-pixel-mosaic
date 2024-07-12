@@ -160,13 +160,13 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const handleSignTypeChange = (type: "simple" | "extended" | "block") => {
     setSignType(type);
     setDensity(getDefaultDensity("sign"));
-    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter avec le nouveau type
   };
 
   const handleStringTypeChange = (type: "simple" | "extended" | "block") => {
     setStringType(type);
     setDensity(getDefaultDensity("string"));
-    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter avec le nouveau type
   };
 
   const handleModalClose = () => {
@@ -176,6 +176,50 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     setDensity(null);
     onClose();
   };
+
+  const applyFilter = async () => {
+    console.log("Applying filter", {
+      filterType,
+      stipplingNumPoints,
+      stipplingPointRadius
+    });
+    if (filterType === "stippling") {
+      setFilteredImageUrl(null);
+      setTimeout(() => {
+        setFilteredImageUrl(imagePreviewUrl);
+      }, 100); // Attendre un court délai avant de réappliquer le filtre
+    }
+
+    if (filterType === "rope") {
+      setFilteredImageUrl(imagePreviewUrl);
+    }
+    if (filterType === "sign") {
+      setFilteredImageUrl(imagePreviewUrl);
+    }
+    if (filterType === "string") {
+      setFilteredImageUrl(imagePreviewUrl);
+    }
+  };
+
+  useEffect(() => {
+    if (imagePreviewUrl && filterType === "stippling") {
+      setIsLoading(true);
+      setFilteredImageUrl(null);
+      setTimeout(() => {
+        applyFilter();
+      }, 100);
+    }
+  }, [
+    imagePreviewUrl,
+    stipplingNumPoints,
+    stipplingPointRadius,
+    stipplingBrightnessThreshold,
+    stipplingGridSpacing,
+    stipplingMaxPointSize,
+    stipplingBrightnessScaling,
+    stipplingPointDensityScaling,
+    stipplingLerpFactor
+  ]);
 
   useEffect(() => {
     if (isOpen && labelRef.current) {
@@ -416,26 +460,42 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   <>
                     <RangeSlider
                       label="Number of Points"
-                      min={1000}
-                      max={500000}
-                      step={1000}
+                      min={500}
+                      max={50000}
+                      step={500}
                       value={stipplingNumPoints}
                       className="range-slider"
                       onChange={(value) => {
                         setStipplingNumPoints(value);
-                        setFilteredImageUrl(imagePreviewUrl); // Forcer la mise à jour du filtre
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          setIsLoading(true);
+                          setFilteredImageUrl(null);
+                          setTimeout(() => {
+                            applyFilter();
+                          }, 100);
+                        }, 100);
                       }}
                     />
                     <RangeSlider
                       label="Point Radius"
                       min={1}
-                      max={100}
-                      step={10}
+                      max={10}
+                      step={1}
                       value={stipplingPointRadius}
                       className="range-slider"
                       onChange={(value) => {
                         setStipplingPointRadius(value);
-                        setFilteredImageUrl(imagePreviewUrl); // Forcer la mise à jour du filtre
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          setIsLoading(true);
+                          setFilteredImageUrl(null);
+                          setTimeout(() => {
+                            applyFilter();
+                          }, 100);
+                        }, 100);
                       }}
                     />
                     <RangeSlider
@@ -447,7 +507,11 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       className="range-slider"
                       onChange={(value) => {
                         setStipplingBrightnessThreshold(value);
-                        setFilteredImageUrl(imagePreviewUrl); // Forcer la mise à jour du filtre
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
                       }}
                     />
                   </>
@@ -461,7 +525,14 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       step={1}
                       value={stipplingGridSpacing}
                       className="range-slider"
-                      onChange={setStipplingGridSpacing}
+                      onChange={(value) => {
+                        setStipplingGridSpacing(value);
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
+                      }}
                     />
                     <RangeSlider
                       label="Max Point Size"
@@ -470,7 +541,14 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       step={1}
                       value={stipplingMaxPointSize}
                       className="range-slider"
-                      onChange={setStipplingMaxPointSize}
+                      onChange={(value) => {
+                        setStipplingMaxPointSize(value);
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
+                      }}
                     />
                     <RangeSlider
                       label="Brightness Scaling"
@@ -479,7 +557,14 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       step={1}
                       value={stipplingBrightnessScaling}
                       className="range-slider"
-                      onChange={setStipplingBrightnessScaling}
+                      onChange={(value) => {
+                        setStipplingBrightnessScaling(value);
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
+                      }}
                     />
                     <RangeSlider
                       label="Point Density Scaling"
@@ -488,7 +573,14 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       step={1}
                       value={stipplingPointDensityScaling}
                       className="range-slider"
-                      onChange={setStipplingPointDensityScaling}
+                      onChange={(value) => {
+                        setStipplingPointDensityScaling(value);
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
+                      }}
                     />
                   </>
                 )}
@@ -496,12 +588,19 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   <>
                     <RangeSlider
                       label="Number of Points"
-                      min={1000}
-                      max={500000}
+                      min={100}
+                      max={50000}
                       step={100}
                       value={stipplingNumPoints}
                       className="range-slider"
-                      onChange={setStipplingNumPoints}
+                      onChange={(value) => {
+                        setStipplingNumPoints(value);
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
+                      }}
                     />
                     <RangeSlider
                       label="Point Radius"
@@ -510,7 +609,14 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       step={1}
                       value={stipplingPointRadius}
                       className="range-slider"
-                      onChange={setStipplingPointRadius}
+                      onChange={(value) => {
+                        setStipplingPointRadius(value);
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
+                      }}
                     />
                     <RangeSlider
                       label="Brightness Threshold"
@@ -519,7 +625,14 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       step={0.05}
                       value={stipplingBrightnessThreshold}
                       className="range-slider"
-                      onChange={setStipplingBrightnessThreshold}
+                      onChange={(value) => {
+                        setStipplingBrightnessThreshold(value);
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
+                      }}
                     />
                     <RangeSlider
                       label="Lerp Factor"
@@ -528,7 +641,14 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       step={0.05}
                       value={stipplingLerpFactor}
                       className="range-slider"
-                      onChange={setStipplingLerpFactor}
+                      onChange={(value) => {
+                        setStipplingLerpFactor(value);
+                        setIsLoading(true);
+                        setFilteredImageUrl(null);
+                        setTimeout(() => {
+                          applyFilter();
+                        }, 100);
+                      }}
                     />
                   </>
                 )}
