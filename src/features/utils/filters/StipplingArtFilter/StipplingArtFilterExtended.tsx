@@ -1,15 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
-import RangeSlider from "@features/modals/RangeSlider";
 
+/**
+ * Composant pour appliquer un filtre d'art stippling en blocs sur une image.
+ * @param {StipplingArtProps} props - Les propriétés du composant.
+ * @param {string} props.imageSrc - L'URL de l'image à traiter.
+ * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
+ * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
+ * @returns {JSX.Element} - Composant JSX.
+ */
 const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete,
   density
 }) => {
-  const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(10);
+  const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(0);
   const [stipplingMaxPointSize, setStipplingMaxPointSize] = useState<number>(1);
   const [stipplingBrightnessScaling, setStipplingBrightnessScaling] =
     useState<number>(25);
