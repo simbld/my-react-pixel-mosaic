@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3-delaunay";
-import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 import type { StipplingArtFilterProps } from "@interfaces/types";
+import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 
 /**
  * Composant pour appliquer un filtre d'art stippling simple sur une image.
@@ -15,20 +15,19 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete,
-  density,
   numPoints,
   pointRadius,
   brightnessThreshold
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(
-    numPoints || 5000
+    numPoints || 5000 // Augmenter la valeur par défaut à 5000
   );
   const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(
-    pointRadius || 3
+    pointRadius || 3 // Augmenter la valeur par défaut à 3
   );
   const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
-    useState<number>(brightnessThreshold || 0.8);
+    useState<number>(brightnessThreshold || 0.8); // Augmenter la valeur par défaut à 0.8
 
   useEffect(() => {
     const canvas = canvasRef.current;
