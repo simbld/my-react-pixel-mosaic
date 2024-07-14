@@ -224,8 +224,10 @@ export interface RangeSliderProps {
   max: number;
   step: number;
   value: number;
-  className: string;
+  className?: string;
   onChange: (value: number) => void;
+  onMouseUp?: () => void;
+  onTouchEnd?: () => void;
 }
 
 export interface FilterOptionsProps {
