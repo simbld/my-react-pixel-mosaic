@@ -469,14 +469,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                         setStipplingNumPoints(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          setIsLoading(true);
-                          setFilteredImageUrl(null);
-                          setTimeout(() => {
-                            applyFilter();
-                          }, 100);
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                     <RangeSlider
                       label="Point Radius"
@@ -489,14 +484,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                         setStipplingPointRadius(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          setIsLoading(true);
-                          setFilteredImageUrl(null);
-                          setTimeout(() => {
-                            applyFilter();
-                          }, 100);
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                     <RangeSlider
                       label="Brightness Threshold"
@@ -509,10 +499,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                         setStipplingBrightnessThreshold(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                   </>
                 )}
@@ -529,10 +518,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                         setStipplingGridSpacing(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                     <RangeSlider
                       label="Max Point Size"
@@ -545,10 +533,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                         setStipplingMaxPointSize(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                     <RangeSlider
                       label="Brightness Scaling"
@@ -561,10 +548,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                         setStipplingBrightnessScaling(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                     <RangeSlider
                       label="Point Density Scaling"
@@ -577,10 +563,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                         setStipplingPointDensityScaling(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                   </>
                 )}
@@ -588,19 +573,18 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   <>
                     <RangeSlider
                       label="Number of Points"
-                      min={100}
+                      min={500}
                       max={50000}
-                      step={100}
+                      step={500}
                       value={stipplingNumPoints}
                       className="range-slider"
                       onChange={(value) => {
                         setStipplingNumPoints(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                     <RangeSlider
                       label="Point Radius"
@@ -613,42 +597,39 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                         setStipplingPointRadius(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                     <RangeSlider
                       label="Brightness Threshold"
                       min={0}
                       max={1}
-                      step={0.05}
+                      step={0.1}
                       value={stipplingBrightnessThreshold}
                       className="range-slider"
                       onChange={(value) => {
                         setStipplingBrightnessThreshold(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                     <RangeSlider
                       label="Lerp Factor"
                       min={0}
                       max={1}
-                      step={0.05}
+                      step={0.1}
                       value={stipplingLerpFactor}
                       className="range-slider"
                       onChange={(value) => {
                         setStipplingLerpFactor(value);
                         setIsLoading(true);
                         setFilteredImageUrl(null);
-                        setTimeout(() => {
-                          applyFilter();
-                        }, 100);
                       }}
+                      onMouseUp={() => applyFilter()}
+                      onTouchEnd={() => applyFilter()}
                     />
                   </>
                 )}
