@@ -436,7 +436,6 @@
   .string-btn.active {
     background-color: #6c6c2f;
   }
-
   .range-slider-ctn {
     display: flex;
     flex-direction: column;
@@ -477,6 +476,7 @@
   }
 
   input[type="range"] {
+    /* General style (for the number) */
     -webkit-appearance: none;
     appearance: none;
     width: 22em;
@@ -489,6 +489,7 @@
   }
 
   input[type="range"]::-webkit-slider-thumb {
+    /* Chrome thumb style (for the number) */
     -webkit-appearance: none;
     width: 3em;
     height: 3em;
@@ -502,7 +503,16 @@
     cursor: pointer;
   }
 
+  input[type="range"]:active::-webkit-slider-thumb {
+    box-shadow:
+      0 0 15px 5px rgba(255, 0, 255, 0.5),
+      inset 0.8em 0.8em 5px -8px rgba(255, 255, 255, 0.4),
+      inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
+      0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.4);
+  }
+
   input[type="range"]::-moz-range-thumb {
+    /* Firefox thumb style (for the number) */
     width: 3em;
     height: 3em;
     margin: 0.5em 0;
@@ -516,7 +526,16 @@
     border: 0;
   }
 
+  input[type="range"]:active::-moz-range-thumb {
+    box-shadow:
+      0 0 15px 5px rgba(255, 0, 255, 0.5),
+      inset 0.8em 0.8em 5px -8px rgba(255, 255, 255, 0.4),
+      inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
+      0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.4);
+  }
+
   input[type="range"]::-webkit-slider-runnable-track {
+    /* Chrome track style (for the number) */
     background: transparent;
     width: 100%;
     height: 4em;
@@ -528,6 +547,7 @@
   }
 
   input[type="range"]::-moz-range-track {
+    /* Firefox track style (for the number) */
     background: transparent;
     width: 100%;
     height: 4em;
@@ -539,6 +559,7 @@
   }
 
   input[type="range"]::before {
+    /* Chrome thumb style before pseudo-element (for the number) */
     content: "0 1 2 3 4 5 6 7 8 9";
     position: absolute;
     text-align: center;
@@ -552,5 +573,21 @@
     padding-top: 0.9em;
     text-shadow: 0.5px 0.5px 0.9px rgba(0, 0, 0, 0.4);
     z-index: -1;
+  }
+
+  input[type="range"]:active::-webkit-slider-thumb {
+    box-shadow:
+      inset 0.8em 0.8em 5px -8px rgba(255, 255, 255, 0.4),
+      inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
+      0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.4),
+      0 0 10px 5px rgba(255, 0, 255, 0.5); /* Violet glow effect */
+  }
+
+  input[type="range"]:active::-moz-range-thumb {
+    box-shadow:
+      inset 0.8em 0.8em 5px -8px rgba(255, 255, 255, 0.4),
+      inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
+      0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.4),
+      0 0 10px 5px rgba(255, 0, 255, 0.5); /* Violet glow effect */
   }
 }
