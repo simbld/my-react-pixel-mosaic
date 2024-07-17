@@ -236,3 +236,14 @@ export interface FilterOptionsProps {
   density: string | null;
   handleDensityChange: (newDensity: string) => void;
 }
+
+export interface SliderFields {
+  stipplingNumPoints: number;
+  stipplingPointRadius: number;
+  stipplingBrightnessThreshold: number;
+  stipplingGridSpacing: number;
+  stipplingMaxPointSize: number;
+  stipplingBrightnessScaling: number;
+  stipplingPointDensityScaling: number;
+  stipplingLerpFactor: number;
+}
