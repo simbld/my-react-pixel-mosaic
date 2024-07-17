@@ -5,7 +5,7 @@ import type { StipplingArtFilterBlockProps } from "@interfaces/types";
 
 /**
  * Composant pour appliquer un filtre d'art stippling en blocs sur une image.
- * @param {StipplingArtProps} props - Les propriétés du composant.
+ * @param {StipplingFilterProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - L'URL de l'image à traiter.
  * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
@@ -14,14 +14,18 @@ import type { StipplingArtFilterBlockProps } from "@interfaces/types";
 const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  numPoints,
+  lerpFactor
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [isRendered, setIsRendered] = useState(false);
-
-  // Variables configurables
-  const numPoints = 1500; // Ajuster pour changer le nombre de points
-  const lerpFactor = 0.5; // Facteur de lissage pour ajuster les positions des points vers les centroids
+  const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(
+    numPoints || 1500
+  );
+  const [stipplingLerpFactor, setStipplingLerpFactor] = useState<number>(
+    lerpFactor || 0.5
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -68,7 +72,7 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      for (let i = 0; i < numPoints; i++) {
+      for (let i = 0; i < stipplingNumPoints; i++) {
         let x, y, brightness;
         do {
           x = Math.floor(Math.random() * drawWidth);
@@ -131,9 +135,11 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
       for (let i = 0; i < points.length; i++) {
         if (centroids[i]) {
           points[i][0] =
-            points[i][0] * (1 - lerpFactor) + centroids[i][0] * lerpFactor;
+            points[i][0] * (1 - stipplingLerpFactor) +
+            centroids[i][0] * stipplingLerpFactor;
           points[i][1] =
-            points[i][1] * (1 - lerpFactor) + centroids[i][1] * lerpFactor;
+            points[i][1] * (1 - stipplingLerpFactor) +
+            centroids[i][1] * stipplingLerpFactor;
         }
       }
 
@@ -164,15 +170,24 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
     };
 
     imageRef.current = image;
-  }, [imageSrc, canvasRef, onFilterComplete, isRendered]);
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    isRendered,
+    stipplingNumPoints,
+    stipplingLerpFactor
+  ]);
 
   return (
-    <img
-      ref={imageRef}
-      src={imageSrc}
-      style={{ display: "none" }}
-      alt="hidden"
-    />
+    <div>
+      <img
+        ref={imageRef}
+        src={imageSrc}
+        style={{ display: "none" }}
+        alt="hidden"
+      />
+    </div>
   );
 };
 
