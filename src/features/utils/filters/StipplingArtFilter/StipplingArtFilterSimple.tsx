@@ -21,13 +21,13 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(
-    numPoints || 5000 // Augmenter la valeur par défaut à 5000
+    numPoints || 50000
   );
   const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(
-    pointRadius || 3 // Augmenter la valeur par défaut à 3
+    pointRadius || 1
   );
   const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
-    useState<number>(brightnessThreshold || 0.8); // Augmenter la valeur par défaut à 0.8
+    useState<number>(brightnessThreshold || 0.4);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,7 +71,7 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      // Générer des points en évitant les zones lumineuses
+      // Generate points while avoiding bright areas
       for (let i = 0; i < stipplingNumPoints; i++) {
         let x, y, brightness;
         do {
