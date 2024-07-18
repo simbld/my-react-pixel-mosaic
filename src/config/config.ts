@@ -2,6 +2,7 @@
 // density = "Ñ@#W$9876543210?!abc;:+=-,._ ";
 // density = " _.,-=+:;cba!?0123456789$W#@Ñ";
 // density = "  .:-i|=+╦%O#@";
+// density = "@%O#╦*o+=|i-:.      ";
 // density = " .:░▒▓█";
 // density = " .:░▒▓█";
 // density = "█▓▒░:. ";
@@ -9,8 +10,8 @@
 
 export const defaultImage: string = "/src/assets/default.png";
 // ASCII
-export const asciiDensitySimple: string = "@%O#╦*o+=|i-:.      ";
-export const asciiDensityExtended: string = "@WÑ#$9876543210?/!*;:+=_-,.   ";
+export const asciiDensitySimple: string = " ._+-*";
+export const asciiDensityExtended: string = "WN$#96307?1/!*;:+=*;^'`-,_.     ";
 export const asciiDensityBlock: string = "█▓▒░:. ";
 
 // Filters no ASCII
