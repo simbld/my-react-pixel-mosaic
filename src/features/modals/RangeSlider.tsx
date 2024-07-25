@@ -24,6 +24,9 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         onMouseUp={onMouseUp}
         onTouchEnd={onTouchEnd}
       />
+      <span className="slider-value" style={{ color: "violet" }}>
+        {value}
+      </span>
     </div>
   );
 };

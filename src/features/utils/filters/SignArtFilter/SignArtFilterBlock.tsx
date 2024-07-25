@@ -1,12 +1,12 @@
+import type { ArtFilterProps } from "@interfaces/types";
 import { useEffect, useRef } from "react";
-import { RopeArtFilterProps } from "@interfaces/types";
 
 /**
- * RopeArtFilterSimple est un composant React qui applique un filtre Rope Art simple à une image.
- * @param {RopeArtFilterProps} props - Les propriétés du composant.
+ * SignArtFilterBlock est un composant React qui applique un filtre Rope Art simple à une image.
+ * @param {StringArtFilterProps} props - Les propriétés du composant.
  * @returns {JSX.Element} L'élément JSX du filtre Rope Art simple.
  */
-const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
+const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete
@@ -49,56 +49,33 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
         );
         const data = imageData.data;
 
-        // Paramètres configurables
-        const lineThickness = 1; // Épaisseur des lignes
-        const numLines = 500000; // Nombre de lignes
-        const minOpacity = 0.0; // Opacité minimale des lignes
-        const maxOpacity = 1.0; // Opacité maximale des lignes
-
         context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "white";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.strokeStyle = "black";
 
-        for (let i = 0; i < numLines; i++) {
-          // Générer des points de départ et d'arrivée aléatoires pour les lignes
-          const x1 = Math.random() * canvas.width;
-          const y1 = Math.random() * canvas.height;
-          const x2 = Math.random() * canvas.width;
-          const y2 = Math.random() * canvas.height;
+        const step = 10; // Distance entre les lignes
+        for (let y = 0; y < canvas.height; y += step) {
+          for (let x = 0; x < canvas.width; x += step) {
+            const pixelIndex = (x + y * canvas.width) * 4;
+            const r = data[pixelIndex];
+            const g = data[pixelIndex + 1];
+            const b = data[pixelIndex + 2];
+            const brightness = (r + g + b) / 3;
+            const lineDensity = map(brightness, 0, 255, 10, 2); // Plus c'est sombre, plus il y a de lignes
 
-          // Calculer la couleur moyenne de la ligne en fonction des pixels traversés
-          const numSamples = 10;
-          let avgR = 0,
-            avgG = 0,
-            avgB = 0;
-          for (let j = 0; j < numSamples; j++) {
-            const t = j / (numSamples - 1);
-            const x = Math.round(x1 + t * (x2 - x1));
-            const y = Math.round(y1 + t * (y2 - y1));
-            const pixelIndex = (y * canvas.width + x) * 4;
-            avgR += data[pixelIndex];
-            avgG += data[pixelIndex + 1];
-            avgB += data[pixelIndex + 2];
+            for (let i = 0; i < lineDensity; i++) {
+              const x1 = x + Math.random() * step;
+              const y1 = y + Math.random() * step;
+              const x2 = x + Math.random() * step;
+              const y2 = y + Math.random() * step;
+
+              context.beginPath();
+              context.moveTo(x1, y1);
+              context.lineTo(x2, y2);
+              context.stroke();
+            }
           }
-          avgR /= numSamples;
-          avgG /= numSamples;
-          avgB /= numSamples;
-
-          // Calculer la luminosité et ajuster l'opacité en fonction
-          const brightness = (avgR + avgG + avgB) / 3;
-          const opacity = map(brightness, 0, 255, maxOpacity, minOpacity);
-
-          // Appliquer un facteur de boost aux couleurs sombres
-          const boostFactor = 1.5;
-          avgR = Math.min(avgR * boostFactor, 255);
-          avgG = Math.min(avgG * boostFactor, 255);
-          avgB = Math.min(avgB * boostFactor, 255);
-
-          // Dessiner la ligne avec la couleur moyenne et l'opacité ajustée
-          context.strokeStyle = `rgba(${avgR},${avgG},${avgB},${opacity})`;
-          context.lineWidth = lineThickness;
-          context.beginPath();
-          context.moveTo(x1, y1);
-          context.lineTo(x2, y2);
-          context.stroke();
         }
 
         if (onFilterComplete) {
@@ -140,4 +117,4 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
   );
 };
 
-export default RopeArtFilterSimple;
+export default SignArtFilterBlock;
