@@ -21,7 +21,7 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [isRendered, setIsRendered] = useState(false);
   const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(
-    numPoints || 1500
+    numPoints || 50
   );
   const [stipplingLerpFactor, setStipplingLerpFactor] = useState<number>(
     lerpFactor || 0.5
