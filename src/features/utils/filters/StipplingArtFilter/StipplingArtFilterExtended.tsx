@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 
@@ -7,32 +7,25 @@ import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
  * @param {StipplingArtFilterExtendedProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - L'URL de l'image à traiter.
  * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
+ * @param {number} props.stipplingGridSpacing - Espacement de la grille.
+ * @param {number} props.stipplingMaxPointSize - Taille maximale des points.
+ * @param {number} props.stipplingBrightnessScaling - Échelle de la luminosité.
+ * @param {number} props.stipplingPointDensityScaling - Échelle de la densité des points.
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
 const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete,
-  density
+  stipplingGridSpacing,
+  stipplingMaxPointSize,
+  stipplingBrightnessScaling,
+  stipplingPointDensityScaling,
+  onFilterComplete
 }) => {
-  const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(10);
-  const [stipplingMaxPointSize, setStipplingMaxPointSize] = useState<number>(5);
-  const [stipplingBrightnessScaling, setStipplingBrightnessScaling] =
-    useState<number>(25);
-  const [stipplingPointDensityScaling, setStipplingPointDensityScaling] =
-    useState<number>(50);
-
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   const applyFilter = () => {
-    console.log("Applying filter with values: ", {
-      stipplingGridSpacing,
-      stipplingMaxPointSize,
-      stipplingBrightnessScaling,
-      stipplingPointDensityScaling
-    });
-
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
     if (!canvas || !context) return;
@@ -122,10 +115,10 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   };
 
   useEffect(() => {
-    applyFilter();
-  }, [imageSrc, canvasRef]);
-
-  useEffect(() => {
+    console.log("Updated Grid Spacing:", stipplingGridSpacing);
+    console.log("Updated Max Point Size:", stipplingMaxPointSize);
+    console.log("Updated Brightness Scaling:", stipplingBrightnessScaling);
+    console.log("Updated Point Density Scaling:", stipplingPointDensityScaling);
     applyFilter();
   }, [
     stipplingGridSpacing,
@@ -134,86 +127,13 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
     stipplingPointDensityScaling
   ]);
 
-  const handleGridSpacingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    console.log("Grid Spacing:", value);
-    setStipplingGridSpacing(value);
-  };
-
-  const handleMaxPointSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    console.log("Max Point Size:", value);
-    setStipplingMaxPointSize(value);
-  };
-
-  const handleBrightnessScalingChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = Number(e.target.value);
-    console.log("Brightness Scaling:", value);
-    setStipplingBrightnessScaling(value);
-  };
-
-  const handlePointDensityScalingChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = Number(e.target.value);
-    console.log("Point Density Scaling:", value);
-    setStipplingPointDensityScaling(value);
-  };
-
   return (
-    <div>
-      <img
-        ref={imageRef}
-        src={imageSrc}
-        style={{ display: "none" }}
-        alt="hidden"
-      />
-      <div className="slider-container">
-        <label>
-          Grid Spacing:
-          <input
-            type="range"
-            min="1"
-            max="50"
-            value={stipplingGridSpacing}
-            onChange={handleGridSpacingChange}
-          />
-        </label>
-        <label>
-          Max Point Size:
-          <input
-            type="range"
-            min="1"
-            max="10"
-            value={stipplingMaxPointSize}
-            onChange={handleMaxPointSizeChange}
-          />
-        </label>
-        <label>
-          Brightness Scaling:
-          <input
-            type="range"
-            min="1"
-            max="100"
-            value={stipplingBrightnessScaling}
-            onChange={handleBrightnessScalingChange}
-          />
-        </label>
-        <label>
-          Point Density Scaling:
-          <input
-            type="range"
-            min="1"
-            max="100"
-            value={stipplingPointDensityScaling}
-            onChange={handlePointDensityScalingChange}
-          />
-        </label>
-        <button onClick={applyFilter}>Apply Filter</button>
-      </div>
-    </div>
+    <img
+      ref={imageRef}
+      src={imageSrc}
+      style={{ display: "none" }}
+      alt="hidden"
+    />
   );
 };
 
