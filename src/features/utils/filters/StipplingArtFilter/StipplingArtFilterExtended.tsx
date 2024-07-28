@@ -1,31 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 
 /**
- * Composant pour appliquer un filtre d'art stippling en blocs sur une image.
- * @param {StipplingArtProps} props - Les propriétés du composant.
+ * Composant pour appliquer un filtre d'art stippling étendu sur une image.
+ * @param {StipplingArtFilterExtendedProps} props - Les propriétés du composant.
  * @param {string} props.imageSrc - L'URL de l'image à traiter.
  * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
+ * @param {number} props.stipplingGridSpacing - Espacement de la grille.
+ * @param {number} props.stipplingMaxPointSize - Taille maximale des points.
+ * @param {number} props.stipplingBrightnessScaling - Échelle de la luminosité.
+ * @param {number} props.stipplingPointDensityScaling - Échelle de la densité des points.
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
 const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete,
-  density
+  stipplingGridSpacing,
+  stipplingMaxPointSize,
+  stipplingBrightnessScaling,
+  stipplingPointDensityScaling,
+  onFilterComplete
 }) => {
-  const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(0);
-  const [stipplingMaxPointSize, setStipplingMaxPointSize] = useState<number>(1);
-  const [stipplingBrightnessScaling, setStipplingBrightnessScaling] =
-    useState<number>(25);
-  const [stipplingPointDensityScaling, setStipplingPointDensityScaling] =
-    useState<number>(50);
-
   const imageRef = useRef<HTMLImageElement | null>(null);
 
-  useEffect(() => {
+  const applyFilter = () => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
     if (!canvas || !context) return;
@@ -68,6 +68,7 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number, number, string][] = [];
 
+      // Itérer sur chaque pixel de l'image en fonction du pas de la grille
       for (let y = 0; y < drawHeight; y += stipplingGridSpacing) {
         for (let x = 0; x < drawWidth; x += stipplingGridSpacing) {
           const pixelIndex = (y * drawWidth + x) * 4;
@@ -80,23 +81,26 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
             (255 - brightness) / stipplingPointDensityScaling
           );
 
+          // Ajouter des points aléatoires dans la cellule de la grille
           for (let i = 0; i < numPoints; i++) {
             const offsetXPoint = x + Math.random() * stipplingGridSpacing;
             const offsetYPoint = y + Math.random() * stipplingGridSpacing;
             points.push([
               offsetXPoint + offsetX,
               offsetYPoint + offsetY,
-              pointSize,
+              Math.min(pointSize, stipplingMaxPointSize),
               `rgb(${r},${g},${b})`
             ]);
           }
         }
       }
 
+      // Effacer le canvas et le remplir de noir
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillStyle = "black";
       context.fillRect(0, 0, canvas.width, canvas.height);
 
+      // Dessiner les points générés sur le canvas
       for (const point of points) {
         context.fillStyle = point[3];
         context.beginPath();
@@ -108,10 +112,15 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
     };
 
     imageRef.current = image;
+  };
+
+  useEffect(() => {
+    console.log("Updated Grid Spacing:", stipplingGridSpacing);
+    console.log("Updated Max Point Size:", stipplingMaxPointSize);
+    console.log("Updated Brightness Scaling:", stipplingBrightnessScaling);
+    console.log("Updated Point Density Scaling:", stipplingPointDensityScaling);
+    applyFilter();
   }, [
-    imageSrc,
-    canvasRef,
-    onFilterComplete,
     stipplingGridSpacing,
     stipplingMaxPointSize,
     stipplingBrightnessScaling,
@@ -119,14 +128,12 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   ]);
 
   return (
-    <div>
-      <img
-        ref={imageRef}
-        src={imageSrc}
-        style={{ display: "none" }}
-        alt="hidden"
-      />
-    </div>
+    <img
+      ref={imageRef}
+      src={imageSrc}
+      style={{ display: "none" }}
+      alt="hidden"
+    />
   );
 };
 

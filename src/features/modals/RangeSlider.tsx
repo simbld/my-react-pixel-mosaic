@@ -10,22 +10,21 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   onChange,
   onMouseUp,
   onTouchEnd
-}) => {
-  return (
-    <div className={className}>
-      <label>{label}</label>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        onMouseUp={onMouseUp}
-        onTouchEnd={onTouchEnd}
-      />
-    </div>
-  );
-};
+}) => (
+  <div className={className}>
+    <label>{label}</label>
+    <input
+      type="range"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      onChange={(e) => onChange(Number(e.target.value))}
+      onMouseUp={onMouseUp}
+      onTouchEnd={onTouchEnd}
+    />
+    <span>{value}</span>
+  </div>
+);
 
 export default RangeSlider;

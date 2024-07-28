@@ -21,13 +21,13 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(
-    numPoints || 50000
+    numPoints || 50
   );
   const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(
-    pointRadius || 1
+    pointRadius || 0.1
   );
   const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
-    useState<number>(brightnessThreshold || 0.4);
+    useState<number>(brightnessThreshold || 0.2);
 
   useEffect(() => {
     const canvas = canvasRef.current;
