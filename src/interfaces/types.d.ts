@@ -177,11 +177,10 @@ export interface StipplingArtFilterProps extends ArtFilterProps {
 }
 
 export interface StipplingArtFilterExtendedProps extends ArtFilterProps {
-  density: string;
-  gridSpacing: number;
-  maxPointSize: number;
-  brightnessScaling: number;
-  pointDensityScaling: number;
+  stipplingGridSpacing: number;
+  stipplingMaxPointSize: number;
+  stipplingBrightnessScaling: number;
+  stipplingPointDensityScaling: number;
 }
 
 export interface StipplingArtFilterBlockProps extends ArtFilterProps {
