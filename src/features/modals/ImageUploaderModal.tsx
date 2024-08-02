@@ -538,8 +538,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                     <RangeSlider
                       label="Number of Points"
                       min={10}
-                      max={10000}
-                      step={10}
+                      max={2000}
+                      step={1}
                       value={stipplingNumPoints}
                       className="range-slider"
                       onChange={(value) =>
@@ -552,7 +552,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       label="Point Radius"
                       min={1}
                       max={10}
-                      step={0.05}
+                      step={0.01}
                       value={stipplingPointRadius}
                       className="range-slider"
                       onChange={(value) =>
