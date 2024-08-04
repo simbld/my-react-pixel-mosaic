@@ -592,11 +592,11 @@
 
   span {
     display: block;
-    font-size: 1px;
+    font-size: 14px; /* Taille de la police ajustée pour la lisibilité */
     font-family: "Early", sans-serif;
-    width: 100%;
-    height: 30px;
-    margin-top: 10px;
+    width: 100%; /* Largeur à 100% pour occuper tout l'espace disponible */
+    height: 30px; /* Hauteur de 30px */
+    margin-top: 10px; /* Espacement supérieur */
     background: linear-gradient(
       #009890 0%,
       #006f6f 30%,
@@ -604,17 +604,25 @@
       #009398 100%
     );
     background-repeat: no-repeat;
-    color: rgb(0, 0, 0);
+    color: @w;
     position: relative;
     overflow: hidden;
     box-shadow:
       0 0 10px 2px rgba(0, 0, 0, 0.2),
       0 0 1px 2px black,
       inset 0 2px 2px -2px white,
-      inset 0 0 2px 15px @glass,
+      inset 0 0 2px 15px rgba(0, 0, 0, 0.5),
       inset 0 0 2px 22px black;
     border-radius: 5px;
+    text-align: center; /* Alignement du texte au centre */
+    line-height: 30px; /* Alignement vertical du texte */
     z-index: 1000;
+  }
+
+  span .value {
+    position: relative;
+    z-index: 2; /* S'assurer que les chiffres sont au-dessus */
+    background: none; /* Pas de fond */
   }
 
   /* Effet de lumière scintillante */
@@ -628,6 +636,7 @@
     background-image: radial-gradient(#7efff4, #18ffec 40%, transparent 70%);
     opacity: 0.3;
     animation: flicker 1.5s infinite;
+    z-index: 1;
   }
 
   @keyframes flicker {
@@ -656,5 +665,6 @@
     );
     background-size: 10px 10px;
     opacity: 0.5;
+    z-index: 0;
   }
 }
