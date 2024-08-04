@@ -23,7 +23,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
       onMouseUp={onMouseUp}
       onTouchEnd={onTouchEnd}
     />
-    <span>{value}</span>
+    <span className="value">{value}</span>
   </div>
 );
 
