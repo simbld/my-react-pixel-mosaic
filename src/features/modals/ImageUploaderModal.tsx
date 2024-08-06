@@ -53,16 +53,17 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     "simple" | "extended" | "block"
   >("simple");
   const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(2000);
-  const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(2);
+  const [stipplingPointRadius, setStipplingPointRadius] =
+    useState<number>(7.35);
   const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
-    useState<number>(0.6);
+    useState<number>(0.5);
   const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(10);
   const [stipplingMaxPointSize, setStipplingMaxPointSize] = useState<number>(1);
   const [stipplingBrightnessScaling, setStipplingBrightnessScaling] =
     useState<number>(25);
   const [stipplingPointDensityScaling, setStipplingPointDensityScaling] =
     useState<number>(50);
-  const [stipplingLerpFactor, setStipplingLerpFactor] = useState<number>(0.5);
+  const [stipplingLerpFactor, setStipplingLerpFactor] = useState<number>(1);
 
   const [ropeType, setRopeType] = useState<"simple" | "extended" | "block">(
     "simple"
