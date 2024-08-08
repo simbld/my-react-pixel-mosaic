@@ -16,16 +16,11 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
   canvasRef,
   onFilterComplete,
   numPoints,
+  pointRadius,
+  brightnessThreshold,
   lerpFactor
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const [isRendered, setIsRendered] = useState(false);
-  const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(
-    numPoints || 50
-  );
-  const [stipplingLerpFactor, setStipplingLerpFactor] = useState<number>(
-    lerpFactor || 0.5
-  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -37,8 +32,6 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
     image.src = imageSrc;
 
     image.onload = () => {
-      setIsRendered(true);
-
       const imgWidth = image.width;
       const imgHeight = image.height;
       const aspectRatio = imgWidth / imgHeight;
@@ -72,7 +65,8 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number][] = [];
 
-      for (let i = 0; i < stipplingNumPoints; i++) {
+      // Ajuster la probabilité pour augmenter la sensibilité des changements
+      for (let i = 0; i < numPoints; i++) {
         let x, y, brightness;
         do {
           x = Math.floor(Math.random() * drawWidth);
@@ -82,7 +76,7 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
           brightness = (r + g + b) / 3;
-        } while (Math.random() > 1 - brightness / 255);
+        } while (Math.random() > 1 - (brightness / 255) * brightnessThreshold);
         points.push([x + offsetX, y + offsetY]);
       }
 
@@ -118,15 +112,11 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
         }
       }
 
-      let maxWeight = 0;
       for (let i = 0; i < centroids.length; i++) {
         if (weights[i] > 0) {
           centroids[i][0] /= weights[i];
           centroids[i][1] /= weights[i];
           avgWeights[i] = weights[i] / (counts[i] || 1);
-          if (avgWeights[i] > maxWeight) {
-            maxWeight = avgWeights[i];
-          }
         } else {
           centroids[i] = points[i];
         }
@@ -135,11 +125,9 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
       for (let i = 0; i < points.length; i++) {
         if (centroids[i]) {
           points[i][0] =
-            points[i][0] * (1 - stipplingLerpFactor) +
-            centroids[i][0] * stipplingLerpFactor;
+            points[i][0] * (1 - lerpFactor) + centroids[i][0] * lerpFactor;
           points[i][1] =
-            points[i][1] * (1 - stipplingLerpFactor) +
-            centroids[i][1] * stipplingLerpFactor;
+            points[i][1] * (1 - lerpFactor) + centroids[i][1] * lerpFactor;
         }
       }
 
@@ -174,9 +162,10 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
     imageSrc,
     canvasRef,
     onFilterComplete,
-    isRendered,
-    stipplingNumPoints,
-    stipplingLerpFactor
+    numPoints,
+    pointRadius,
+    brightnessThreshold,
+    lerpFactor
   ]);
 
   return (
