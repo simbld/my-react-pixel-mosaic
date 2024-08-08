@@ -52,9 +52,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   const [stipplingType, setStipplingType] = useState<
     "simple" | "extended" | "block"
   >("simple");
-  const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(2000);
-  const [stipplingPointRadius, setStipplingPointRadius] =
-    useState<number>(7.35);
+  const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(30000);
+  const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(1);
   const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
     useState<number>(0.5);
   const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(10);
@@ -433,7 +432,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                     <RangeSlider
                       label="Number of Points"
                       min={10}
-                      max={50000}
+                      max={30000}
                       step={10}
                       value={stipplingNumPoints}
                       className="range-slider"
@@ -460,7 +459,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       label="Brightness Threshold"
                       min={0}
                       max={1}
-                      step={0.01}
+                      step={0.1}
                       value={stipplingBrightnessThreshold}
                       className="range-slider"
                       onChange={(value) =>
@@ -553,7 +552,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       label="Point Radius"
                       min={1}
                       max={10}
-                      step={0.01}
+                      step={0.1}
                       value={stipplingPointRadius}
                       className="range-slider"
                       onChange={(value) =>
@@ -566,7 +565,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       label="Brightness Threshold"
                       min={0}
                       max={1}
-                      step={0.01}
+                      step={0.1}
                       value={stipplingBrightnessThreshold}
                       className="range-slider"
                       onChange={(value) =>
