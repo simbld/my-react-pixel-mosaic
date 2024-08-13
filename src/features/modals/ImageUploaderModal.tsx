@@ -785,7 +785,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             </>
           )}
           <button onClick={handleModalClose} className="close-btn">
-            CLOSE
+            Home
           </button>
         </div>
       </div>
