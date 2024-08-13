@@ -432,7 +432,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                     <RangeSlider
                       label="Number of Points"
                       min={10}
-                      max={30000}
+                      max={500000}
                       step={10}
                       value={stipplingNumPoints}
                       className="range-slider"
@@ -444,7 +444,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                     />
                     <RangeSlider
                       label="Point Radius"
-                      min={0}
+                      min={0.1}
                       max={10}
                       step={0.1}
                       value={stipplingPointRadius}
@@ -457,7 +457,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                     />
                     <RangeSlider
                       label="Brightness Threshold"
-                      min={0}
+                      min={0.1}
                       max={1}
                       step={0.1}
                       value={stipplingBrightnessThreshold}
@@ -491,7 +491,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                     <RangeSlider
                       label="Max Point Size"
                       min={1}
-                      max={10}
+                      max={100}
                       step={1}
                       value={stipplingMaxPointSize}
                       className="range-slider"
@@ -538,8 +538,8 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                     <RangeSlider
                       label="Number of Points"
                       min={10}
-                      max={2000}
-                      step={1}
+                      max={500}
+                      step={10}
                       value={stipplingNumPoints}
                       className="range-slider"
                       onChange={(value) =>
@@ -565,7 +565,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                       label="Brightness Threshold"
                       min={0}
                       max={1}
-                      step={0.1}
+                      step={0.01}
                       value={stipplingBrightnessThreshold}
                       className="range-slider"
                       onChange={(value) =>
