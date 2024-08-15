@@ -177,6 +177,16 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     onClose();
   };
 
+  const handleModalDownload = () => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      const link = document.createElement("a");
+      link.download = "filtered-image.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  };
+
   const handleSliderChange = (
     value: number,
     setValue: React.Dispatch<React.SetStateAction<number>>
@@ -255,7 +265,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
         </div>
         <div className="glass-screen-matrix-modal">
           <div className="title-modal">{fileName || "Aucune image"}</div>
-          <button className="upload-btn inline">IN LINE</button>
+          <button className="upload-btn inline">Open</button>
           <input
             type="file"
             id="file"
@@ -265,7 +275,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             ref={fileInputRef}
           />
           <label className="upload-btn local" htmlFor="file" ref={labelRef}>
-            LOCAL
+            new
           </label>
           <div className="whiteboard-container">
             <canvas
@@ -786,6 +796,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           )}
           <button onClick={handleModalClose} className="close-btn">
             Home
+          </button>
+          <button onClick={handleModalDownload} className="download-btn">
+            Download
           </button>
         </div>
       </div>
