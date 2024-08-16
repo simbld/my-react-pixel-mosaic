@@ -10,6 +10,7 @@
   background-color: @gameboyColor;
   background-repeat: repeat;
   z-index: 101;
+  cursor: url("src/assets/brush.png"), auto;
 
   &::before {
     content: "";
@@ -29,11 +30,11 @@
   position: absolute;
   width: 20%;
   height: 7%;
-  top: 2%;
-  left: 2%;
+  top: 4%;
+  left: 4%;
   transform: translateX(0%);
   z-index: 101;
-  cursor: pointer;
+  cursor: url("src/assets/brush.png"), auto;
   border: @screenOnOutline 3px solid;
   background-color: @but;
   color: @gL;
@@ -57,6 +58,43 @@
 }
 
 .close-btn:active {
+  transform: translate(10px, 10px);
+  box-shadow: none;
+}
+
+.download-btn {
+  .flex-center();
+  position: absolute;
+  width: 20%;
+  height: 7%;
+  top: 4%;
+  right: 4%;
+  transform: translateX(0%);
+  z-index: 101;
+  cursor: url("src/assets/brush.png"), auto;
+  border: @screenOnOutline 3px solid;
+  background-color: @but;
+  color: @gL;
+  font-size: 30px;
+  font-family: "Early", sans-serif;
+  text-shadow: 2px 2px 2px @b;
+  will-change: transform, box-shadow;
+  transition: opacity 1s ease;
+  opacity: 0.8;
+}
+
+.download-btn:hover {
+  background-color: @but;
+  color: @screenOnDark;
+  box-shadow: 10px 10px 0px @screenOnOutline;
+  text-shadow: 2px 2px 2px @b;
+  transition:
+    box-shadow 0.1s,
+    transform 0.1s ease;
+  opacity: 1;
+}
+
+.download-btn:active {
   transform: translate(10px, 10px);
   box-shadow: none;
 }
@@ -193,12 +231,12 @@
 
   .upload-btn {
     .flex-center();
+    flex-direction: row;
     position: absolute;
     width: 20%;
     height: 5%;
-    right: 2%;
     z-index: 101;
-    cursor: pointer;
+    cursor: url("src/assets/brush.png"), auto;
     border: @screenOnOutline 3px solid;
     background-color: @but;
     color: @gL;
@@ -234,10 +272,12 @@
 
   .local {
     top: 2%;
+    left: 50%;
   }
 
   .inline {
     top: 8%;
+    left: 50%;
   }
 
   img {
@@ -257,7 +297,7 @@
     height: 6%;
     bottom: 3%;
     right: 3%;
-    cursor: pointer;
+    cursor: url("src/assets/brush.png"), auto;
     border: @screenOnOutline 3px solid;
     background-color: @but;
     color: @gL;
@@ -316,7 +356,7 @@
     will-change: transform, box-shadow, background-color, scale, color;
     transition: opacity 1s ease;
     opacity: 0.8;
-    cursor: pointer;
+    cursor: url("src/assets/palette.png"), auto;
     transition:
       background-color 0.3s,
       transform 0.3s;
@@ -352,7 +392,9 @@
 
   .density-btn.active,
   .filter-option.active {
-    background-color: @vl;
+    background-color: @g;
+    color: @w;
+    opacity: 1;
   }
 
   .filter-selection-btn {
@@ -381,7 +423,9 @@
     text-shadow: 2px 2px 2px @b;
     transition: opacity 1s ease;
     opacity: 0.8;
-    cursor: pointer;
+    cursor:
+      url("src/assets/filter-pointer.png") 20 20,
+      auto;
     width: 14rem;
     height: 3.5rem;
   }
@@ -482,11 +526,6 @@
   }
 
   .range-slider:hover {
-    position: relative;
-    margin: 20px;
-    margin-bottom: 30px;
-    padding: 5px;
-    border-radius: 50px;
     box-shadow:
       inset 0 0 10px @b,
       inset 0 0 20px rgba(51, 51, 51, 1),
@@ -494,27 +533,33 @@
       0 0 1px 5px @sliderCtn,
       0 0 20px 1px @g,
       0px 0px 70px -10px @glow;
-    opacity: 1;
     transform: scaleX(1.02) scaleY(1.02);
-    z-index: 10;
   }
 
   .range-slider:active {
-    position: relative;
-    margin: 20px;
-    margin-bottom: 30px;
-    padding: 5px;
-    border-radius: 50px;
     box-shadow:
       inset 0 0 10px @b,
       inset 0 0 20px rgba(51, 51, 51, 1),
       inset 5px 5px 30px 30px @g,
       0 0 1px 5px @sliderCtn,
       0 0 20px 1px @g,
-      0px 0px 50px 20px @glow;
-    opacity: 1;
+      inset 0px 0px 3px 3px @glow;
     transform: scaleX(1.02) scaleY(1.02);
-    z-index: 10;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      box-shadow:
+        inset 0 0 1px @b,
+        inset 0 0 2px rgba(51, 51, 51, 1),
+        inset 0 0 10px 10px @glow;
+      border-radius: 50px;
+      z-index: -1;
+    }
   }
 
   .range-slider label {
@@ -525,9 +570,10 @@
     color: @bl;
     transform: scaleX(1.7) scaleY(4) translate(0%, 24%);
     opacity: 0.4;
-    text-shadow: 2px 1px 0.9px rgb(0, 0, 0);
+    text-shadow: 2px 1px 0.9px @glow;
     text-align: center;
     z-index: -1;
+    cursor: url("src/assets/brush.png"), auto;
   }
 
   input[type="range"] {
@@ -539,6 +585,7 @@
     position: relative;
     z-index: 1;
     margin-top: 7%;
+    cursor: url("src/assets/brush.png"), auto;
   }
 
   // curseur
@@ -555,22 +602,23 @@
       inset 0.8em 0.8em 5px -8px rgba(255, 255, 255, 0.4),
       inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
       0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.4);
-    cursor: pointer;
+    cursor: url("src/assets/brush.png"), auto;
     z-index: 5;
   }
 
   input[type="range"]::-moz-range-thumb {
     position: relative;
+    appearance: none;
     margin-top: -17px;
     width: 1em;
-    height: 4.5em;
+    height: 3em;
     background: @b;
     border-radius: 20px;
     box-shadow:
       inset 0.8em 0.8em 5px -8px rgba(255, 255, 255, 0.4),
       inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
       0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.4);
-    cursor: pointer;
+    cursor: url("src/assets/brush.png"), auto;
     z-index: 5;
     border: 0;
   }
@@ -590,23 +638,24 @@
       inset 1em 1em 5px -8px rgba(255, 255, 255, 0.4),
       inset -1em -1em 10px -3px rgba(0, 0, 0, 0.2),
       1em 0.5em 7px -0.5em @glow;
-    cursor: pointer;
+    cursor: url("src/assets/brush.png"), auto;
     z-index: 5;
   }
 
   input[type="range"]:hover::-moz-range-thumb {
     position: relative;
+    appearance: none;
     margin-top: -17px;
     width: 1.1em;
-    height: 4.5em;
+    height: 3em;
     background: @b;
     border-radius: 20px;
     border: 0.5px solid @glow;
     box-shadow:
-      inset 0.8em 0.8em 5px -8px rgba(255, 255, 255, 0.4),
-      inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
-      0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.4);
-    cursor: pointer;
+      inset 1em 1em 5px -8px rgba(255, 255, 255, 0.4),
+      inset -1em -1em 10px -3px rgba(0, 0, 0, 0.2),
+      1em 0.5em 7px -0.5em @glow;
+    cursor: url("src/assets/brush.png"), auto;
     z-index: 5;
     border: 0;
   }
@@ -627,39 +676,44 @@
       inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
       0 0 20px 1px @g,
       0px 0px 5px 5px @glow;
-    cursor: pointer;
+    cursor: url("src/assets/brush.png"), auto;
     z-index: 5;
   }
 
   input[type="range"]:active::-moz-range-thumb {
     position: relative;
+    appearance: none;
     margin-top: -17px;
     width: 1.1em;
-    height: 4.5em;
+    height: 3em;
     background: @b;
     border-radius: 20px;
     border: 0.5px solid @glow;
     box-shadow:
       inset 0.8em 0.8em 5px -8px rgba(255, 255, 255, 0.4),
       inset -0.4em -0.4em 10px -3px rgba(0, 0, 0, 0.2),
-      0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.4);
-    cursor: pointer;
+      0 0 20px 1px @g,
+      0px 0px 5px 5px @glow;
+    cursor: url("src/assets/brush.png"), auto;
     z-index: 5;
     border: 0;
   }
 
   input[type="range"]::before {
     content: "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15";
+    .flex-center();
     position: absolute;
     width: 100%;
+    height: 300%;
     text-align: center;
     color: @w;
     font-size: 12px;
     font-family: "Early", sans-serif;
-    top: 10%;
+    top: -24%;
     transform: scaleX(1.55) scaleY(1.3) translate(0%, -25%);
     z-index: -1;
-    opacity: 0.9;
+    opacity: 0.2;
+    cursor: url("src/assets/brush.png"), auto;
   }
 
   span {
@@ -685,6 +739,7 @@
     text-align: center;
     line-height: 30px;
     z-index: 11;
+    cursor: url("src/assets/brush.png"), auto;
   }
 
   span .value {
