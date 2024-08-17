@@ -4,7 +4,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2000;
+  z-index: 9999;
 }
 
 .loader-bar {
@@ -13,7 +13,7 @@
   height: 10px;
   margin: 2.5px 1px;
   border-radius: 4px;
-  animation: scale-up4 1s linear infinite;
+  animation: scale-up-loader 1s linear infinite;
 }
 
 .loader-bar:nth-child(2) {
@@ -72,13 +72,13 @@
   animation-delay: 0.4s;
 }
 
-@keyframes scale-up4 {
+@keyframes scale-up-loader {
   20% {
-    background: linear-gradient(to top, #b8a3af87, #5353542e, #b8a3af87);
-    transform: scaleY(2);
+    background: linear-gradient(to top, @gf, @b, @pf, @b, @gf);
+    transform: scaleY(1.5);
   }
 
   40% {
-    transform: scaleY(2);
+    transform: scaleY(1.5);
   }
 }
