@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RopeArtFilterProps } from "@interfaces/types";
 
 /**
@@ -12,6 +12,12 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+
+  // États pour les paramètres configurables
+  const [step, setStep] = useState<number>(10); // Distance entre les lignes
+  const [angleSteps, setAngleSteps] = useState<number>(12); // Nombre de directions des lignes
+  const [minLineDensity, setMinLineDensity] = useState<number>(5); // Densité minimale des lignes
+  const [maxLineDensity, setMaxLineDensity] = useState<number>(15); // Densité maximale des lignes
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -53,8 +59,6 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
         context.fillStyle = "white";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
-        const step = 10; // Distance entre les lignes
-        const angleSteps = 12; // Nombre de directions des lignes (12 pour 30 degrés entre chaque ligne)
         for (let y = 0; y < canvas.height; y += step) {
           for (let x = 0; x < canvas.width; x += step) {
             const pixelIndex = (x + y * canvas.width) * 4;
@@ -62,7 +66,13 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
             const brightness = (r + g + b) / 3;
-            const lineDensity = map(brightness, 0, 255, 5, 15); // Plus c'est sombre, plus il y a de lignes
+            const lineDensity = map(
+              brightness,
+              0,
+              255,
+              minLineDensity,
+              maxLineDensity
+            );
 
             for (let angleIndex = 0; angleIndex < angleSteps; angleIndex++) {
               const angle = (Math.PI * 2 * angleIndex) / angleSteps;
@@ -93,7 +103,15 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    step,
+    angleSteps,
+    minLineDensity,
+    maxLineDensity
+  ]);
 
   /**
    * Mappe une valeur d'un intervalle à un autre.
