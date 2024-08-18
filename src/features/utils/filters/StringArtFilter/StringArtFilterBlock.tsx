@@ -1,17 +1,22 @@
 import type { ArtFilterProps } from "@interfaces/types";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
- * StringArtFilterBlock est un composant React qui applique un filtre de String Art à une image.
+ * SignArtFilterBlock est un composant React qui applique un filtre Sign Art en mode bloc à une image.
  * @param {ArtFilterProps} props - Les propriétés du composant.
- * @returns {JSX.Element} L'élément JSX du filtre String Art.
+ * @returns {JSX.Element} L'élément JSX du filtre Sign Art en blocs.
  */
-const StringArtFilterBlock: React.FC<ArtFilterProps> = ({
+const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+
+  // États pour les paramètres configurables
+  const [step, setStep] = useState<number>(10); // Distance entre les lignes
+  const [minLineDensity, setMinLineDensity] = useState<number>(2); // Densité minimale de lignes
+  const [maxLineDensity, setMaxLineDensity] = useState<number>(10); // Densité maximale de lignes
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -40,7 +45,7 @@ const StringArtFilterBlock: React.FC<ArtFilterProps> = ({
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Récupérer les données de l'image et appliquer le filtre String Art
+        // Récupérer les données de l'image et appliquer le filtre Sign Art
         const imageData = context.getImageData(
           0,
           0,
@@ -49,37 +54,37 @@ const StringArtFilterBlock: React.FC<ArtFilterProps> = ({
         );
         const data = imageData.data;
 
-        const numPoints = 200; // Nombre de points autour du cercle
-        const points = generateCirclePoints(
-          numPoints,
-          canvas.width,
-          canvas.height
-        );
-        const numLines = 2000; // Nombre de lignes à tracer
-
         context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "white";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.strokeStyle = "black";
 
-        let lastPoint = points[0];
-        for (let i = 0; i < numLines; i++) {
-          let bestPoint = null;
-          let bestScore = -Infinity;
+        for (let y = 0; y < canvas.height; y += step) {
+          for (let x = 0; x < canvas.width; x += step) {
+            const pixelIndex = (x + y * canvas.width) * 4;
+            const r = data[pixelIndex];
+            const g = data[pixelIndex + 1];
+            const b = data[pixelIndex + 2];
+            const brightness = (r + g + b) / 3;
+            const lineDensity = map(
+              brightness,
+              0,
+              255,
+              maxLineDensity,
+              minLineDensity
+            ); // Plus c'est sombre, plus il y a de lignes
 
-          for (const point of points) {
-            const score = evaluateLine(data, canvas.width, lastPoint, point);
-            if (score > bestScore) {
-              bestScore = score;
-              bestPoint = point;
+            for (let i = 0; i < lineDensity; i++) {
+              const x1 = x + Math.random() * step;
+              const y1 = y + Math.random() * step;
+              const x2 = x + Math.random() * step;
+              const y2 = y + Math.random() * step;
+
+              context.beginPath();
+              context.moveTo(x1, y1);
+              context.lineTo(x2, y2);
+              context.stroke();
             }
-          }
-
-          if (bestPoint) {
-            context.strokeStyle = "black";
-            context.lineWidth = 0.5;
-            context.beginPath();
-            context.moveTo(lastPoint.x, lastPoint.y);
-            context.lineTo(bestPoint.x, bestPoint.y);
-            context.stroke();
-            lastPoint = bestPoint;
           }
         }
 
@@ -91,64 +96,32 @@ const StringArtFilterBlock: React.FC<ArtFilterProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    step,
+    minLineDensity,
+    maxLineDensity
+  ]);
 
   /**
-   * Génère des points autour d'un cercle.
-   * @param {number} numPoints - Le nombre de points à générer.
-   * @param {number} width - La largeur du canvas.
-   * @param {number} height - La hauteur du canvas.
-   * @returns {Array<{x: number, y: number}>} - Un tableau de points.
+   * Mappe une valeur d'un intervalle à un autre.
+   * @param {number} value - La valeur à mapper.
+   * @param {number} start1 - Début de l'intervalle d'origine.
+   * @param {number} stop1 - Fin de l'intervalle d'origine.
+   * @param {number} start2 - Début du nouvel intervalle.
+   * @param {number} stop2 - Fin du nouvel intervalle.
+   * @returns {number} - La valeur mappée.
    */
-  const generateCirclePoints = (
-    numPoints: number,
-    width: number,
-    height: number
-  ) => {
-    const points = [];
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = Math.min(width, height) / 2;
-
-    for (let i = 0; i < numPoints; i++) {
-      const angle = (i / numPoints) * 2 * Math.PI;
-      points.push({
-        x: centerX + radius * Math.cos(angle),
-        y: centerY + radius * Math.sin(angle)
-      });
-    }
-
-    return points;
-  };
-
-  /**
-   * Évalue une ligne en fonction des pixels traversés.
-   * @param {Uint8ClampedArray} data - Les données de l'image.
-   * @param {number} width - La largeur du canvas.
-   * @param {{x: number, y: number}} point1 - Le point de départ de la ligne.
-   * @param {{x: number, y: number}} point2 - Le point d'arrivée de la ligne.
-   * @returns {number} - Le score de la ligne.
-   */
-  const evaluateLine = (
-    data: Uint8ClampedArray,
-    width: number,
-    point1: { x: number; y: number },
-    point2: { x: number; y: number }
+  const map = (
+    value: number,
+    start1: number,
+    stop1: number,
+    start2: number,
+    stop2: number
   ): number => {
-    const numSamples = 100;
-    let score = 0;
-
-    for (let i = 0; i < numSamples; i++) {
-      const t = i / (numSamples - 1);
-      const x = Math.round(point1.x + t * (point2.x - point1.x));
-      const y = Math.round(point1.y + t * (point2.y - point1.y));
-      const pixelIndex = (y * width + x) * 4;
-      const brightness =
-        (data[pixelIndex] + data[pixelIndex + 1] + data[pixelIndex + 2]) / 3;
-      score += 255 - brightness; // Plus la zone est sombre, plus le score est élevé
-    }
-
-    return score;
+    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
   };
 
   return (
@@ -161,4 +134,4 @@ const StringArtFilterBlock: React.FC<ArtFilterProps> = ({
   );
 };
 
-export default StringArtFilterBlock;
+export default SignArtFilterBlock;
