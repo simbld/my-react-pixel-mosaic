@@ -10,7 +10,9 @@
   background-color: @gameboyColor;
   background-repeat: repeat;
   z-index: 101;
-  cursor: url("src/assets/brush.png"), auto;
+  cursor:
+    url("src/assets/brush.png") 0 0,
+    auto;
 
   &::before {
     content: "";
@@ -34,7 +36,9 @@
   left: 4%;
   transform: translateX(0%);
   z-index: 101;
-  cursor: url("src/assets/brush.png"), auto;
+  cursor:
+    url("src/assets/brush.png") 0 0,
+    auto;
   border: @screenOnOutline 3px solid;
   background-color: @but;
   color: @gL;
@@ -71,7 +75,9 @@
   right: 4%;
   transform: translateX(0%);
   z-index: 101;
-  cursor: url("src/assets/brush.png"), auto;
+  cursor:
+    url("src/assets/brush.png") 0 0,
+    auto;
   border: @screenOnOutline 3px solid;
   background-color: @but;
   color: @gL;
@@ -236,7 +242,9 @@
     width: 20%;
     height: 5%;
     z-index: 101;
-    cursor: url("src/assets/brush.png"), auto;
+    cursor:
+      url("src/assets/brush.png") 20 20,
+      auto;
     border: @screenOnOutline 3px solid;
     background-color: @but;
     color: @gL;
@@ -297,7 +305,9 @@
     height: 6%;
     bottom: 3%;
     right: 3%;
-    cursor: url("src/assets/brush.png"), auto;
+    cursor:
+      url("src/assets/brush.png") 20 20,
+      auto;
     border: @screenOnOutline 3px solid;
     background-color: @but;
     color: @gL;
@@ -356,7 +366,9 @@
     will-change: transform, box-shadow, background-color, scale, color;
     transition: opacity 1s ease;
     opacity: 0.8;
-    cursor: url("src/assets/palette.png"), auto;
+    cursor:
+      url("src/assets/brush.png") 0 0,
+      auto;
     transition:
       background-color 0.3s,
       transform 0.3s;
@@ -527,7 +539,9 @@
     transition: transform 0.5s ease;
     background: @bl;
     opacity: 0.7;
-    cursor: url("src/assets/brush.png"), auto;
+    cursor:
+      url("src/assets/brush.png") 20 20,
+      auto;
   }
 
   .range-slider:hover {
@@ -586,10 +600,14 @@
       transform 0.5s ease;
   }
 
+  .range-slider:hover label {
+    animation: shine 1s infinite alternate;
+  }
+
   .range-slider label:hover {
     text-shadow: 2px 1.5px 1.5px @b;
     transform: scaleX(1.7) scaleY(4);
-    animation: flicker 0.2s infinite alternate;
+    animation: shine 1s infinite alternate;
   }
 
   .range-slider label:active {
@@ -718,6 +736,7 @@
     border: 0;
   }
 
+  // Styling the range track numbers
   input[type="range"]::before {
     content: "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15";
     .flex-center();
@@ -737,12 +756,12 @@
 
   .range-slider input[type="range"]::before:hover ~ label {
     color: @glow;
-    animation: flicker 0.2s infinite alternate;
+    animation: shine 0.2s infinite alternate;
   }
 
   .range-slider input[type="range"]::before:active ~ label {
     color: @glow;
-    animation: flicker 0.2s infinite alternate;
+    animation: shine 0.2s infinite alternate;
   }
 
   span {
