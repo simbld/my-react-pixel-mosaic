@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RopeArtFilterProps } from "@interfaces/types";
 
 /**
@@ -12,6 +12,12 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+
+  const [lineThickness, setLineThickness] = useState<number>(1); // Épaisseur des lignes
+  const [numLines, setNumLines] = useState<number>(500000); // Nombre de lignes
+  const [minOpacity, setMinOpacity] = useState<number>(0.0); // Opacité minimale des lignes
+  const [maxOpacity, setMaxOpacity] = useState<number>(1.0); // Opacité maximale des lignes
+  const [boostFactor, setBoostFactor] = useState<number>(1.5); // Facteur de boost pour les couleurs sombres
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -49,12 +55,6 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
         );
         const data = imageData.data;
 
-        // Paramètres configurables
-        const lineThickness = 1; // Épaisseur des lignes
-        const numLines = 500000; // Nombre de lignes
-        const minOpacity = 0.0; // Opacité minimale des lignes
-        const maxOpacity = 1.0; // Opacité maximale des lignes
-
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         for (let i = 0; i < numLines; i++) {
@@ -87,7 +87,6 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
           const opacity = map(brightness, 0, 255, maxOpacity, minOpacity);
 
           // Appliquer un facteur de boost aux couleurs sombres
-          const boostFactor = 1.5;
           avgR = Math.min(avgR * boostFactor, 255);
           avgG = Math.min(avgG * boostFactor, 255);
           avgB = Math.min(avgB * boostFactor, 255);
@@ -109,7 +108,16 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    lineThickness,
+    numLines,
+    minOpacity,
+    maxOpacity,
+    boostFactor
+  ]);
 
   /**
    * Mappe une valeur d'un intervalle à un autre.
