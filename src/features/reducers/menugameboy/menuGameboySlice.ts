@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { MenuGameboyState } from "../../../interfaces/types";
+import type { MenuGameboyStateProps } from "../../../interfaces/types";
 
-const initialState: MenuGameboyState = {
+const initialState: MenuGameboyStateProps = {
   selectedOptionIndex: 0,
   optionCount: 4 // Cette valeur peut être dynamique si nécessaire
 };
