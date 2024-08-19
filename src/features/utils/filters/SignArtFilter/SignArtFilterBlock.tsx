@@ -1,10 +1,10 @@
 import type { ArtFilterProps } from "@interfaces/types";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
- * SignArtFilterBlock est un composant React qui applique un filtre Rope Art simple à une image.
- * @param {StringArtFilterProps} props - Les propriétés du composant.
- * @returns {JSX.Element} L'élément JSX du filtre Rope Art simple.
+ * SignArtFilterBlock est un composant React qui applique un filtre Sign Art en mode bloc à une image.
+ * @param {ArtFilterProps} props - Les propriétés du composant.
+ * @returns {JSX.Element} L'élément JSX du filtre Sign Art en blocs.
  */
 const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
   imageSrc,
@@ -12,6 +12,11 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+
+  // États pour les paramètres configurables
+  const [step, setStep] = useState<number>(10); // Distance entre les lignes
+  const [minLineDensity, setMinLineDensity] = useState<number>(2); // Densité minimale de lignes
+  const [maxLineDensity, setMaxLineDensity] = useState<number>(10); // Densité maximale de lignes
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -40,7 +45,7 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Récupérer les données de l'image et appliquer le filtre Rope Art
+        // Récupérer les données de l'image et appliquer le filtre Sign Art
         const imageData = context.getImageData(
           0,
           0,
@@ -54,7 +59,6 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.strokeStyle = "black";
 
-        const step = 10; // Distance entre les lignes
         for (let y = 0; y < canvas.height; y += step) {
           for (let x = 0; x < canvas.width; x += step) {
             const pixelIndex = (x + y * canvas.width) * 4;
@@ -62,7 +66,13 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
             const brightness = (r + g + b) / 3;
-            const lineDensity = map(brightness, 0, 255, 10, 2); // Plus c'est sombre, plus il y a de lignes
+            const lineDensity = map(
+              brightness,
+              0,
+              255,
+              maxLineDensity,
+              minLineDensity
+            ); // Plus c'est sombre, plus il y a de lignes
 
             for (let i = 0; i < lineDensity; i++) {
               const x1 = x + Math.random() * step;
@@ -86,7 +96,14 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    step,
+    minLineDensity,
+    maxLineDensity
+  ]);
 
   /**
    * Mappe une valeur d'un intervalle à un autre.

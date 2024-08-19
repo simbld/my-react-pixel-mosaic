@@ -1,17 +1,22 @@
-import type { StringArtFilterProps } from "@interfaces/types";
-import { useEffect, useRef } from "react";
+import type { StringArtFilterSimpleProps } from "@interfaces/types";
+import { useEffect, useRef, useState } from "react";
 
 /**
- * StringArtFilterSimple est un composant React qui applique un filtre de String Art à une image.
- * @param {StringArtFilterProps} props - Les propriétés du composant.
- * @returns {JSX.Element} L'élément JSX du filtre String Art.
+ * StringArtFilterSimple is a React component that applies a String Art filter to an image.
+ * @param {StringArtFilterProps} props - The component properties.
+ * @returns {JSX.Element} The JSX element of the String Art filter.
  */
-const StringArtFilterSimple: React.FC<StringArtFilterProps> = ({
+const StringArtFilterSimple: React.FC<StringArtFilterSimpleProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+
+  // États pour les paramètres configurables
+  const [numPoints, setNumPoints] = useState<number>(200); // Number of points around the circle
+  const [numLines, setNumLines] = useState<number>(2000); // Number of lines to draw
+  const [lineWidth, setLineWidth] = useState<number>(0.5); // Line width
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -36,11 +41,11 @@ const StringArtFilterSimple: React.FC<StringArtFilterProps> = ({
         const offsetX = (canvas.width - drawWidth) / 2;
         const offsetY = (canvas.height - drawHeight) / 2;
 
-        // Dessiner l'image redimensionnée sur le canvas
+        // Draw the resized image on the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Récupérer les données de l'image et appliquer le filtre String Art
+        // Retrieve image data and apply String Art filter
         const imageData = context.getImageData(
           0,
           0,
@@ -49,13 +54,11 @@ const StringArtFilterSimple: React.FC<StringArtFilterProps> = ({
         );
         const data = imageData.data;
 
-        const numPoints = 200; // Nombre de points autour du cercle
         const points = generateCirclePoints(
           numPoints,
           canvas.width,
           canvas.height
         );
-        const numLines = 2000; // Nombre de lignes à tracer
 
         context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -74,7 +77,7 @@ const StringArtFilterSimple: React.FC<StringArtFilterProps> = ({
 
           if (bestPoint) {
             context.strokeStyle = "black";
-            context.lineWidth = 0.5;
+            context.lineWidth = lineWidth;
             context.beginPath();
             context.moveTo(lastPoint.x, lastPoint.y);
             context.lineTo(bestPoint.x, bestPoint.y);
@@ -91,14 +94,14 @@ const StringArtFilterSimple: React.FC<StringArtFilterProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [imageSrc, canvasRef, onFilterComplete, numPoints, numLines, lineWidth]);
 
   /**
-   * Génère des points autour d'un cercle.
-   * @param {number} numPoints - Le nombre de points à générer.
-   * @param {number} width - La largeur du canvas.
-   * @param {number} height - La hauteur du canvas.
-   * @returns {Array<{x: number, y: number}>} - Un tableau de points.
+   * Generates points around a circle.
+   * @param {number} numPoints - The number of points to generate.
+   * @param {number} width - The width of the canvas.
+   * @param {number} height - The height of the canvas.
+   * @returns {Array<{x: number, y: number}>} - A points table.
    */
   const generateCirclePoints = (
     numPoints: number,
@@ -122,12 +125,12 @@ const StringArtFilterSimple: React.FC<StringArtFilterProps> = ({
   };
 
   /**
-   * Évalue une ligne en fonction des pixels traversés.
-   * @param {Uint8ClampedArray} data - Les données de l'image.
-   * @param {number} width - La largeur du canvas.
-   * @param {{x: number, y: number}} point1 - Le point de départ de la ligne.
-   * @param {{x: number, y: number}} point2 - Le point d'arrivée de la ligne.
-   * @returns {number} - Le score de la ligne.
+   * Evaluates a line based on the pixels crossed.
+   * @param {Uint8ClampedArray} data - Image data.
+   * @param {number} width - The width of the canvas.
+   * @param {{x: number, y: number}} point1 - The starting point of the line.
+   * @param {{x: number, y: number}} point2 - The end point of the line.
+   * @returns {number} - The line score.
    */
   const evaluateLine = (
     data: Uint8ClampedArray,
@@ -145,7 +148,7 @@ const StringArtFilterSimple: React.FC<StringArtFilterProps> = ({
       const pixelIndex = (y * width + x) * 4;
       const brightness =
         (data[pixelIndex] + data[pixelIndex + 1] + data[pixelIndex + 2]) / 3;
-      score += 255 - brightness; // Plus la zone est sombre, plus le score est élevé
+      score += 255 - brightness; // The darker the area, the higher the score
     }
 
     return score;

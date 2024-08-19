@@ -5,10 +5,7 @@ import type { StipplingArtFilterBlockProps } from "@interfaces/types";
 
 /**
  * Composant pour appliquer un filtre d'art stippling en blocs sur une image.
- * @param {StipplingFilterProps} props - Les propriétés du composant.
- * @param {string} props.imageSrc - L'URL de l'image à traiter.
- * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
- * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
+ * @param {StipplingArtFilterBlockProps} props - Les propriétés du composant.
  * @returns {JSX.Element} - Composant JSX.
  */
 const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
@@ -21,6 +18,18 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
   lerpFactor
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
+
+  const [blockNumPoints, setBlockNumPoints] = useState<number>(
+    numPoints || 1400
+  );
+  const [blockPointRadius, setBlockPointRadius] = useState<number>(
+    pointRadius || 2
+  );
+  const [blockBrightnessThreshold, setBlockBrightnessThreshold] =
+    useState<number>(brightnessThreshold || 0.1);
+  const [blockLerpFactor, setBlockLerpFactor] = useState<number>(
+    lerpFactor || 0.13
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -66,7 +75,7 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
       const points: [number, number][] = [];
 
       // Ajuster la probabilité pour augmenter la sensibilité des changements
-      for (let i = 0; i < numPoints; i++) {
+      for (let i = 0; i < blockNumPoints; i++) {
         let x, y, brightness;
         do {
           x = Math.floor(Math.random() * drawWidth);
@@ -76,7 +85,10 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
           brightness = (r + g + b) / 3;
-        } while (Math.random() > 1 - (brightness / 255) * brightnessThreshold);
+        } while (
+          Math.random() >
+          1 - (brightness / 255) * blockBrightnessThreshold
+        );
         points.push([x + offsetX, y + offsetY]);
       }
 
@@ -125,9 +137,11 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
       for (let i = 0; i < points.length; i++) {
         if (centroids[i]) {
           points[i][0] =
-            points[i][0] * (1 - lerpFactor) + centroids[i][0] * lerpFactor;
+            points[i][0] * (1 - blockLerpFactor) +
+            centroids[i][0] * blockLerpFactor;
           points[i][1] =
-            points[i][1] * (1 - lerpFactor) + centroids[i][1] * lerpFactor;
+            points[i][1] * (1 - blockLerpFactor) +
+            centroids[i][1] * blockLerpFactor;
         }
       }
 
@@ -162,10 +176,10 @@ const StipplingArtFilterBlock: React.FC<StipplingArtFilterBlockProps> = ({
     imageSrc,
     canvasRef,
     onFilterComplete,
-    numPoints,
-    pointRadius,
-    brightnessThreshold,
-    lerpFactor
+    blockNumPoints,
+    blockPointRadius,
+    blockBrightnessThreshold,
+    blockLerpFactor
   ]);
 
   return (

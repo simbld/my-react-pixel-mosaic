@@ -1,5 +1,5 @@
 import type { ArtFilterProps } from "@interfaces/types";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * StringArtFilterExtended est un composant React qui applique un filtre de String Art à une image.
@@ -12,6 +12,11 @@ const StringArtFilterExtended: React.FC<ArtFilterProps> = ({
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+
+  // États pour les paramètres configurables
+  const [numPoints, setNumPoints] = useState<number>(200); // Nombre de points autour du cercle
+  const [numLines, setNumLines] = useState<number>(2000); // Nombre de lignes à tracer
+  const [lineWidth, setLineWidth] = useState<number>(0.5); // Épaisseur des lignes
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -59,13 +64,11 @@ const StringArtFilterExtended: React.FC<ArtFilterProps> = ({
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
 
-      const numPoints = 200; // Nombre de points autour du cercle
       const points = generateCirclePoints(
         numPoints,
         canvas.width,
         canvas.height
       );
-      const numLines = 2000; // Nombre de lignes à tracer
 
       context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -84,7 +87,7 @@ const StringArtFilterExtended: React.FC<ArtFilterProps> = ({
 
         if (bestPoint) {
           context.strokeStyle = "black";
-          context.lineWidth = 0.5;
+          context.lineWidth = lineWidth;
           context.beginPath();
           context.moveTo(lastPoint.x, lastPoint.y);
           context.lineTo(bestPoint.x, bestPoint.y);
@@ -108,7 +111,7 @@ const StringArtFilterExtended: React.FC<ArtFilterProps> = ({
         context.clearRect(0, 0, canvas.width, canvas.height);
       }
     };
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [imageSrc, canvasRef, onFilterComplete, numPoints, numLines, lineWidth]);
 
   /**
    * Génère des points autour d'un cercle.

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RopeArtFilterProps } from "@interfaces/types";
 
 /**
@@ -12,6 +12,11 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+
+  // États pour les paramètres configurables
+  const [step, setStep] = useState<number>(10); // Distance entre les lignes
+  const [minLineDensity, setMinLineDensity] = useState<number>(4); // Densité minimale de lignes
+  const [maxLineDensity, setMaxLineDensity] = useState<number>(10); // Densité maximale de lignes
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -52,11 +57,6 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = "white";
         context.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Variables configurables
-        const step = 10; // Distance entre les lignes
-        const minLineDensity = 4; // Densité minimale de lignes
-        const maxLineDensity = 10; // Densité maximale de lignes
 
         for (let y = 0; y < canvas.height; y += step) {
           for (let x = 0; x < canvas.width; x += step) {
@@ -111,7 +111,14 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef, onFilterComplete]);
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    step,
+    minLineDensity,
+    maxLineDensity
+  ]);
 
   /**
    * Mappe une valeur d'un intervalle à un autre.

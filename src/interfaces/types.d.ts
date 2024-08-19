@@ -1,26 +1,46 @@
 // redux persist store
 export interface RootStateProps {
   imageProcessing: ImageProcessingStateProps;
+  rangeSliderState: RangeSliderStateProps;
 }
 
 export interface ImageProcessingStateProps {
   url: string | null;
   filters: {
     ascii: boolean;
+    stippling: boolean;
+    rope: boolean;
+    sign: boolean;
+    string: boolean;
   };
   error: string | null;
 }
 
-export interface GameboyState {
+export interface GameboyStateProps {
   poweredOn: boolean;
   titlesShown: boolean;
   menuVisible: boolean;
   soundPlaying: boolean;
 }
 
-export interface MenuGameboyState {
+export interface MenuGameboyStateProps {
   selectedOptionIndex: number;
   optionCount: number;
+}
+
+export interface RangeSliderStateProps {
+  stipplingSimple: SimpleFilterProps;
+  stipplingExtended: ExtendedFilterProps;
+  stipplingBlock: BlockFilterProps;
+  ropeSimple: SimpleFilterProps;
+  ropeExtended: ExtendedFilterProps;
+  ropeBlock: BlockFilterProps;
+  signSimple: SimpleFilterProps;
+  signExtended: ExtendedFilterProps;
+  signBlock: BlockFilterProps;
+  stringSimple: SimpleFilterProps;
+  stringExtended: ExtendedFilterProps;
+  stringBlock: BlockFilterProps;
 }
 
 // helpers
@@ -162,15 +182,15 @@ export interface ArtFilterProps {
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
   filterType: "simple" | "extended" | "block";
   onFilterComplete: () => void;
-  density?: string;
+  density?: string; // Optional as not all filters will use density
 }
 
 export interface AsciiFilterProps extends ArtFilterProps {
   density: string;
 }
 
-export interface StipplingArtFilterProps extends ArtFilterProps {
-  density: string;
+// Stippling Art Filter Props
+export interface StipplingArtFilterSimpleProps extends ArtFilterProps {
   numPoints: number;
   pointRadius: number;
   brightnessThreshold: number;
@@ -190,15 +210,78 @@ export interface StipplingArtFilterBlockProps extends ArtFilterProps {
   lerpFactor: number;
 }
 
-export interface RopeArtFilterProps extends ArtFilterProps {
-  density: string;
+// Rope Art Filter Props
+export interface RopeArtFilterSimpleProps extends ArtFilterProps {
+  lineThickness: number;
+  numLines: number;
+  minOpacity: number;
+  maxOpacity: number;
 }
 
-export interface SignArtFilterProps extends ArtFilterProps {
+export interface RopeArtFilterExtendedProps extends ArtFilterProps {
+  step: number;
+  angleSteps: number;
+  lineDensity: number;
+}
+
+export interface RopeArtFilterBlockProps extends ArtFilterProps {
+  step: number;
+  minLineDensity: number;
+  maxLineDensity: number;
+}
+
+// Sign Art Filter Props
+export interface SignArtFilterSimpleProps extends ArtFilterProps {
   shape: string;
+  step: number;
+  lineDensity: number;
 }
 
-export interface StringArtFilterProps extends ArtFilterProps {}
+export interface SignArtFilterExtendedProps extends ArtFilterProps {
+  step: number;
+  lineDensity: number;
+}
+
+export interface SignArtFilterBlockProps extends ArtFilterProps {
+  step: number;
+  minLineDensity: number;
+  maxLineDensity: number;
+}
+
+// String Art Filter Props (similar to others)
+export interface StringArtFilterSimpleProps
+  extends ArtFilterProps,
+    SimpleFilterProps {}
+export interface StringArtFilterExtendedProps
+  extends ArtFilterProps,
+    ExtendedFilterProps {}
+export interface StringArtFilterBlockProps
+  extends ArtFilterProps,
+    BlockFilterProps {}
+
+// Common filter props for Simple, Extended, and Block configurations
+export interface SimpleFilterProps {
+  numPoints: number;
+  pointRadius: number;
+  brightnessThreshold: number;
+  shape?: string; // Added shape here, if applicable
+}
+
+export interface ExtendedFilterProps {
+  gridSpacing: number;
+  maxPointSize: number;
+  brightnessScaling: number;
+  pointDensityScaling: number;
+}
+
+export interface BlockFilterProps {
+  numPoints: number;
+  pointRadius: number;
+  brightnessThreshold: number;
+  lerpFactor: number;
+  minLineDensity?: number;
+  maxLineDensity?: number;
+}
 
 // modals
 export interface ImageUploaderModalProps {
@@ -234,15 +317,4 @@ export interface FilterOptionsProps {
   onFilterChange: (newFilter: "simple" | "extended" | "block") => void;
   density: string | null;
   handleDensityChange: (newDensity: string) => void;
-}
-
-export interface SliderFields {
-  stipplingNumPoints: number;
-  stipplingPointRadius: number;
-  stipplingBrightnessThreshold: number;
-  stipplingGridSpacing: number;
-  stipplingMaxPointSize: number;
-  stipplingBrightnessScaling: number;
-  stipplingPointDensityScaling: number;
-  stipplingLerpFactor: number;
 }
