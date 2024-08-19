@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GameboyState } from "../../../interfaces/types";
+import { GameboyStateProps } from "../../../interfaces/types";
 
 // Définition des types d'actions utilisant PayloadAction
 export type PowerAction = PayloadAction<boolean>;
 
 // Définition de l'état initial
-const initialState: GameboyState = {
+const initialState: GameboyStateProps = {
   poweredOn: false,
   titlesShown: false,
   menuVisible: false,
