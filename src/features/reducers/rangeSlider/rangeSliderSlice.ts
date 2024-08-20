@@ -14,10 +14,10 @@ const initialState: RangeSliderStateProps = {
     pointDensityScaling: 12
   },
   stipplingBlock: {
-    numPoints: 400000,
-    pointRadius: 0.75,
-    brightnessThreshold: 0.45,
-    lerpFactor: 0.5
+    numPoints: 1000,
+    pointRadius: 9.5,
+    brightnessThreshold: 0.5,
+    lerpFactor: 0.4
   },
   ropeSimple: {
     numPoints: 1500,
