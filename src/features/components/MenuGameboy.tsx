@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import type { MenuGameboyProps } from "../../interfaces/types";
 import { memo, useEffect, useRef, useState } from "react";
-import type { RootState } from "../reducers/stores/store";
+import type { RootStateProps } from "../reducers/stores/store";
 import {
   nextOption,
   previousOption,
@@ -36,7 +36,7 @@ const MenuItem = memo(
 
 const MenuGameboy: React.FC<MenuGameboyProps> = ({ menuOptions }) => {
   const selectedOptionIndex = useSelector(
-    (state: RootState) => state.menuGameboy.selectedOptionIndex
+    (state: RootStateProps) => state.menuGameboy.selectedOptionIndex
   );
 
   const dispatch = useDispatch();
