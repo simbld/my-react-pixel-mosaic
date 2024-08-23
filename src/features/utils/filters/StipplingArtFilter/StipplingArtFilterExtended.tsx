@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
+import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
 
 /**
  * Composant pour appliquer un filtre d'art stippling étendu sur une image.
@@ -10,26 +10,26 @@ import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
-  stipplingGridSpacing,
-  stipplingMaxPointSize,
-  stipplingBrightnessScaling,
-  stipplingPointDensityScaling,
+  gridSpacing,
+  maxPointSize,
+  brightnessScaling,
+  pointDensityScaling,
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
 
-  const [gridSpacing, setGridSpacing] = useState<number>(
-    stipplingGridSpacing || 10
+  // Utilisation des props directement
+  const [gridSpacingState, setGridSpacingState] = useState<number>(
+    gridSpacing || 10
   );
-  const [maxPointSize, setMaxPointSize] = useState<number>(
-    stipplingMaxPointSize || 15
+  const [maxPointSizeState, setMaxPointSizeState] = useState<number>(
+    maxPointSize || 15
   );
-  const [brightnessScaling, setBrightnessScaling] = useState<number>(
-    stipplingBrightnessScaling || 40
+  const [brightnessScalingState, setBrightnessScalingState] = useState<number>(
+    brightnessScaling || 40
   );
-  const [pointDensityScaling, setPointDensityScaling] = useState<number>(
-    stipplingPointDensityScaling || 10
-  );
+  const [pointDensityScalingState, setPointDensityScalingState] =
+    useState<number>(pointDensityScaling || 10);
 
   const applyFilter = () => {
     const canvas = canvasRef.current;
@@ -73,25 +73,25 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number, number, string][] = [];
 
-      for (let y = 0; y < drawHeight; y += gridSpacing) {
-        for (let x = 0; x < drawWidth; x += gridSpacing) {
+      for (let y = 0; y < drawHeight; y += gridSpacingState) {
+        for (let x = 0; x < drawWidth; x += gridSpacingState) {
           const pixelIndex = (y * drawWidth + x) * 4;
           const r = imageData.data[pixelIndex];
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
           const brightness = (r + g + b) / 3;
-          const pointSize = 1 + (255 - brightness) / brightnessScaling;
+          const pointSize = 1 + (255 - brightness) / brightnessScalingState;
           const numPoints = Math.floor(
-            (255 - brightness) / pointDensityScaling
+            (255 - brightness) / pointDensityScalingState
           );
 
           for (let i = 0; i < numPoints; i++) {
-            const offsetXPoint = x + Math.random() * gridSpacing;
-            const offsetYPoint = y + Math.random() * gridSpacing;
+            const offsetXPoint = x + Math.random() * gridSpacingState;
+            const offsetYPoint = y + Math.random() * gridSpacingState;
             points.push([
               offsetXPoint + offsetX,
               offsetYPoint + offsetY,
-              Math.min(pointSize, maxPointSize),
+              Math.min(pointSize, maxPointSizeState),
               `rgb(${r},${g},${b})`
             ]);
           }
@@ -117,7 +117,12 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
 
   useEffect(() => {
     applyFilter();
-  }, [gridSpacing, maxPointSize, brightnessScaling, pointDensityScaling]);
+  }, [
+    gridSpacingState,
+    maxPointSizeState,
+    brightnessScalingState,
+    pointDensityScalingState
+  ]);
 
   return (
     <img
