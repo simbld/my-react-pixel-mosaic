@@ -1,5 +1,6 @@
 // redux persist store
 export interface RootStateProps {
+  filters: any;
   imageProcessing: ImageProcessingStateProps;
   rangeSliderState: RangeSliderStateProps;
 }
@@ -41,6 +42,14 @@ export interface RangeSliderStateProps {
   stringSimple: SimpleFilterProps;
   stringExtended: ExtendedFilterProps;
   stringBlock: BlockFilterProps;
+}
+
+export interface FiltersStateProps {
+  ascii: boolean;
+  stippling: boolean;
+  rope: boolean;
+  sign: boolean;
+  string: boolean;
 }
 
 // helpers
@@ -197,10 +206,10 @@ export interface StipplingArtFilterSimpleProps extends ArtFilterProps {
 }
 
 export interface StipplingArtFilterExtendedProps extends ArtFilterProps {
-  stipplingGridSpacing: number;
-  stipplingMaxPointSize: number;
-  stipplingBrightnessScaling: number;
-  stipplingPointDensityScaling: number;
+  gridSpacing: number;
+  maxPointSize: number;
+  brightnessScaling: number;
+  pointDensityScaling: number;
 }
 
 export interface StipplingArtFilterBlockProps extends ArtFilterProps {
