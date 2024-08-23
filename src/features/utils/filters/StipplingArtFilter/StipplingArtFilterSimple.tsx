@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3-delaunay";
-import type { StipplingArtFilterProps } from "@interfaces/types";
+import type { StipplingArtFilterSimpleProps } from "@interfaces/types";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 
 /**
@@ -11,7 +11,7 @@ import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
  * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
  * @returns {JSX.Element} - Composant JSX.
  */
-const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
+const StipplingArtFilterSimple: React.FC<StipplingArtFilterSimpleProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete,
