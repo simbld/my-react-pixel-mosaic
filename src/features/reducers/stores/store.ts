@@ -16,7 +16,13 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["gameboy", "menuGameboy", "imageProcessing"]
+  whitelist: [
+    "gameboy",
+    "menuGameboy",
+    "imageProcessing",
+    "rangeSliders",
+    "filters"
+  ]
 };
 
 // Création du store redux avec redux-persist
@@ -39,7 +45,7 @@ export const persistor = persistStore(store);
 export type AppStore = typeof store;
 
 // Type pour l'état global avec useSelector
-export type RootState = ReturnType<typeof store.getState>;
+export type RootStateProps = ReturnType<typeof store.getState>;
 
 // Type avec useDispatch
 export type AppDispatch = typeof store.dispatch;
