@@ -1,5 +1,20 @@
-import type { FiltersStateProps } from "@interfaces/types";
-import { createSlice, PayloadAction, Reducer } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  toggleAsciiFilter,
+  toggleStipplingFilter,
+  toggleRopeFilter,
+  toggleSignFilter,
+  toggleStringFilter,
+  resetAllFilters
+} from "./filterActions";
+
+interface FiltersStateProps {
+  ascii: boolean;
+  stippling: boolean;
+  rope: boolean;
+  sign: boolean;
+  string: boolean;
+}
 
 const initialState: FiltersStateProps = {
   ascii: false,
@@ -9,28 +24,34 @@ const initialState: FiltersStateProps = {
   string: false
 };
 
-export const filtersSlice = createSlice({
+const filtersSlice = createSlice({
   name: "filters",
   initialState,
-  reducers: {
-    toggleFilter: (state, action: PayloadAction<keyof FiltersStateProps>) => {
-      const filter = action.payload;
-      state[filter] = !state[filter];
-    },
-    resetFilters: (state) => {
-      Object.keys(state).forEach((filter) => {
-        state[filter as keyof FiltersStateProps] = false;
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(toggleAsciiFilter, (state, action: PayloadAction<boolean>) => {
+        state.ascii = action.payload;
+      })
+      .addCase(
+        toggleStipplingFilter,
+        (state, action: PayloadAction<boolean>) => {
+          state.stippling = action.payload;
+        }
+      )
+      .addCase(toggleRopeFilter, (state, action: PayloadAction<boolean>) => {
+        state.rope = action.payload;
+      })
+      .addCase(toggleSignFilter, (state, action: PayloadAction<boolean>) => {
+        state.sign = action.payload;
+      })
+      .addCase(toggleStringFilter, (state, action: PayloadAction<boolean>) => {
+        state.string = action.payload;
+      })
+      .addCase(resetAllFilters, (state) => {
+        return initialState;
       });
-    },
-    setFilter: (
-      state,
-      action: PayloadAction<{ filter: keyof FiltersStateProps; value: boolean }>
-    ) => {
-      const { filter, value } = action.payload;
-      state[filter] = value;
-    }
   }
 });
 
-export const { toggleFilter, resetFilters, setFilter } = filtersSlice.actions;
-export const filtersReducer: Reducer<FiltersStateProps> = filtersSlice.reducer;
+export const filtersReducer = filtersSlice.reducer;
