@@ -1,12 +1,9 @@
 import type { GetGenerateCirclePointsProps } from "@interfaces/types";
 
 /**
- * Génère des points disposés en cercle pour une utilisation dans l'algorithme de String Art.
- * @param {number} lineDensity - La densité des lignes.
- * @param {number} width - La largeur de la zone de dessin.
- * @param {number} height - La hauteur de la zone de dessin.
- * @param {GetGenerateCirclePointsProps} props - Les paramètres nécessaires pour générer les points.
- * @returns {Array<{x: number, y: number}>} Un tableau d'objets contenant les coordonnées des points générés.
+ * Generates points arranged in a circle for use in the String Art algorithm.
+ * @param {GetGenerateCirclePointsProps} props - The parameters needed to generate the points.
+ * @returns {Array<{x: number, y: number}>} An array of objects containing the coordinates of the generated points.
  */
 const getGenerateCirclePoints = ({
   lineDensity,
