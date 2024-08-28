@@ -8,38 +8,23 @@ import type { ApplyEvaluateLineProps } from "@interfaces/types";
 const applyEvaluateLine = ({
   data,
   width,
-  point1,
-  point2
+  lastPoint,
+  point
 }: ApplyEvaluateLineProps): number => {
-  const dx = Math.abs(point2.x - point1.x);
-  const dy = Math.abs(point2.y - point1.y);
-  const sx = point1.x < point2.x ? 1 : -1;
-  const sy = point1.y < point2.y ? 1 : -1;
-  let err = dx - dy;
-  let score = 0;
+  const dx = point.x - lastPoint.x;
+  const dy = point.y - lastPoint.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  let total = 0;
 
-  let x = point1.x;
-  let y = point1.y;
-
-  while (true) {
-    const pixelIndex = (Math.floor(y) * width + Math.floor(x)) * 4;
-    const brightness =
-      data[pixelIndex] + data[pixelIndex + 1] + data[pixelIndex + 2];
-    score += brightness;
-
-    if (x === point2.x && y === point2.y) break;
-    const e2 = 2 * err;
-    if (e2 > -dy) {
-      err -= dy;
-      x += sx;
-    }
-    if (e2 < dx) {
-      err += dx;
-      y += sy;
-    }
+  for (let i = 0; i < distance; i++) {
+    const t = i / distance;
+    const x = Math.floor(lastPoint.x + t * dx);
+    const y = Math.floor(lastPoint.y + t * dy);
+    const index = (y * width + x) * 4;
+    total += data[index] + data[index + 1] + data[index + 2];
   }
 
-  return score;
+  return total / distance;
 };
 
 export default applyEvaluateLine;
