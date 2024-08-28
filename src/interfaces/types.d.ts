@@ -1,5 +1,6 @@
 // redux persist store
 export interface RootStateProps {
+  [x: string]: any;
   filters: any;
   imageProcessing: ImageProcessingStateProps;
   rangeSliderState: RangeSliderStateProps;
@@ -30,6 +31,11 @@ export interface MenuGameboyStateProps {
 }
 
 export interface RangeSliderStateProps {
+  filterType: "ascii" | "stippling" | "rope" | "sign" | "string";
+  stipplingType: "simple" | "extended" | "block";
+  ropeType: "simple" | "extended" | "block";
+  signType: "simple" | "extended" | "block";
+  stringType: "simple" | "extended" | "block";
   stipplingSimple: SimpleFilterProps;
   stipplingExtended: ExtendedFilterProps;
   stipplingBlock: BlockFilterProps;
@@ -52,6 +58,44 @@ export interface FiltersStateProps {
   string: boolean;
 }
 
+export interface FilterState {
+  filterType: "ascii" | "stippling" | "rope" | "sign" | "string";
+}
+
+// Specific state types for each filter configuration
+export interface SimpleFilterStateProps {
+  stipplingSimple: StipplingArtFilterSimpleProps;
+  ropeSimple: RopeArtFilterSimpleProps;
+  signSimple: SignArtFilterSimpleProps;
+  stringSimple: StringArtFilterSimpleProps;
+}
+
+export interface ExtendedFilterStateProps {
+  stipplingExtended: StipplingArtFilterExtendedProps;
+  ropeExtended: RopeArtFilterExtendedProps;
+  signExtended: SignArtFilterExtendedProps;
+  stringExtended: StringArtFilterExtendedProps;
+}
+
+export interface BlockFilterStateProps {
+  stipplingBlock: StipplingArtFilterBlockProps;
+  ropeBlock: RopeArtFilterBlockProps;
+  signBlock: SignArtFilterBlockProps;
+  stringBlock: StringArtFilterBlockProps;
+}
+
+// Global interface
+export interface RootStateProps {
+  filters: FiltersStateProps;
+  imageProcessing: ImageProcessingStateProps;
+  gameboyState: GameboyStateProps;
+  menuGameboyState: MenuGameboyStateProps;
+  rangeSliderState: RangeSliderStateProps; // Pour gérer les états des sliders
+  simpleFilterState: SimpleFilterStateProps; // Pour les filtres de type simple
+  extendedFilterState: ExtendedFilterStateProps; // Pour les filtres de type extended
+  blockFilterState: BlockFilterStateProps; // Pour les filtres de type block
+}
+
 // helpers
 export interface PixelColorProps {
   r: number;
@@ -59,8 +103,30 @@ export interface PixelColorProps {
   b: number;
 }
 
+export interface GetPixelMapProps {
+  value: number;
+  start1: number;
+  stop1: number;
+  start2: number;
+  stop2: number;
+}
+
 export interface ImageURLProps {
   imageUrl: string;
+}
+
+// utils
+export interface GetGenerateCirclePointsProps {
+  lineDensity: number;
+  width: number;
+  height: number;
+}
+
+export interface ApplyEvaluateLineProps {
+  data: Uint8ClampedArray;
+  width: number;
+  lastPoint: { x: number; y: number };
+  point: { x: number; y: number };
 }
 
 // custom hooks
@@ -225,12 +291,14 @@ export interface RopeArtFilterSimpleProps extends ArtFilterProps {
   numLines: number;
   minOpacity: number;
   maxOpacity: number;
+  boostFactor: number;
 }
 
 export interface RopeArtFilterExtendedProps extends ArtFilterProps {
   step: number;
   angleSteps: number;
-  lineDensity: number;
+  minLineDensity: number;
+  maxLineDensity: number;
 }
 
 export interface RopeArtFilterBlockProps extends ArtFilterProps {
@@ -252,44 +320,78 @@ export interface SignArtFilterExtendedProps extends ArtFilterProps {
 }
 
 export interface SignArtFilterBlockProps extends ArtFilterProps {
-  step: number;
-  minLineDensity: number;
-  maxLineDensity: number;
+  step?: number;
+  minLineDensity?: number;
+  maxLineDensity?: number;
 }
 
-// String Art Filter Props (similar to others)
-export interface StringArtFilterSimpleProps
-  extends ArtFilterProps,
-    SimpleFilterProps {}
-export interface StringArtFilterExtendedProps
-  extends ArtFilterProps,
-    ExtendedFilterProps {}
-export interface StringArtFilterBlockProps
-  extends ArtFilterProps,
-    BlockFilterProps {}
+// String Art Filter Props
+export interface StringArtFilterSimpleProps extends ArtFilterProps {
+  lineDensity: number;
+  numPoints: number;
+  lineWidth: number;
+}
+export interface StringArtFilterExtendedProps extends ArtFilterProps {
+  lineDensity: number;
+  step: number;
+  tension: number;
+  opacity: number;
+}
+export interface StringArtFilterBlockProps extends ArtFilterProps {
+  thickness: number;
+  maxLength: number;
+  step: number;
+}
 
 // Common filter props for Simple, Extended, and Block configurations
 export interface SimpleFilterProps {
-  numPoints: number;
-  pointRadius: number;
-  brightnessThreshold: number;
-  shape?: string; // Added shape here, if applicable
+  numPoints?: number;
+  numLines?: number;
+  lineThickness?: number;
+  lineWidth?: number;
+  lineDensity?: number;
+  angleSteps?: number;
+  boostFactor?: number;
+  step?: number;
+  pointRadius?: number;
+  brightnessThreshold?: number;
+  shape?: string;
+  minOpacity?: number;
+  minLineDensity?: number;
+  maxOpacity?: number;
+  maxLineDensity?: number;
+  length?: number;
+  tension?: number;
 }
 
 export interface ExtendedFilterProps {
-  gridSpacing: number;
-  maxPointSize: number;
-  brightnessScaling: number;
-  pointDensityScaling: number;
+  gridSpacing?: number;
+  maxPointSize?: number;
+  brightnessScaling?: number;
+  pointDensityScaling?: number;
+  shape?: string;
+  step?: number;
+  angleSteps?: number;
+  lineDensity?: number;
+  minLineDensity?: number;
+  maxLineDensity?: number;
+  density?: number;
+  opacity?: number;
+  tension?: number;
 }
 
 export interface BlockFilterProps {
-  numPoints: number;
-  pointRadius: number;
-  brightnessThreshold: number;
-  lerpFactor: number;
+  numPoints?: number;
+  pointRadius?: number;
+  brightnessThreshold?: number;
+  lerpFactor?: number;
+  step?: number;
   minLineDensity?: number;
   maxLineDensity?: number;
+  maxLength?: number;
+  density?: number;
+  opacity?: number;
+  thickness?: number;
 }
 
 // modals
