@@ -6,8 +6,15 @@ import type {
   BlockFilterProps
 } from "@interfaces/types";
 
-// État initial du slice
+// Initial state of the slice
 const initialState: RangeSliderStateProps = {
+  filterType: "ascii",
+  stipplingType: "simple",
+  ropeType: "simple",
+  signType: "simple",
+  stringType: "simple",
+
+  // The states of simple, extended and block filters
   stipplingSimple: {
     numPoints: 30000,
     pointRadius: 2,
@@ -32,15 +39,53 @@ const initialState: RangeSliderStateProps = {
   signSimple: { shape: "circle", step: 10, lineDensity: 5 },
   signExtended: { step: 10, lineDensity: 10 },
   signBlock: { step: 10, minLineDensity: 2, maxLineDensity: 10 },
-  stringSimple: { stringLength: 100, stringTension: 0.5 },
-  stringExtended: { stringDensity: 10, stringOpacity: 0.7 },
-  stringBlock: { stringThickness: 1, maxStringLength: 100 }
+  stringSimple: {
+    lineDensity: 100,
+    numPoints: 100,
+    lineWidth: 0.1
+  },
+  stringExtended: { lineDensity: 0.8, step: 10, tension: 0.5, opacity: 0.8 },
+  stringBlock: { thickness: 2, maxLength: 50, step: 10 }
 };
 
 const rangeSliderSlice = createSlice({
   name: "rangeSliders",
   initialState,
   reducers: {
+    // Actions to update the filter
+    updateFilterType(
+      state,
+      action: PayloadAction<"ascii" | "stippling" | "rope" | "sign" | "string">
+    ) {
+      state.filterType = action.payload;
+    },
+    // Actions to update the sub option of the filter
+    updateStipplingType(
+      state,
+      action: PayloadAction<"simple" | "extended" | "block">
+    ) {
+      state.stipplingType = action.payload;
+    },
+    updateRopeType(
+      state,
+      action: PayloadAction<"simple" | "extended" | "block">
+    ) {
+      state.ropeType = action.payload;
+    },
+    updateSignType(
+      state,
+      action: PayloadAction<"simple" | "extended" | "block">
+    ) {
+      state.signType = action.payload;
+    },
+    updateStringType(
+      state,
+      action: PayloadAction<"simple" | "extended" | "block">
+    ) {
+      state.stringType = action.payload;
+    },
+
+    // Other actions to update simple, extended and block filters
     updateStipplingSimple(state, action: PayloadAction<SimpleFilterProps>) {
       state.stipplingSimple = action.payload;
     },
@@ -81,6 +126,11 @@ const rangeSliderSlice = createSlice({
 });
 
 export const {
+  updateFilterType,
+  updateStipplingType,
+  updateRopeType,
+  updateSignType,
+  updateStringType,
   updateStipplingSimple,
   updateStipplingExtended,
   updateStipplingBlock,
