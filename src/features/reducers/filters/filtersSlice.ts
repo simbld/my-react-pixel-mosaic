@@ -1,20 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  toggleAsciiFilter,
-  toggleStipplingFilter,
-  toggleRopeFilter,
-  toggleSignFilter,
-  toggleStringFilter,
-  resetAllFilters
-} from "./filterActions";
-
-interface FiltersStateProps {
-  ascii: boolean;
-  stippling: boolean;
-  rope: boolean;
-  sign: boolean;
-  string: boolean;
-}
+import type { FiltersStateProps } from "@interfaces/types";
 
 const initialState: FiltersStateProps = {
   ascii: false,
@@ -27,31 +12,35 @@ const initialState: FiltersStateProps = {
 const filtersSlice = createSlice({
   name: "filters",
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(toggleAsciiFilter, (state, action: PayloadAction<boolean>) => {
-        state.ascii = action.payload;
-      })
-      .addCase(
-        toggleStipplingFilter,
-        (state, action: PayloadAction<boolean>) => {
-          state.stippling = action.payload;
-        }
-      )
-      .addCase(toggleRopeFilter, (state, action: PayloadAction<boolean>) => {
-        state.rope = action.payload;
-      })
-      .addCase(toggleSignFilter, (state, action: PayloadAction<boolean>) => {
-        state.sign = action.payload;
-      })
-      .addCase(toggleStringFilter, (state, action: PayloadAction<boolean>) => {
-        state.string = action.payload;
-      })
-      .addCase(resetAllFilters, (state) => {
-        return initialState;
-      });
+  reducers: {
+    toggleAsciiFilter(state, action: PayloadAction<boolean>) {
+      state.ascii = action.payload;
+    },
+    toggleStipplingFilter(state, action: PayloadAction<boolean>) {
+      state.stippling = action.payload;
+    },
+    toggleRopeFilter(state, action: PayloadAction<boolean>) {
+      state.rope = action.payload;
+    },
+    toggleSignFilter(state, action: PayloadAction<boolean>) {
+      state.sign = action.payload;
+    },
+    toggleStringFilter(state, action: PayloadAction<boolean>) {
+      state.string = action.payload;
+    },
+    resetAllFilters(state) {
+      return initialState;
+    }
   }
 });
 
-export const filtersReducer = filtersSlice.reducer;
+export const {
+  toggleAsciiFilter,
+  toggleStipplingFilter,
+  toggleRopeFilter,
+  toggleSignFilter,
+  toggleStringFilter,
+  resetAllFilters
+} = filtersSlice.actions;
+
+export default filtersSlice.reducer;
