@@ -3,7 +3,7 @@ import gameboyReducer from "./gameboy/gameboySlice";
 import { imageProcessingReducer } from "./imageprocessing/imageProcessingSlice";
 import menuGameboyReducer from "./menugameboy/menuGameboySlice";
 import rangeSliderReducer from "./rangeSliders/rangeSliderSlice";
-import { filtersReducer } from "./filters/filtersSlice";
+import filtersReducer from "./filters/filtersSlice";
 
 const rootReducer: Reducer = combineReducers({
   imageProcessing: imageProcessingReducer,
