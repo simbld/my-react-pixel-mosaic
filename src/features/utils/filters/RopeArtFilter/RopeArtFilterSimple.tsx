@@ -1,23 +1,40 @@
-import { useEffect, useRef, useState } from "react";
-import { RopeArtFilterProps } from "@interfaces/types";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { RootStateProps, RopeArtFilterSimpleProps } from "@interfaces/types";
+import getPixelMap from "@helpers/getPixelMap";
 
 /**
  * RopeArtFilterSimple est un composant React qui applique un filtre Rope Art simple à une image.
- * @param {RopeArtFilterProps} props - Les propriétés du composant.
+ * @param {RopeArtFilterSimpleProps} props - Les propriétés du composant.
  * @returns {JSX.Element} L'élément JSX du filtre Rope Art simple.
  */
-const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
+const RopeArtFilterSimple: React.FC<RopeArtFilterSimpleProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  lineThickness: propLineThickness,
+  numLines: propNumLines,
+  minOpacity: propMinOpacity,
+  maxOpacity: propMaxOpacity,
+  boostFactor: propBoostFactor
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const [lineThickness, setLineThickness] = useState<number>(1); // Épaisseur des lignes
-  const [numLines, setNumLines] = useState<number>(500000); // Nombre de lignes
-  const [minOpacity, setMinOpacity] = useState<number>(0.0); // Opacité minimale des lignes
-  const [maxOpacity, setMaxOpacity] = useState<number>(1.0); // Opacité maximale des lignes
-  const [boostFactor, setBoostFactor] = useState<number>(1.5); // Facteur de boost pour les couleurs sombres
+  // Redux
+  const {
+    lineThickness: reduxLineThickness,
+    numLines: reduxNumLines,
+    minOpacity: reduxMinOpacity,
+    maxOpacity: reduxMaxOpacity,
+    boostFactor: reduxBoostFactor
+  } = useSelector((state: RootStateProps) => state.rangeSliders.ropeSimple);
+
+  // props if exists, otherwise fallback on store Redux
+  const lineThickness = propLineThickness || reduxLineThickness;
+  const numLines = propNumLines || reduxNumLines;
+  const minOpacity = propMinOpacity || reduxMinOpacity;
+  const maxOpacity = propMaxOpacity || reduxMaxOpacity;
+  const boostFactor = propBoostFactor || reduxBoostFactor;
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -42,11 +59,11 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
         const offsetX = (canvas.width - drawWidth) / 2;
         const offsetY = (canvas.height - drawHeight) / 2;
 
-        // Dessiner l'image redimensionnée sur le canvas
+        // Draw the resized image on the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Récupérer les données de l'image et appliquer le filtre Rope Art
+        // Get image data and apply Sign Art filter
         const imageData = context.getImageData(
           0,
           0,
@@ -84,7 +101,13 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
 
           // Calculer la luminosité et ajuster l'opacité en fonction
           const brightness = (avgR + avgG + avgB) / 3;
-          const opacity = map(brightness, 0, 255, maxOpacity, minOpacity);
+          const opacity = getPixelMap({
+            value: brightness,
+            start1: 0,
+            stop1: 255,
+            start2: minOpacity,
+            stop2: maxOpacity
+          });
 
           // Appliquer un facteur de boost aux couleurs sombres
           avgR = Math.min(avgR * boostFactor, 255);
@@ -118,25 +141,6 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterProps> = ({
     maxOpacity,
     boostFactor
   ]);
-
-  /**
-   * Mappe une valeur d'un intervalle à un autre.
-   * @param {number} value - La valeur à mapper.
-   * @param {number} start1 - Début de l'intervalle d'origine.
-   * @param {number} stop1 - Fin de l'intervalle d'origine.
-   * @param {number} start2 - Début du nouvel intervalle.
-   * @param {number} stop2 - Fin du nouvel intervalle.
-   * @returns {number} - La valeur mappée.
-   */
-  const map = (
-    value: number,
-    start1: number,
-    stop1: number,
-    start2: number,
-    stop2: number
-  ): number => {
-    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
-  };
 
   return (
     <img

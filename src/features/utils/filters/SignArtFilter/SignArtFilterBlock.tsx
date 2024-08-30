@@ -1,22 +1,40 @@
-import type { ArtFilterProps } from "@interfaces/types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import {
+  RootStateProps,
+  type SignArtFilterBlockProps
+} from "@interfaces/types";
 
-/**
- * SignArtFilterBlock est un composant React qui applique un filtre Sign Art en mode bloc à une image.
- * @param {ArtFilterProps} props - Les propriétés du composant.
- * @returns {JSX.Element} L'élément JSX du filtre Sign Art en blocs.
- */
-const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
+const SignArtFilterBlock: React.FC<SignArtFilterBlockProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  step: propStep,
+  minLineDensity: propMinLineDensity,
+  maxLineDensity: propMaxLineDensity
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // États pour les paramètres configurables
-  const [step, setStep] = useState<number>(10); // Distance entre les lignes
-  const [minLineDensity, setMinLineDensity] = useState<number>(2); // Densité minimale de lignes
-  const [maxLineDensity, setMaxLineDensity] = useState<number>(10); // Densité maximale de lignes
+  // Redux
+  const {
+    step: reduxStep,
+    minLineDensity: reduxMinLineDensity,
+    maxLineDensity: reduxMaxLineDensity,
+    shape: reduxShape
+  } = useSelector((state: RootStateProps) => state.rangeSliders.signBlock);
+
+  // props if exists, otherwise fallback on store Redux
+  const step = propStep || reduxStep;
+  const minLineDensity = propMinLineDensity || reduxMinLineDensity;
+  const maxLineDensity = propMaxLineDensity || reduxMaxLineDensity;
+  const shape = reduxShape || "defaultShape";
+
+  if (!step || !minLineDensity || !maxLineDensity) {
+    console.error(
+      "Les valeurs de 'step', 'minLineDensity', ou 'maxLineDensity' sont manquantes."
+    );
+    return null;
+  }
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -41,11 +59,11 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
         const offsetX = (canvas.width - drawWidth) / 2;
         const offsetY = (canvas.height - drawHeight) / 2;
 
-        // Dessiner l'image redimensionnée sur le canvas
+        // Draw the resized image on the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Récupérer les données de l'image et appliquer le filtre Sign Art
+        // Get image data and apply Sign Art filter
         const imageData = context.getImageData(
           0,
           0,
@@ -57,7 +75,6 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = "white";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        context.strokeStyle = "black";
 
         for (let y = 0; y < canvas.height; y += step) {
           for (let x = 0; x < canvas.width; x += step) {
@@ -65,25 +82,25 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
             const r = data[pixelIndex];
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
-            const brightness = (r + g + b) / 3;
-            const lineDensity = map(
-              brightness,
-              0,
-              255,
-              maxLineDensity,
-              minLineDensity
-            ); // Plus c'est sombre, plus il y a de lignes
 
-            for (let i = 0; i < lineDensity; i++) {
+            for (let i = 0; i < maxLineDensity; i++) {
               const x1 = x + Math.random() * step;
               const y1 = y + Math.random() * step;
               const x2 = x + Math.random() * step;
               const y2 = y + Math.random() * step;
 
-              context.beginPath();
-              context.moveTo(x1, y1);
-              context.lineTo(x2, y2);
-              context.stroke();
+              context.strokeStyle = `rgb(${r},${g},${b})`;
+
+              if (shape === "circle") {
+                context.beginPath();
+                context.arc(x1, y1, step / 2, 0, Math.PI * 2);
+                context.stroke();
+              } else {
+                context.beginPath();
+                context.moveTo(x1, y1);
+                context.lineTo(x2, y2);
+                context.stroke();
+              }
             }
           }
         }
@@ -102,27 +119,9 @@ const SignArtFilterBlock: React.FC<ArtFilterProps> = ({
     onFilterComplete,
     step,
     minLineDensity,
-    maxLineDensity
+    maxLineDensity,
+    shape
   ]);
-
-  /**
-   * Mappe une valeur d'un intervalle à un autre.
-   * @param {number} value - La valeur à mapper.
-   * @param {number} start1 - Début de l'intervalle d'origine.
-   * @param {number} stop1 - Fin de l'intervalle d'origine.
-   * @param {number} start2 - Début du nouvel intervalle.
-   * @param {number} stop2 - Fin du nouvel intervalle.
-   * @returns {number} - La valeur mappée.
-   */
-  const map = (
-    value: number,
-    start1: number,
-    stop1: number,
-    start2: number,
-    stop2: number
-  ): number => {
-    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
-  };
 
   return (
     <img

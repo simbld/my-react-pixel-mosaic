@@ -1,5 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import type { ImageUploaderModalProps } from "src/interfaces/types";
+import type {
+  BlockFilterProps,
+  ExtendedFilterProps,
+  ImageUploaderModalProps,
+  RootStateProps,
+  SimpleFilterProps
+} from "src/interfaces/types";
 import AsciiArtFilter from "@filters/AsciiArtFilter";
 import {
   StipplingArtFilterSimple,
@@ -26,14 +32,41 @@ import {
   TARGET_HEIGHT,
   asciiDensitySimple,
   asciiDensityExtended,
-  asciiDensityBlock,
-  DensitySimple,
-  DensityExtended,
-  DensityBlock
+  asciiDensityBlock
 } from "@config/config";
 import Loader from "../common/Loader";
-import getDefaultDensity from "../utils/density/GetDefaultDensity";
+import getDefaultDensity from "../utils/density/getDefaultDensity";
 import RangeSlider from "./RangeSlider";
+import {
+  updateFilterType,
+  updateStipplingType,
+  updateRopeType,
+  updateSignType,
+  updateStringType,
+  updateRopeBlock,
+  updateRopeExtended,
+  updateRopeSimple,
+  updateSignBlock,
+  updateSignExtended,
+  updateSignSimple,
+  updateStipplingBlock,
+  updateStipplingExtended,
+  updateStipplingSimple,
+  updateStringBlock,
+  updateStringExtended,
+  updateStringSimple
+} from "@reducers/rangeSliders/rangeSliderSlice";
+import {
+  toggleAsciiFilter,
+  toggleStipplingFilter,
+  toggleRopeFilter,
+  toggleSignFilter,
+  toggleStringFilter,
+  resetAllFilters
+} from "@reducers/filters/filtersSlice";
+import { useSelector } from "react-redux";
+import type { AppDispatch } from "@features/reducers/stores/store";
+import { useDispatch } from "react-redux";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -41,45 +74,175 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   isOpen,
   onClose
 }) => {
-  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-  const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
-  const [density, setDensity] = useState<string | null>(
-    getDefaultDensity("ascii")
-  );
-  const [filterType, setFilterType] = useState<
-    "ascii" | "stippling" | "rope" | "sign" | "string"
-  >("ascii");
-  const [stipplingType, setStipplingType] = useState<
-    "simple" | "extended" | "block"
-  >("simple");
-  const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(30000);
-  const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(1);
-  const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
-    useState<number>(0.5);
-  const [stipplingGridSpacing, setStipplingGridSpacing] = useState<number>(10);
-  const [stipplingMaxPointSize, setStipplingMaxPointSize] = useState<number>(1);
-  const [stipplingBrightnessScaling, setStipplingBrightnessScaling] =
-    useState<number>(25);
-  const [stipplingPointDensityScaling, setStipplingPointDensityScaling] =
-    useState<number>(50);
-  const [stipplingLerpFactor, setStipplingLerpFactor] = useState<number>(1);
-
-  const [ropeType, setRopeType] = useState<"simple" | "extended" | "block">(
-    "simple"
-  );
-  const [signType, setSignType] = useState<"simple" | "extended" | "block">(
-    "simple"
-  );
-  const [stringType, setStringType] = useState<"simple" | "extended" | "block">(
-    "simple"
-  );
+  // DOM refs
   const modalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Local states
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [filteredImageUrl, setFilteredImageUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [density, setDensity] = useState<string | null>(
+    getDefaultDensity("ascii")
+  );
 
+  // Redux
+  const dispatch = useDispatch();
+  const filterType = useSelector(
+    (state: RootStateProps) => state.rangeSliders.filterType
+  );
+  const stipplingType = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stipplingType
+  );
+  const ropeType = useSelector(
+    (state: RootStateProps) => state.rangeSliders.ropeType
+  );
+  const signType = useSelector(
+    (state: RootStateProps) => state.rangeSliders.signType
+  );
+  const stringType = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stringType
+  );
+
+  // Filter actions
+  const { ascii, stippling, rope, sign, string } = useSelector(
+    (state: RootStateProps) => state.filters
+  );
+
+  // Get the filter values ​​in the Redux store (initialized to 0)
+  const stipplingSimple = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stipplingSimple
+  );
+  const stipplingExtended = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stipplingExtended
+  );
+  const stipplingBlock = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stipplingBlock
+  );
+  const ropeSimple = useSelector(
+    (state: RootStateProps) => state.rangeSliders.ropeSimple
+  );
+  const ropeExtended = useSelector(
+    (state: RootStateProps) => state.rangeSliders.ropeExtended
+  );
+  const ropeBlock = useSelector(
+    (state: RootStateProps) => state.rangeSliders.ropeBlock
+  );
+  const signSimple = useSelector(
+    (state: RootStateProps) => state.rangeSliders.signSimple
+  );
+  const signExtended = useSelector(
+    (state: RootStateProps) => state.rangeSliders.signExtended
+  );
+  const signBlock = useSelector(
+    (state: RootStateProps) => state.rangeSliders.signBlock
+  );
+  const stringSimple = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stringSimple
+  );
+  const stringExtended = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stringExtended
+  );
+  const stringBlock = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stringBlock
+  );
+
+  // Filter actions
+  const filterActions = {
+    stipplingSimple: updateStipplingSimple,
+    stipplingExtended: updateStipplingExtended,
+    stipplingBlock: updateStipplingBlock,
+    ropeSimple: updateRopeSimple,
+    ropeExtended: updateRopeExtended,
+    ropeBlock: updateRopeBlock,
+    signSimple: updateSignSimple,
+    signExtended: updateSignExtended,
+    signBlock: updateSignBlock,
+    stringSimple: updateStringSimple,
+    stringExtended: updateStringExtended,
+    stringBlock: updateStringBlock
+  };
+
+  const getCurrentValues = (filterName: keyof typeof filterActions) => {
+    switch (filterName) {
+      case "stipplingSimple":
+        return stipplingSimple;
+      case "stipplingExtended":
+        return stipplingExtended;
+      case "stipplingBlock":
+        return stipplingBlock;
+      case "ropeSimple":
+        return ropeSimple;
+      case "ropeExtended":
+        return ropeExtended;
+      case "ropeBlock":
+        return ropeBlock;
+      case "signSimple":
+        return signSimple;
+      case "signExtended":
+        return signExtended;
+      case "signBlock":
+        return signBlock;
+      case "stringSimple":
+        return stringSimple;
+      case "stringExtended":
+        return stringExtended;
+      case "stringBlock":
+        return stringBlock;
+      default:
+        return undefined;
+    }
+  };
+
+  // Toggle filter
+  const handleAsciiToggle = () => {
+    dispatch(toggleAsciiFilter(!ascii));
+  };
+  const handleStipplingToggle = () => {
+    dispatch(toggleStipplingFilter(!stippling));
+  };
+  const handleRopeToggle = () => {
+    dispatch(toggleRopeFilter(!rope));
+  };
+  const handleSignToggle = () => {
+    dispatch(toggleSignFilter(!sign));
+  };
+  const handleStringToggle = () => {
+    dispatch(toggleStringFilter(!string));
+  };
+
+  // Handle filter type change
+  const handleFilterTypeChange = (
+    type: "ascii" | "stippling" | "rope" | "sign" | "string"
+  ) => {
+    dispatch(updateFilterType(type));
+    setDensity(getDefaultDensity(type));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+  };
+
+  const handleStipplingTypeChange = (type: "simple" | "extended" | "block") => {
+    dispatch(updateStipplingType(type));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+  };
+
+  const handleRopeTypeChange = (type: "simple" | "extended" | "block") => {
+    dispatch(updateRopeType(type));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
+  };
+
+  const handleSignTypeChange = (type: "simple" | "extended" | "block") => {
+    dispatch(updateSignType(type));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter avec le nouveau type
+  };
+
+  const handleStringTypeChange = (type: "simple" | "extended" | "block") => {
+    dispatch(updateStringType(type));
+    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter avec le nouveau type
+  };
+
+  // Handle image change
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -100,11 +263,13 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     event.target.value = "";
   };
 
+  // Handle density change for ascii
   const handleDensityChange = (newDensity: string) => {
-    setDensity(density === newDensity ? null : newDensity); // Toggle the density
+    setDensity(density === newDensity ? null : newDensity); // Toggle the density(sub option: simple, extended, block)
     setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new density
   };
 
+  // Handle remove all filter
   const handleRemoveFilter = () => {
     setFilteredImageUrl(null);
     setDensity(null);
@@ -137,38 +302,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     }
   };
 
-  const handleFilterTypeChange = (
-    type: "ascii" | "stippling" | "rope" | "sign" | "string"
-  ) => {
-    setFilterType(type);
-    setDensity(getDefaultDensity(type));
-    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
-  };
-
-  const handleStipplingTypeChange = (type: "simple" | "extended" | "block") => {
-    setStipplingType(type);
-    setDensity(getDefaultDensity("stippling"));
-    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
-  };
-
-  const handleRopeTypeChange = (type: "simple" | "extended" | "block") => {
-    setRopeType(type);
-    setDensity(getDefaultDensity("rope"));
-    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter with the new type
-  };
-
-  const handleSignTypeChange = (type: "simple" | "extended" | "block") => {
-    setSignType(type);
-    setDensity(getDefaultDensity("sign"));
-    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter avec le nouveau type
-  };
-
-  const handleStringTypeChange = (type: "simple" | "extended" | "block") => {
-    setStringType(type);
-    setDensity(getDefaultDensity("string"));
-    setFilteredImageUrl(imagePreviewUrl); // Reapply the filter avec le nouveau type
-  };
-
+  // Handle switch home menu
   const handleModalClose = () => {
     setImagePreviewUrl(null);
     setFilteredImageUrl(null);
@@ -177,6 +311,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
     onClose();
   };
 
+  // Handle download filtered image
   const handleModalDownload = () => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
@@ -188,10 +323,18 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   };
 
   const handleSliderChange = (
-    value: number,
-    setValue: React.Dispatch<React.SetStateAction<number>>
+    filterName: keyof typeof filterActions,
+    property:
+      | keyof SimpleFilterProps
+      | keyof ExtendedFilterProps
+      | keyof BlockFilterProps,
+    value: number
   ) => {
-    setValue(value);
+    const currentValues = getCurrentValues(filterName);
+    const action = filterActions[filterName];
+    const updatedValues = { ...currentValues, [property]: value };
+
+    dispatch(action(updatedValues));
   };
 
   const handleSliderMouseUp = async () => {
@@ -245,6 +388,563 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
       setIsLoading(false);
     }
   }, [filteredImageUrl]);
+
+  const renderStipplingSliders = () => {
+    if (stipplingType === "simple") {
+      return (
+        <>
+          <RangeSlider
+            label="Number of Points"
+            min={100}
+            max={500000}
+            step={100}
+            value={stipplingSimple.numPoints!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stipplingSimple", "numPoints", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Point Radius"
+            min={0.25}
+            max={10}
+            step={0.25}
+            value={stipplingSimple.pointRadius!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "stipplingSimple",
+                "pointRadius",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Brightness Threshold"
+            min={0.05}
+            max={1}
+            step={0.05}
+            value={stipplingSimple.brightnessThreshold!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "stipplingSimple",
+                "brightnessThreshold",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    } else if (stipplingType === "extended") {
+      return (
+        <>
+          <RangeSlider
+            label="Grid Spacing"
+            min={1}
+            max={50}
+            step={1}
+            value={stipplingExtended.gridSpacing!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "stipplingExtended",
+                "gridSpacing",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Max Point Size"
+            min={1}
+            max={100}
+            step={1}
+            value={stipplingExtended.maxPointSize!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "stipplingExtended",
+                "maxPointSize",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Brightness Scaling"
+            min={1}
+            max={100}
+            step={1}
+            value={stipplingExtended.brightnessScaling!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "stipplingExtended",
+                "brightnessScaling",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Point Density Scaling"
+            min={1}
+            max={100}
+            step={1}
+            value={stipplingExtended.pointDensityScaling!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "stipplingExtended",
+                "pointDensityScaling",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    } else if (stipplingType === "block") {
+      return (
+        <>
+          <RangeSlider
+            label="Number of Points"
+            min={10}
+            max={2000}
+            step={10}
+            value={stipplingBlock.numPoints!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stipplingBlock", "numPoints", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Point Radius"
+            min={1}
+            max={10}
+            step={0.1}
+            value={stipplingBlock.pointRadius!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stipplingBlock", "pointRadius", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Brightness Threshold"
+            min={0.01}
+            max={1}
+            step={0.01}
+            value={stipplingBlock.brightnessThreshold!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "stipplingBlock",
+                "brightnessThreshold",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Lerp Factor"
+            min={0.01}
+            max={1}
+            step={0.01}
+            value={stipplingBlock.lerpFactor!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stipplingBlock", "lerpFactor", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    }
+  };
+
+  const renderRopeSliders = () => {
+    if (ropeType === "simple") {
+      return (
+        <>
+          <RangeSlider
+            label="Line Thickness"
+            min={1}
+            max={10}
+            step={0.5}
+            value={ropeSimple.lineThickness!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeSimple", "lineThickness", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Number of Lines"
+            min={1}
+            max={20}
+            step={1}
+            value={ropeSimple.numLines!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeSimple", "numLines", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Min Opacity"
+            min={0}
+            max={1}
+            step={0.1}
+            value={ropeSimple.minOpacity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeSimple", "minOpacity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Max Opacity"
+            min={0}
+            max={1}
+            step={0.1}
+            value={ropeSimple.maxOpacity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeSimple", "maxOpacity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    } else if (ropeType === "extended") {
+      return (
+        <>
+          <RangeSlider
+            label="Step"
+            min={1}
+            max={50}
+            step={1}
+            value={ropeExtended.step!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeExtended", "step", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Angle Steps"
+            min={1}
+            max={50}
+            step={1}
+            value={ropeExtended.angleSteps!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeExtended", "angleSteps", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Min Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={ropeExtended.minLineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "ropeExtended",
+                "minLineDensity",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Max Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={ropeExtended.maxLineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange(
+                "ropeExtended",
+                "maxLineDensity",
+                Number(value)
+              )
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    } else if (ropeType === "block") {
+      return (
+        <>
+          <RangeSlider
+            label="Step"
+            min={1}
+            max={50}
+            step={1}
+            value={ropeExtended.step!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeBlock", "step", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Angle Steps"
+            min={1}
+            max={50}
+            step={1}
+            value={ropeExtended.angleSteps!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeBlock", "angleSteps", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={ropeExtended.lineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("ropeBlock", "lineDensity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    }
+  };
+
+  const renderSignSliders = () => {
+    if (signType === "simple") {
+      return (
+        <>
+          <RangeSlider
+            label="Shape"
+            min={1}
+            max={5}
+            step={1}
+            value={Number(signSimple.shape)!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("signSimple", "shape", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Step"
+            min={1}
+            max={10}
+            step={1}
+            value={signSimple.step!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("signSimple", "step", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={signSimple.lineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("signSimple", "lineDensity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    }
+  };
+
+  const renderStringSliders = () => {
+    if (stringType === "simple") {
+      return (
+        <>
+          <RangeSlider
+            label="Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={stringSimple.lineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringSimple", "lineDensity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Line Width"
+            min={50}
+            max={200}
+            step={10}
+            value={stringSimple.lineWidth!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringSimple", "lineWidth", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Number Of Points"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={stringSimple.numPoints!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringSimple", "numPoints", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    } else if (stringType === "extended") {
+      return (
+        <>
+          <RangeSlider
+            label="Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={stringExtended.lineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringExtended", "lineDensity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Step"
+            min={1}
+            max={50}
+            step={1}
+            value={stringExtended.step!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringExtended", "step", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Tension"
+            min={0.1}
+            max={1}
+            step={0.1}
+            value={stringExtended.tension!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringExtended", "tension", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Opacity"
+            min={0.1}
+            max={1}
+            step={0.1}
+            value={stringExtended.opacity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringExtended", "opacity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    } else if (stringType === "block") {
+      return (
+        <>
+          <RangeSlider
+            label="Thickness"
+            min={1}
+            max={10}
+            step={1}
+            value={stringBlock.thickness!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringBlock", "thickness", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Max Length"
+            min={50}
+            max={300}
+            step={10}
+            value={stringBlock.maxLength!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringBlock", "maxLength", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Step"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={stringBlock.step!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("stringBlock", "step", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    }
+  };
 
   return isOpen ? (
     <div className="overlay" role="dialog" ref={modalRef} tabIndex={0}>
@@ -366,42 +1066,40 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           )}
           {filteredImageUrl && filterType === "stippling" && (
             <>
-              {stipplingType === "simple" && (
+              <div className="range-slider-ctn">{renderStipplingSliders()}</div>
+              {stipplingType === "simple" && stipplingSimple && (
                 <StipplingArtFilterSimple
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
-                  density={density || ""}
                   onFilterComplete={() => setIsLoading(false)}
-                  numPoints={stipplingNumPoints}
-                  pointRadius={stipplingPointRadius}
-                  brightnessThreshold={stipplingBrightnessThreshold}
-                  filterType={"simple"}
+                  numPoints={stipplingSimple.numPoints!}
+                  pointRadius={stipplingSimple.pointRadius!}
+                  brightnessThreshold={stipplingSimple.brightnessThreshold!}
+                  filterType={stipplingType}
                 />
               )}
-              {stipplingType === "extended" && (
+              {stipplingType === "extended" && stipplingExtended && (
                 <StipplingArtFilterExtended
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
-                  density={density || ""}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"extended"}
-                  stipplingGridSpacing={stipplingGridSpacing}
-                  stipplingMaxPointSize={stipplingMaxPointSize}
-                  stipplingBrightnessScaling={stipplingBrightnessScaling}
-                  stipplingPointDensityScaling={stipplingPointDensityScaling}
+                  gridSpacing={stipplingExtended.gridSpacing!}
+                  maxPointSize={stipplingExtended.maxPointSize!}
+                  brightnessScaling={stipplingExtended.brightnessScaling!}
+                  pointDensityScaling={stipplingExtended.pointDensityScaling!}
+                  filterType={stipplingType}
                 />
               )}
-              {stipplingType === "block" && (
+              {stipplingType === "block" && stipplingBlock && (
                 <StipplingArtFilterBlock
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
-                  density={density || ""}
                   onFilterComplete={() => setIsLoading(false)}
-                  numPoints={stipplingNumPoints}
-                  pointRadius={stipplingPointRadius}
-                  brightnessThreshold={stipplingBrightnessThreshold}
-                  lerpFactor={stipplingLerpFactor}
-                  filterType={"block"}
+                  numPoints={stipplingBlock.numPoints!}
+                  pointRadius={stipplingBlock.pointRadius!}
+                  brightnessThreshold={stipplingBlock.brightnessThreshold!}
+                  lerpFactor={stipplingBlock.lerpFactor!}
+                  filterType={stipplingType}
                 />
               )}
               <div className="filter-options active">
@@ -436,184 +1134,23 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
               >
                 NO FILTER
               </button>
-              <div className="range-slider-ctn">
-                {stipplingType === "simple" && (
-                  <>
-                    <RangeSlider
-                      label="Number of Points"
-                      min={100}
-                      max={500000}
-                      step={100}
-                      value={stipplingNumPoints}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(value, setStipplingNumPoints)
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                    <RangeSlider
-                      label="Point Radius"
-                      min={0.25}
-                      max={10}
-                      step={0.25}
-                      value={stipplingPointRadius}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(value, setStipplingPointRadius)
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                    <RangeSlider
-                      label="Brightness Threshold"
-                      min={0.05}
-                      max={1}
-                      step={0.05}
-                      value={stipplingBrightnessThreshold}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(
-                          value,
-                          setStipplingBrightnessThreshold
-                        )
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                  </>
-                )}
-                {stipplingType === "extended" && (
-                  <>
-                    <RangeSlider
-                      label="Grid Spacing"
-                      min={1}
-                      max={50}
-                      step={1}
-                      value={stipplingGridSpacing}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(value, setStipplingGridSpacing)
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                    <RangeSlider
-                      label="Max Point Size"
-                      min={1}
-                      max={100}
-                      step={1}
-                      value={stipplingMaxPointSize}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(value, setStipplingMaxPointSize)
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                    <RangeSlider
-                      label="Brightness Scaling"
-                      min={1}
-                      max={100}
-                      step={1}
-                      value={stipplingBrightnessScaling}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(value, setStipplingBrightnessScaling)
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                    <RangeSlider
-                      label="Point Density Scaling"
-                      min={1}
-                      max={100}
-                      step={1}
-                      value={stipplingPointDensityScaling}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(
-                          value,
-                          setStipplingPointDensityScaling
-                        )
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                  </>
-                )}
-
-                {stipplingType === "block" && (
-                  <>
-                    <RangeSlider
-                      label="Number of Points"
-                      min={10}
-                      max={2000}
-                      step={10}
-                      value={stipplingNumPoints}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(value, setStipplingNumPoints)
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                    <RangeSlider
-                      label="Point Radius"
-                      min={1}
-                      max={10}
-                      step={0.1}
-                      value={stipplingPointRadius}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(value, setStipplingPointRadius)
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                    <RangeSlider
-                      label="Brightness Threshold"
-                      min={0.01}
-                      max={1}
-                      step={0.01}
-                      value={stipplingBrightnessThreshold}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(
-                          value,
-                          setStipplingBrightnessThreshold
-                        )
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                    <RangeSlider
-                      label="Lerp Factor"
-                      min={0.01}
-                      max={1}
-                      step={0.01}
-                      value={stipplingLerpFactor}
-                      className="range-slider"
-                      onChange={(value) =>
-                        handleSliderChange(value, setStipplingLerpFactor)
-                      }
-                      onMouseUp={handleSliderMouseUp}
-                      onTouchEnd={handleSliderMouseUp}
-                    />
-                  </>
-                )}
-              </div>
             </>
           )}
+
           {filteredImageUrl && filterType === "rope" && (
             <>
+              <div className="range-slider-ctn">{renderRopeSliders()}</div>
               {ropeType === "simple" && (
                 <RopeArtFilterSimple
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"simple"}
-                  density={""}
+                  lineThickness={ropeSimple.lineThickness!}
+                  numLines={ropeSimple.numLines!}
+                  minOpacity={ropeSimple.minOpacity!}
+                  maxOpacity={ropeSimple.maxOpacity!}
+                  boostFactor={ropeSimple.boostFactor!}
+                  filterType={ropeType}
                 />
               )}
               {ropeType === "extended" && (
@@ -621,8 +1158,11 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"extended"}
-                  density={""}
+                  step={ropeExtended.step!}
+                  angleSteps={ropeExtended.angleSteps!}
+                  minLineDensity={ropeExtended.minLineDensity!}
+                  maxLineDensity={ropeExtended.maxLineDensity!}
+                  filterType={ropeType}
                 />
               )}
               {ropeType === "block" && (
@@ -630,8 +1170,10 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"block"}
-                  density={""}
+                  step={ropeBlock.step!}
+                  minLineDensity={ropeBlock.minLineDensity!}
+                  maxLineDensity={ropeBlock.maxLineDensity!}
+                  filterType={ropeType}
                 />
               )}
               <div className="filter-options active">
@@ -670,13 +1212,16 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           )}
           {filteredImageUrl && filterType === "sign" && (
             <>
+              <div className="range-slider-ctn">{renderSignSliders()}</div>
               {signType === "simple" && (
                 <SignArtFilterSimple
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"simple"}
-                  density={""}
+                  shape={signSimple.shape!}
+                  step={signSimple.step!}
+                  lineDensity={signSimple.lineDensity!}
+                  filterType={signType}
                 />
               )}
               {signType === "extended" && (
@@ -684,8 +1229,9 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"extended"}
-                  density={""}
+                  step={signExtended.step!}
+                  lineDensity={signExtended.lineDensity!}
+                  filterType={signType}
                 />
               )}
               {signType === "block" && (
@@ -693,8 +1239,10 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"block"}
-                  density={""}
+                  step={signBlock.step!}
+                  minLineDensity={signBlock.minLineDensity!}
+                  maxLineDensity={signBlock.maxLineDensity!}
+                  filterType={signType}
                 />
               )}
               <div className="filter-options active">
@@ -733,16 +1281,16 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           )}
           {filteredImageUrl && filterType === "string" && (
             <>
+              <div className="range-slider-ctn">{renderStringSliders()}</div>
               {stringType === "simple" && (
                 <StringArtFilterSimple
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"simple"}
-                  density={""}
-                  numPoints={0}
-                  pointRadius={0}
-                  brightnessThreshold={0}
+                  lineDensity={stringSimple.lineDensity!}
+                  numPoints={stringSimple.numPoints!}
+                  lineWidth={stringSimple.lineWidth!}
+                  filterType={stringType}
                 />
               )}
               {stringType === "extended" && (
@@ -750,8 +1298,11 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"extended"}
-                  density={""}
+                  lineDensity={stringExtended.lineDensity!}
+                  step={stringExtended.step!}
+                  tension={stringExtended.tension!}
+                  opacity={stringExtended.opacity!}
+                  filterType={stringType}
                 />
               )}
               {stringType === "block" && (
@@ -759,8 +1310,10 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
                   onFilterComplete={() => setIsLoading(false)}
-                  filterType={"block"}
-                  density={""}
+                  thickness={stringBlock.thickness!}
+                  maxLength={stringBlock.maxLength!}
+                  step={stringBlock.step!}
+                  filterType={stringType}
                 />
               )}
               <div className="filter-options active">

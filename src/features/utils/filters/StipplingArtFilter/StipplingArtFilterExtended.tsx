@@ -1,6 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
-import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
+import type {
+  RootStateProps,
+  StipplingArtFilterExtendedProps
+} from "@interfaces/types";
 
 /**
  * Composant pour appliquer un filtre d'art stippling étendu sur une image.
@@ -10,26 +14,30 @@ import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
 const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
-  gridSpacing,
-  maxPointSize,
-  brightnessScaling,
-  pointDensityScaling,
+  gridSpacing: propGridSpacing,
+  maxPointSize: propMaxPointSize,
+  brightnessScaling: propBrightnessScaling,
+  pointDensityScaling: propPointDensityScaling,
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
 
-  // Utilisation des props directement
-  const [gridSpacingState, setGridSpacingState] = useState<number>(
-    gridSpacing || 10
+  // Redux
+  const {
+    gridSpacing: reduxGridSpacing,
+    maxPointSize: reduxMaxPointSize,
+    brightnessScaling: reduxBrightnessScaling,
+    pointDensityScaling: reduxPointDensityScaling
+  } = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stipplingExtended
   );
-  const [maxPointSizeState, setMaxPointSizeState] = useState<number>(
-    maxPointSize || 15
-  );
-  const [brightnessScalingState, setBrightnessScalingState] = useState<number>(
-    brightnessScaling || 40
-  );
-  const [pointDensityScalingState, setPointDensityScalingState] =
-    useState<number>(pointDensityScaling || 10);
+
+  // props if exists, otherwise fallback on store Redux
+  const gridSpacing = propGridSpacing || reduxGridSpacing;
+  const maxPointSize = propMaxPointSize || reduxMaxPointSize;
+  const brightnessScaling = propBrightnessScaling || reduxBrightnessScaling;
+  const pointDensityScaling =
+    propPointDensityScaling || reduxPointDensityScaling;
 
   const applyFilter = () => {
     const canvas = canvasRef.current;
@@ -73,25 +81,25 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
       const points: [number, number, number, string][] = [];
 
-      for (let y = 0; y < drawHeight; y += gridSpacingState) {
-        for (let x = 0; x < drawWidth; x += gridSpacingState) {
+      for (let y = 0; y < drawHeight; y += gridSpacing) {
+        for (let x = 0; x < drawWidth; x += gridSpacing) {
           const pixelIndex = (y * drawWidth + x) * 4;
           const r = imageData.data[pixelIndex];
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
           const brightness = (r + g + b) / 3;
-          const pointSize = 1 + (255 - brightness) / brightnessScalingState;
+          const pointSize = 1 + (255 - brightness) / brightnessScaling;
           const numPoints = Math.floor(
-            (255 - brightness) / pointDensityScalingState
+            (255 - brightness) / pointDensityScaling
           );
 
           for (let i = 0; i < numPoints; i++) {
-            const offsetXPoint = x + Math.random() * gridSpacingState;
-            const offsetYPoint = y + Math.random() * gridSpacingState;
+            const offsetXPoint = x + Math.random() * gridSpacing;
+            const offsetYPoint = y + Math.random() * gridSpacing;
             points.push([
               offsetXPoint + offsetX,
               offsetYPoint + offsetY,
-              Math.min(pointSize, maxPointSizeState),
+              Math.min(pointSize, maxPointSize),
               `rgb(${r},${g},${b})`
             ]);
           }
@@ -117,12 +125,7 @@ const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
 
   useEffect(() => {
     applyFilter();
-  }, [
-    gridSpacingState,
-    maxPointSizeState,
-    brightnessScalingState,
-    pointDensityScalingState
-  ]);
+  }, [gridSpacing, maxPointSize, brightnessScaling, pointDensityScaling]);
 
   return (
     <img
