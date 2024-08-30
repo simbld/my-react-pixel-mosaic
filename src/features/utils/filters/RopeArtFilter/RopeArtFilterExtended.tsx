@@ -1,23 +1,37 @@
-import { useEffect, useRef, useState } from "react";
-import { RopeArtFilterProps } from "@interfaces/types";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { RootStateProps, RopeArtFilterExtendedProps } from "@interfaces/types";
+import getPixelMap from "@helpers/getPixelMap";
 
 /**
  * RopeArtFilterExtended est un composant React qui applique un filtre Rope Art en mode étendu à une image.
- * @param {RopeArtFilterProps} props - Les propriétés du composant.
+ * @param {RopeArtFilterExtendedProps} props - Les propriétés du composant.
  * @returns {JSX.Element} L'élément JSX du filtre Rope Art étendu.
  */
-const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
+const RopeArtFilterExtended: React.FC<RopeArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  step: propStep,
+  angleSteps: propAngleSteps,
+  minLineDensity: propMinLineDensity,
+  maxLineDensity: propMaxLineDensity
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // États pour les paramètres configurables
-  const [step, setStep] = useState<number>(10); // Distance entre les lignes
-  const [angleSteps, setAngleSteps] = useState<number>(12); // Nombre de directions des lignes
-  const [minLineDensity, setMinLineDensity] = useState<number>(5); // Densité minimale des lignes
-  const [maxLineDensity, setMaxLineDensity] = useState<number>(15); // Densité maximale des lignes
+  // Redux
+  const {
+    step: reduxStep,
+    angleSteps: reduxAngleSteps,
+    minLineDensity: reduxMinLineDensity,
+    maxLineDensity: reduxMaxLineDensity
+  } = useSelector((state: RootStateProps) => state.rangeSliders.ropeExtended);
+
+  // Utiliser les valeurs des props si elles existent, sinon fallback sur celles du store Redux
+  const step = propStep || reduxStep;
+  const angleSteps = propAngleSteps || reduxAngleSteps;
+  const minLineDensity = propMinLineDensity || reduxMinLineDensity;
+  const maxLineDensity = propMaxLineDensity || reduxMaxLineDensity;
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -46,7 +60,7 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Récupérer les données de l'image et appliquer le filtre Rope Art
+        // Récupérer les données de l'image et appliquer le filtre Sign Art
         const imageData = context.getImageData(
           0,
           0,
@@ -66,13 +80,13 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
             const brightness = (r + g + b) / 3;
-            const lineDensity = map(
-              brightness,
-              0,
-              255,
-              minLineDensity,
-              maxLineDensity
-            );
+            const lineDensity = getPixelMap({
+              value: brightness,
+              start1: 0,
+              stop1: 255,
+              start2: minLineDensity,
+              stop2: maxLineDensity
+            });
 
             for (let angleIndex = 0; angleIndex < angleSteps; angleIndex++) {
               const angle = (Math.PI * 2 * angleIndex) / angleSteps;
@@ -112,25 +126,6 @@ const RopeArtFilterExtended: React.FC<RopeArtFilterProps> = ({
     minLineDensity,
     maxLineDensity
   ]);
-
-  /**
-   * Mappe une valeur d'un intervalle à un autre.
-   * @param {number} value - La valeur à mapper.
-   * @param {number} start1 - Début de l'intervalle d'origine.
-   * @param {number} stop1 - Fin de l'intervalle d'origine.
-   * @param {number} start2 - Début du nouvel intervalle.
-   * @param {number} stop2 - Fin du nouvel intervalle.
-   * @returns {number} - La valeur mappée.
-   */
-  const map = (
-    value: number,
-    start1: number,
-    stop1: number,
-    start2: number,
-    stop2: number
-  ): number => {
-    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
-  };
 
   return (
     <img

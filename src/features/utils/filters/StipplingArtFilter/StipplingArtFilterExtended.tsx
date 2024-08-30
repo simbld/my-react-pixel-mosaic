@@ -1,6 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import type { StipplingArtFilterExtendedProps } from "@interfaces/types";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
+import type {
+  RootStateProps,
+  StipplingArtFilterExtendedProps
+} from "@interfaces/types";
 
 /**
  * Composant pour appliquer un filtre d'art stippling étendu sur une image.
@@ -10,26 +14,30 @@ import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 const StipplingArtFilterExtended: React.FC<StipplingArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
-  stipplingGridSpacing,
-  stipplingMaxPointSize,
-  stipplingBrightnessScaling,
-  stipplingPointDensityScaling,
+  gridSpacing: propGridSpacing,
+  maxPointSize: propMaxPointSize,
+  brightnessScaling: propBrightnessScaling,
+  pointDensityScaling: propPointDensityScaling,
   onFilterComplete
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
 
-  const [gridSpacing, setGridSpacing] = useState<number>(
-    stipplingGridSpacing || 10
+  // Redux
+  const {
+    gridSpacing: reduxGridSpacing,
+    maxPointSize: reduxMaxPointSize,
+    brightnessScaling: reduxBrightnessScaling,
+    pointDensityScaling: reduxPointDensityScaling
+  } = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stipplingExtended
   );
-  const [maxPointSize, setMaxPointSize] = useState<number>(
-    stipplingMaxPointSize || 15
-  );
-  const [brightnessScaling, setBrightnessScaling] = useState<number>(
-    stipplingBrightnessScaling || 40
-  );
-  const [pointDensityScaling, setPointDensityScaling] = useState<number>(
-    stipplingPointDensityScaling || 10
-  );
+
+  // props if exists, otherwise fallback on store Redux
+  const gridSpacing = propGridSpacing || reduxGridSpacing;
+  const maxPointSize = propMaxPointSize || reduxMaxPointSize;
+  const brightnessScaling = propBrightnessScaling || reduxBrightnessScaling;
+  const pointDensityScaling =
+    propPointDensityScaling || reduxPointDensityScaling;
 
   const applyFilter = () => {
     const canvas = canvasRef.current;

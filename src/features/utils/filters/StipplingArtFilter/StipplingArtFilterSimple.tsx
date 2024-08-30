@@ -1,33 +1,41 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import * as d3 from "d3-delaunay";
-import type { StipplingArtFilterProps } from "@interfaces/types";
+import type {
+  RootStateProps,
+  StipplingArtFilterSimpleProps
+} from "@interfaces/types";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 
 /**
- * Composant pour appliquer un filtre d'art stippling simple sur une image.
- * @param {StipplingFilterProps} props - Les propriétés du composant.
- * @param {string} props.imageSrc - L'URL de l'image à traiter.
- * @param {React.MutableRefObject<HTMLCanvasElement | null>} props.canvasRef - La référence du canevas.
- * @param {() => void} props.onFilterComplete - La fonction à appeler une fois le filtre appliqué.
- * @returns {JSX.Element} - Composant JSX.
+ * Component for applying a simple stippling art filter on an image.
+ * @param {StipplingArtFilterSimpleProps} props - Props of the component.
+ * @returns {JSX.Element} - JSX Component.
  */
-const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
+const StipplingArtFilterSimple: React.FC<StipplingArtFilterSimpleProps> = ({
   imageSrc,
   canvasRef,
   onFilterComplete,
-  numPoints,
-  pointRadius,
-  brightnessThreshold
+  numPoints: propNumPoints,
+  pointRadius: propPointRadius,
+  brightnessThreshold: propBrightnessThreshold
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const [stipplingNumPoints, setStipplingNumPoints] = useState<number>(
-    numPoints || 400000
+
+  // Redux
+  const {
+    numPoints: reduxNumPoints,
+    pointRadius: reduxPointRadius,
+    brightnessThreshold: reduxBrightnessThreshold
+  } = useSelector(
+    (state: RootStateProps) => state.rangeSliders.stipplingSimple
   );
-  const [stipplingPointRadius, setStipplingPointRadius] = useState<number>(
-    pointRadius || 0.75
-  );
-  const [stipplingBrightnessThreshold, setStipplingBrightnessThreshold] =
-    useState<number>(brightnessThreshold || 0.45);
+
+  // props if exists, otherwise fallback on store Redux
+  const numPoints = propNumPoints || reduxNumPoints;
+  const pointRadius = propPointRadius || reduxPointRadius;
+  const brightnessThreshold =
+    propBrightnessThreshold || reduxBrightnessThreshold;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -72,7 +80,7 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
       const points: [number, number][] = [];
 
       // Generate points while avoiding bright areas
-      for (let i = 0; i < stipplingNumPoints; i++) {
+      for (let i = 0; i < numPoints; i++) {
         let x, y, brightness;
         do {
           x = Math.floor(Math.random() * drawWidth);
@@ -82,7 +90,7 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
           const g = imageData.data[pixelIndex + 1];
           const b = imageData.data[pixelIndex + 2];
           brightness = (r + g + b) / 3 / 255;
-        } while (brightness > stipplingBrightnessThreshold);
+        } while (brightness > brightnessThreshold);
         points.push([x + offsetX, y + offsetY]);
       }
 
@@ -134,7 +142,7 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
       context.fillStyle = "black";
       for (const point of points) {
         context.beginPath();
-        context.arc(point[0], point[1], stipplingPointRadius, 0, 2 * Math.PI);
+        context.arc(point[0], point[1], pointRadius, 0, 2 * Math.PI);
         context.fill();
       }
 
@@ -146,9 +154,9 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterProps> = ({
     imageSrc,
     canvasRef,
     onFilterComplete,
-    stipplingNumPoints,
-    stipplingPointRadius,
-    stipplingBrightnessThreshold
+    numPoints,
+    pointRadius,
+    brightnessThreshold
   ]);
 
   return (

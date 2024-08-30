@@ -1,6 +1,6 @@
 import type { RangeSliderProps } from "@interfaces/types";
 
-const RangeSlider: React.FC<RangeSliderProps> = ({
+const RangeSlider = ({
   label,
   min,
   max,
@@ -10,12 +10,14 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   onChange,
   onMouseUp,
   onTouchEnd
-}) => {
+}: RangeSliderProps) => {
   return (
     <div className={className}>
-      <label>{label}</label>
+      <label htmlFor={label}>{label}</label>
       <input
         type="range"
+        id={label}
+        aria-label={label}
         min={min}
         max={max}
         step={step}

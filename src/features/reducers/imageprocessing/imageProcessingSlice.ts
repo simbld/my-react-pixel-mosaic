@@ -5,7 +5,11 @@ import { ImageProcessingStateProps } from "../../../interfaces/types";
 const initialState: ImageProcessingStateProps = {
   url: defaultImage,
   filters: {
-    ascii: false
+    ascii: false,
+    stippling: false,
+    rope: false,
+    sign: false,
+    string: false
   },
   error: null
 };

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../reducers/stores/store";
+import type { AppDispatch, RootStateProps } from "../reducers/stores/store";
 import {
   togglePower,
   playSound,
@@ -166,10 +166,10 @@ const Gameboy: React.FC<GameboyProps> = ({ onGameboyHome }) => {
   };
 
   const { poweredOn, titlesShown, menuVisible, soundPlaying } = useSelector(
-    (state: RootState) => state.gameboy
+    (state: RootStateProps) => state.gameboy
   );
   const selectedOptionIndex = useSelector(
-    (state: RootState) => state.menuGameboy.selectedOptionIndex
+    (state: RootStateProps) => state.menuGameboy.selectedOptionIndex
   );
 
   const handleOpenModal = () => {

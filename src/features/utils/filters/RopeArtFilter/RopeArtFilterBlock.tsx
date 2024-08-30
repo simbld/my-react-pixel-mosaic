@@ -1,22 +1,34 @@
-import { useEffect, useRef, useState } from "react";
-import { RopeArtFilterProps } from "@interfaces/types";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { RootStateProps, RopeArtFilterBlockProps } from "@interfaces/types";
+import getPixelMap from "@helpers/getPixelMap";
 
 /**
  * RopeArtFilterBlock est un composant React qui applique un filtre Rope Art en texture de filet à une image.
- * @param {RopeArtFilterProps} props - Les propriétés du composant.
+ * @param {RopeArtFilterBlockProps} props - Les propriétés du composant.
  * @returns {JSX.Element} L'élément JSX du filtre Rope Art en blocs.
  */
-const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
+const RopeArtFilterBlock: React.FC<RopeArtFilterBlockProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  step: propStep,
+  minLineDensity: propMinLineDensity,
+  maxLineDensity: propMaxLineDensity
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // États pour les paramètres configurables
-  const [step, setStep] = useState<number>(10); // Distance entre les lignes
-  const [minLineDensity, setMinLineDensity] = useState<number>(4); // Densité minimale de lignes
-  const [maxLineDensity, setMaxLineDensity] = useState<number>(10); // Densité maximale de lignes
+  // Redux
+  const {
+    step: reduxStep,
+    minLineDensity: reduxMinLineDensity,
+    maxLineDensity: reduxMaxLineDensity
+  } = useSelector((state: RootStateProps) => state.rangeSliders.ropeBlock);
+
+  // props if exists, otherwise fallback on store Redux
+  const step = propStep || reduxStep;
+  const minLineDensity = propMinLineDensity || reduxMinLineDensity;
+  const maxLineDensity = propMaxLineDensity || reduxMaxLineDensity;
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -41,11 +53,11 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
         const offsetX = (canvas.width - drawWidth) / 2;
         const offsetY = (canvas.height - drawHeight) / 2;
 
-        // Dessiner l'image redimensionnée sur le canvas
+        // Draw the resized image on the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Récupérer les données de l'image et appliquer le filtre Rope Art
+        // Get image data and apply Sign Art filter
         const imageData = context.getImageData(
           0,
           0,
@@ -65,15 +77,15 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
             const brightness = (r + g + b) / 3;
-            const lineDensity = map(
-              brightness,
-              0,
-              255,
-              minLineDensity,
-              maxLineDensity
-            ); // Plus c'est sombre, plus il y a de lignes
+            const lineDensity = getPixelMap({
+              value: brightness,
+              start1: 0,
+              stop1: 255,
+              start2: minLineDensity,
+              stop2: maxLineDensity
+            }); // The darker it is, the more lines there are
 
-            // Dessiner les lignes horizontales
+            // Draw horizontal lines
             for (let i = 0; i < lineDensity; i++) {
               const x1 = x;
               const y1 = y + (i * step) / lineDensity;
@@ -87,7 +99,7 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
               context.stroke();
             }
 
-            // Dessiner les lignes verticales
+            // Draw vertical lines
             for (let i = 0; i < lineDensity; i++) {
               const x1 = x + (i * step) / lineDensity;
               const y1 = y;
@@ -119,25 +131,6 @@ const RopeArtFilterBlock: React.FC<RopeArtFilterProps> = ({
     minLineDensity,
     maxLineDensity
   ]);
-
-  /**
-   * Mappe une valeur d'un intervalle à un autre.
-   * @param {number} value - La valeur à mapper.
-   * @param {number} start1 - Début de l'intervalle d'origine.
-   * @param {number} stop1 - Fin de l'intervalle d'origine.
-   * @param {number} start2 - Début du nouvel intervalle.
-   * @param {number} stop2 - Fin du nouvel intervalle.
-   * @returns {number} - La valeur mappée.
-   */
-  const map = (
-    value: number,
-    start1: number,
-    stop1: number,
-    start2: number,
-    stop2: number
-  ): number => {
-    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
-  };
 
   return (
     <img

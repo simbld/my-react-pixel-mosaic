@@ -11,4 +11,4 @@ const getDefaultDensity = (filterType: string): string => {
 
 export default getDefaultDensity;
 
-// Path: src/features/utils/density/GetDefaultDensity.ts
+// Path: src/features/utils/density/getDefaultDensity.ts

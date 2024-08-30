@@ -1,178 +1,115 @@
-import type { ArtFilterProps } from "@interfaces/types";
-import { useEffect, useRef, useState } from "react";
+import type { StringArtFilterExtendedProps } from "@interfaces/types";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { RootStateProps } from "@interfaces/types";
 
 /**
- * StringArtFilterExtended est un composant React qui applique un filtre de String Art à une image.
- * @param {ArtFilterProps} props - Les propriétés du composant.
- * @returns {JSX.Element} L'élément JSX du filtre String Art.
+ * StringArtFilterExtended is a React component that applies a String Art filter to an image.
+ * @param {StringArtFilterExtendedProps} props - The component properties.
+ * @returns {JSX.Element} The JSX element of the String Art filter.
  */
-const StringArtFilterExtended: React.FC<ArtFilterProps> = ({
+const StringArtFilterExtended: React.FC<StringArtFilterExtendedProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  lineDensity: propLineDensity,
+  step: propStep,
+  tension: propTension,
+  opacity: propOpacity
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // États pour les paramètres configurables
-  const [numPoints, setNumPoints] = useState<number>(200); // Nombre de points autour du cercle
-  const [numLines, setNumLines] = useState<number>(2000); // Nombre de lignes à tracer
-  const [lineWidth, setLineWidth] = useState<number>(0.5); // Épaisseur des lignes
+  // Redux
+  const {
+    lineDensity: reduxLineDensity,
+    step: reduxStep,
+    tension: reduxTension,
+    opacity: reduxOpacity
+  } = useSelector((state: RootStateProps) => state.rangeSliders.stringExtended);
+
+  // props if exists, otherwise fallback on store Redux
+  const lineDensity = propLineDensity || reduxLineDensity;
+  const step = propStep || reduxStep;
+  const tension = propTension || reduxTension;
+  const opacity = propOpacity || reduxOpacity;
 
   useEffect(() => {
     const canvas = canvasRef?.current;
-    if (!canvas) {
-      console.error("Canvas is null");
-      return;
-    }
-
-    const context = canvas.getContext("2d", { willReadFrequently: true });
-    if (!context) {
-      console.error("Context is null");
-      return;
-    }
-
+    const context = canvas?.getContext("2d", { willReadFrequently: true });
     const image = imageRef.current;
-    if (!image) {
-      console.error("Image ref is null");
-      return;
-    }
 
-    image.onload = () => {
-      console.log("Image loaded:", image.src); // Vérifier si l'image est bien chargée
+    if (canvas && context && image) {
+      image.onload = () => {
+        const imgWidth = image.width;
+        const imgHeight = image.height;
+        const aspectRatio = imgWidth / imgHeight;
 
-      const imgWidth = image.width;
-      const imgHeight = image.height;
-      const aspectRatio = imgWidth / imgHeight;
+        let drawWidth = canvas.width;
+        let drawHeight = canvas.height;
 
-      let drawWidth = canvas.width;
-      let drawHeight = canvas.height;
+        if (canvas.width / canvas.height > aspectRatio) {
+          drawWidth = canvas.height * aspectRatio;
+        } else {
+          drawHeight = canvas.width / aspectRatio;
+        }
 
-      if (canvas.width / canvas.height > aspectRatio) {
-        drawWidth = canvas.height * aspectRatio;
-      } else {
-        drawHeight = canvas.width / aspectRatio;
-      }
+        const offsetX = (canvas.width - drawWidth) / 2;
+        const offsetY = (canvas.height - drawHeight) / 2;
 
-      const offsetX = (canvas.width - drawWidth) / 2;
-      const offsetY = (canvas.height - drawHeight) / 2;
+        // Draw the resized image on the canvas
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-      // Dessiner l'image redimensionnée sur le canvas
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+        // Retrieve image data and apply String Art filter
+        const imageData = context.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+        const data = imageData.data;
 
-      // Récupérer les données de l'image et appliquer le filtre String Art
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
-      const points = generateCirclePoints(
-        numPoints,
-        canvas.width,
-        canvas.height
-      );
+        for (let y = 0; y < canvas.height; y += step) {
+          for (let x = 0; x < canvas.width; x += step) {
+            const pixelIndex = (y * canvas.width + x) * 4;
+            const brightness =
+              (data[pixelIndex] + data[pixelIndex + 1] + data[pixelIndex + 2]) /
+              3;
 
-      context.clearRect(0, 0, canvas.width, canvas.height);
+            if (Math.random() < lineDensity) {
+              const angle = Math.random() * 2 * Math.PI;
+              const x2 = x + Math.cos(angle) * tension * 100;
+              const y2 = y + Math.sin(angle) * tension * 100;
 
-      let lastPoint = points[0];
-      for (let i = 0; i < numLines; i++) {
-        let bestPoint = null;
-        let bestScore = -Infinity;
-
-        for (const point of points) {
-          const score = evaluateLine(data, canvas.width, lastPoint, point);
-          if (score > bestScore) {
-            bestScore = score;
-            bestPoint = point;
+              context.strokeStyle = `rgba(0, 0, 0, ${opacity})`;
+              context.lineWidth = 1.5;
+              context.beginPath();
+              context.moveTo(x, y);
+              context.lineTo(x2, y2);
+              context.stroke();
+            }
           }
         }
 
-        if (bestPoint) {
-          context.strokeStyle = "black";
-          context.lineWidth = lineWidth;
-          context.beginPath();
-          context.moveTo(lastPoint.x, lastPoint.y);
-          context.lineTo(bestPoint.x, bestPoint.y);
-          context.stroke();
-          lastPoint = bestPoint;
+        if (onFilterComplete) {
+          onFilterComplete();
         }
-      }
+      };
 
-      if (onFilterComplete) {
-        onFilterComplete();
-      }
-    };
-
-    image.crossOrigin = "Anonymous";
-    image.src = imageSrc;
-    console.log("Image source set:", image.src); // Vérifier si l'image source est bien définie
-
-    // Cleanup function
-    return () => {
-      if (context) {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    };
-  }, [imageSrc, canvasRef, onFilterComplete, numPoints, numLines, lineWidth]);
-
-  /**
-   * Génère des points autour d'un cercle.
-   * @param {number} numPoints - Le nombre de points à générer.
-   * @param {number} width - La largeur du canvas.
-   * @param {number} height - La hauteur du canvas.
-   * @returns {Array<{x: number, y: number}>} - Un tableau de points.
-   */
-  const generateCirclePoints = (
-    numPoints: number,
-    width: number,
-    height: number
-  ) => {
-    const points = [];
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = Math.min(width, height) / 2;
-
-    for (let i = 0; i < numPoints; i++) {
-      const angle = (i / numPoints) * 2 * Math.PI;
-      points.push({
-        x: centerX + radius * Math.cos(angle),
-        y: centerY + radius * Math.sin(angle)
-      });
+      image.crossOrigin = "Anonymous";
+      image.src = imageSrc;
     }
-
-    console.log("Generated points:", points); // Vérifier les points générés
-    return points;
-  };
-
-  /**
-   * Évalue une ligne en fonction des pixels traversés.
-   * @param {Uint8ClampedArray} data - Les données de l'image.
-   * @param {number} width - La largeur du canvas.
-   * @param {{x: number, y: number}} point1 - Le point de départ de la ligne.
-   * @param {{x: number, y: number}} point2 - Le point d'arrivée de la ligne.
-   * @returns {number} - Le score de la ligne.
-   */
-  const evaluateLine = (
-    data: Uint8ClampedArray,
-    width: number,
-    point1: { x: number; y: number },
-    point2: { x: number; y: number }
-  ): number => {
-    const numSamples = 100;
-    let score = 0;
-
-    for (let i = 0; i < numSamples; i++) {
-      const t = i / (numSamples - 1);
-      const x = Math.round(point1.x + t * (point2.x - point1.x));
-      const y = Math.round(point1.y + t * (point2.y - point1.y));
-      const pixelIndex = (y * width + x) * 4;
-      if (pixelIndex < data.length) {
-        const brightness =
-          (data[pixelIndex] + data[pixelIndex + 1] + data[pixelIndex + 2]) / 3;
-        score += 255 - brightness; // Plus la zone est sombre, plus le score est élevé
-      }
-    }
-
-    return score;
-  };
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    lineDensity,
+    step,
+    tension,
+    opacity
+  ]);
 
   return (
     <img
