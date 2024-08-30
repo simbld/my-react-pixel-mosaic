@@ -1,22 +1,36 @@
 import type { StringArtFilterSimpleProps } from "@interfaces/types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { RootStateProps } from "@interfaces/types";
+import getGenerateCirclePoints from "@features/utils/stringArtUtils/getGenerateCirclePoints";
+import applyEvaluateLine from "@features/utils/stringArtUtils/applyEvaluateLine";
 
 /**
- * StringArtFilterSimple is a React component that applies a String Art filter to an image.
- * @param {StringArtFilterProps} props - The component properties.
+ * StringArtFilterSimple is a React component that applies a basic String Art filter to an image.
+ * @param {StringArtFilterSimpleProps} props - The component properties.
  * @returns {JSX.Element} The JSX element of the String Art filter.
  */
 const StringArtFilterSimple: React.FC<StringArtFilterSimpleProps> = ({
   imageSrc,
   canvasRef,
-  onFilterComplete
+  onFilterComplete,
+  lineDensity: propLineDensity,
+  numPoints: propNumPoints,
+  lineWidth: propLineWidth
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // États pour les paramètres configurables
-  const [numPoints, setNumPoints] = useState<number>(200); // Number of points around the circle
-  const [numLines, setNumLines] = useState<number>(2000); // Number of lines to draw
-  const [lineWidth, setLineWidth] = useState<number>(0.5); // Line width
+  // Redux
+  const {
+    lineDensity: reduxLineDensity,
+    numPoints: reduxNumPoints,
+    lineWidth: reduxLineWidth
+  } = useSelector((state: RootStateProps) => state.rangeSliders.stringSimple);
+
+  // props if exists, otherwise fallback on store Redux
+  const lineDensity = propLineDensity || reduxLineDensity;
+  const numPoints = propNumPoints || reduxNumPoints;
+  const lineWidth = propLineWidth || reduxLineWidth;
 
   useEffect(() => {
     const canvas = canvasRef?.current;
@@ -45,7 +59,7 @@ const StringArtFilterSimple: React.FC<StringArtFilterSimpleProps> = ({
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Retrieve image data and apply String Art filter
+        // Get image data and apply Sign Art filter
         const imageData = context.getImageData(
           0,
           0,
@@ -54,21 +68,26 @@ const StringArtFilterSimple: React.FC<StringArtFilterSimpleProps> = ({
         );
         const data = imageData.data;
 
-        const points = generateCirclePoints(
-          numPoints,
-          canvas.width,
-          canvas.height
-        );
+        const points = getGenerateCirclePoints({
+          lineDensity: lineDensity * 2,
+          width: canvas.width,
+          height: canvas.height
+        });
 
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         let lastPoint = points[0];
-        for (let i = 0; i < numLines; i++) {
+        for (let i = 0; i < lineDensity * 20; i++) {
           let bestPoint = null;
           let bestScore = -Infinity;
 
           for (const point of points) {
-            const score = evaluateLine(data, canvas.width, lastPoint, point);
+            const score = applyEvaluateLine({
+              data,
+              width: canvas.width,
+              lastPoint,
+              point
+            });
             if (score > bestScore) {
               bestScore = score;
               bestPoint = point;
@@ -94,65 +113,14 @@ const StringArtFilterSimple: React.FC<StringArtFilterSimpleProps> = ({
       image.crossOrigin = "Anonymous";
       image.src = imageSrc;
     }
-  }, [imageSrc, canvasRef, onFilterComplete, numPoints, numLines, lineWidth]);
-
-  /**
-   * Generates points around a circle.
-   * @param {number} numPoints - The number of points to generate.
-   * @param {number} width - The width of the canvas.
-   * @param {number} height - The height of the canvas.
-   * @returns {Array<{x: number, y: number}>} - A points table.
-   */
-  const generateCirclePoints = (
-    numPoints: number,
-    width: number,
-    height: number
-  ) => {
-    const points = [];
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = Math.min(width, height) / 2;
-
-    for (let i = 0; i < numPoints; i++) {
-      const angle = (i / numPoints) * 2 * Math.PI;
-      points.push({
-        x: centerX + radius * Math.cos(angle),
-        y: centerY + radius * Math.sin(angle)
-      });
-    }
-
-    return points;
-  };
-
-  /**
-   * Evaluates a line based on the pixels crossed.
-   * @param {Uint8ClampedArray} data - Image data.
-   * @param {number} width - The width of the canvas.
-   * @param {{x: number, y: number}} point1 - The starting point of the line.
-   * @param {{x: number, y: number}} point2 - The end point of the line.
-   * @returns {number} - The line score.
-   */
-  const evaluateLine = (
-    data: Uint8ClampedArray,
-    width: number,
-    point1: { x: number; y: number },
-    point2: { x: number; y: number }
-  ): number => {
-    const numSamples = 100;
-    let score = 0;
-
-    for (let i = 0; i < numSamples; i++) {
-      const t = i / (numSamples - 1);
-      const x = Math.round(point1.x + t * (point2.x - point1.x));
-      const y = Math.round(point1.y + t * (point2.y - point1.y));
-      const pixelIndex = (y * width + x) * 4;
-      const brightness =
-        (data[pixelIndex] + data[pixelIndex + 1] + data[pixelIndex + 2]) / 3;
-      score += 255 - brightness; // The darker the area, the higher the score
-    }
-
-    return score;
-  };
+  }, [
+    imageSrc,
+    canvasRef,
+    onFilterComplete,
+    lineDensity,
+    numPoints,
+    lineWidth
+  ]);
 
   return (
     <img
