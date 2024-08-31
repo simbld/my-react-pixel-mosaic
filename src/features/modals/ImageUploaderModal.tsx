@@ -397,7 +397,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             label="Number of Points"
             min={100}
             max={500000}
-            step={100}
+            step={10}
             value={stipplingSimple.numPoints!}
             className="range-slider"
             onChange={(value) =>
@@ -410,7 +410,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             label="Point Radius"
             min={0.25}
             max={10}
-            step={0.25}
+            step={0.05}
             value={stipplingSimple.pointRadius!}
             className="range-slider"
             onChange={(value) =>
@@ -448,7 +448,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <RangeSlider
             label="Grid Spacing"
             min={1}
-            max={50}
+            max={200}
             step={1}
             value={stipplingExtended.gridSpacing!}
             className="range-slider"
@@ -465,7 +465,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <RangeSlider
             label="Max Point Size"
             min={1}
-            max={100}
+            max={200}
             step={1}
             value={stipplingExtended.maxPointSize!}
             className="range-slider"
@@ -482,7 +482,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <RangeSlider
             label="Brightness Scaling"
             min={1}
-            max={100}
+            max={200}
             step={1}
             value={stipplingExtended.brightnessScaling!}
             className="range-slider"
@@ -499,7 +499,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <RangeSlider
             label="Point Density Scaling"
             min={1}
-            max={100}
+            max={200}
             step={1}
             value={stipplingExtended.pointDensityScaling!}
             className="range-slider"
@@ -521,7 +521,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           <RangeSlider
             label="Number of Points"
             min={10}
-            max={2000}
+            max={3000}
             step={10}
             value={stipplingBlock.numPoints!}
             className="range-slider"
@@ -580,7 +580,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   };
 
   const renderRopeSliders = () => {
-    if (ropeType === "simple") {
+    if (ropeType === "simple" && ropeSimple) {
       return (
         <>
           <RangeSlider
@@ -637,7 +637,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           />
         </>
       );
-    } else if (ropeType === "extended") {
+    } else if (ropeType === "extended" && ropeExtended) {
       return (
         <>
           <RangeSlider
@@ -702,7 +702,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           />
         </>
       );
-    } else if (ropeType === "block") {
+    } else if (ropeType === "block" && ropeBlock) {
       return (
         <>
           <RangeSlider
@@ -750,7 +750,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
   };
 
   const renderSignSliders = () => {
-    if (signType === "simple") {
+    if (signType === "simple" && signSimple) {
       return (
         <>
           <RangeSlider
@@ -758,7 +758,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
             min={1}
             max={5}
             step={1}
-            value={Number(signSimple.shape)!}
+            value={Number(signSimple.shape)}
             className="range-slider"
             onChange={(value) =>
               handleSliderChange("signSimple", "shape", Number(value))
@@ -794,11 +794,86 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           />
         </>
       );
+    } else if (signType === "extended" && signExtended) {
+      return (
+        <>
+          <RangeSlider
+            label="Step"
+            min={1}
+            max={10}
+            step={1}
+            value={signExtended.step!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("signExtended", "step", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={signExtended.lineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("signExtended", "lineDensity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
+    } else if (signType === "block" && signBlock) {
+      return (
+        <>
+          <RangeSlider
+            label="Step"
+            min={1}
+            max={10}
+            step={1}
+            value={signBlock.step!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("signBlock", "step", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Min Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={signBlock.minLineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("signBlock", "minLineDensity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+          <RangeSlider
+            label="Max Line Density"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={signBlock.maxLineDensity!}
+            className="range-slider"
+            onChange={(value) =>
+              handleSliderChange("signBlock", "maxLineDensity", Number(value))
+            }
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
+          />
+        </>
+      );
     }
   };
 
   const renderStringSliders = () => {
-    if (stringType === "simple") {
+    if (stringType === "simple" && stringSimple) {
       return (
         <>
           <RangeSlider
@@ -842,7 +917,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           />
         </>
       );
-    } else if (stringType === "extended") {
+    } else if (stringType === "extended" && stringExtended) {
       return (
         <>
           <RangeSlider
@@ -899,7 +974,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           />
         </>
       );
-    } else if (stringType === "block") {
+    } else if (stringType === "block" && stringBlock) {
       return (
         <>
           <RangeSlider
@@ -1140,7 +1215,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           {filteredImageUrl && filterType === "rope" && (
             <>
               <div className="range-slider-ctn">{renderRopeSliders()}</div>
-              {ropeType === "simple" && (
+              {ropeType === "simple" && ropeSimple && (
                 <RopeArtFilterSimple
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
@@ -1153,7 +1228,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={ropeType}
                 />
               )}
-              {ropeType === "extended" && (
+              {ropeType === "extended" && ropeExtended && (
                 <RopeArtFilterExtended
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
@@ -1165,7 +1240,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={ropeType}
                 />
               )}
-              {ropeType === "block" && (
+              {ropeType === "block" && ropeBlock && (
                 <RopeArtFilterBlock
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
@@ -1213,7 +1288,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           {filteredImageUrl && filterType === "sign" && (
             <>
               <div className="range-slider-ctn">{renderSignSliders()}</div>
-              {signType === "simple" && (
+              {signType === "simple" && signSimple && (
                 <SignArtFilterSimple
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
@@ -1224,7 +1299,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={signType}
                 />
               )}
-              {signType === "extended" && (
+              {signType === "extended" && signExtended && (
                 <SignArtFilterExtended
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
@@ -1234,7 +1309,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={signType}
                 />
               )}
-              {signType === "block" && (
+              {signType === "block" && signBlock && (
                 <SignArtFilterBlock
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
@@ -1282,7 +1357,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
           {filteredImageUrl && filterType === "string" && (
             <>
               <div className="range-slider-ctn">{renderStringSliders()}</div>
-              {stringType === "simple" && (
+              {stringType === "simple" && stringSimple && (
                 <StringArtFilterSimple
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
@@ -1293,7 +1368,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={stringType}
                 />
               )}
-              {stringType === "extended" && (
+              {stringType === "extended" && stringExtended && (
                 <StringArtFilterExtended
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
@@ -1305,7 +1380,7 @@ const ImageUploaderModal: React.FC<ImageUploaderModalProps> = ({
                   filterType={stringType}
                 />
               )}
-              {stringType === "block" && (
+              {stringType === "block" && stringBlock && (
                 <StringArtFilterBlock
                   imageSrc={filteredImageUrl}
                   canvasRef={canvasRef}
