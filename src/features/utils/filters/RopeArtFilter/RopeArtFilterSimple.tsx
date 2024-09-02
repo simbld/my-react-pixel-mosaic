@@ -3,11 +3,6 @@ import { useSelector } from "react-redux";
 import { RootStateProps, RopeArtFilterSimpleProps } from "@interfaces/types";
 import getPixelMap from "@helpers/getPixelMap";
 
-/**
- * RopeArtFilterSimple est un composant React qui applique un filtre Rope Art simple à une image.
- * @param {RopeArtFilterSimpleProps} props - Les propriétés du composant.
- * @returns {JSX.Element} L'élément JSX du filtre Rope Art simple.
- */
 const RopeArtFilterSimple: React.FC<RopeArtFilterSimpleProps> = ({
   imageSrc,
   canvasRef,
@@ -20,7 +15,6 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterSimpleProps> = ({
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // Redux
   const {
     lineThickness: reduxLineThickness,
     numLines: reduxNumLines,
@@ -29,20 +23,28 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterSimpleProps> = ({
     boostFactor: reduxBoostFactor
   } = useSelector((state: RootStateProps) => state.rangeSliders.ropeSimple);
 
-  // props if exists, otherwise fallback on store Redux
-  const lineThickness = propLineThickness || reduxLineThickness;
-  const numLines = propNumLines || reduxNumLines;
-  const minOpacity = propMinOpacity || reduxMinOpacity;
-  const maxOpacity = propMaxOpacity || reduxMaxOpacity;
-  const boostFactor = propBoostFactor || reduxBoostFactor;
+  const lineThickness = propLineThickness ?? reduxLineThickness;
+  const numLines = propNumLines ?? reduxNumLines;
+  const minOpacity = propMinOpacity ?? reduxMinOpacity;
+  const maxOpacity = propMaxOpacity ?? reduxMaxOpacity;
+  const boostFactor = propBoostFactor ?? reduxBoostFactor;
 
   useEffect(() => {
     const canvas = canvasRef?.current;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
     const image = imageRef.current;
 
+    console.log("Canvas:", canvas);
+
+    if (!canvas || !context) {
+      console.error("Canvas or context is not available.");
+      return;
+    }
+
     if (canvas && context && image) {
       image.onload = () => {
+        console.log("Image loaded:", image.src);
+
         const imgWidth = image.width;
         const imgHeight = image.height;
         const aspectRatio = imgWidth / imgHeight;
@@ -59,11 +61,9 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterSimpleProps> = ({
         const offsetX = (canvas.width - drawWidth) / 2;
         const offsetY = (canvas.height - drawHeight) / 2;
 
-        // Draw the resized image on the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        // Get image data and apply Sign Art filter
         const imageData = context.getImageData(
           0,
           0,
@@ -75,13 +75,13 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterSimpleProps> = ({
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         for (let i = 0; i < numLines; i++) {
-          // Générer des points de départ et d'arrivée aléatoires pour les lignes
+          console.log(`Drawing line ${i + 1}/${numLines}`);
+
           const x1 = Math.random() * canvas.width;
           const y1 = Math.random() * canvas.height;
           const x2 = Math.random() * canvas.width;
           const y2 = Math.random() * canvas.height;
 
-          // Calculer la couleur moyenne de la ligne en fonction des pixels traversés
           const numSamples = 10;
           let avgR = 0,
             avgG = 0,
@@ -99,7 +99,6 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterSimpleProps> = ({
           avgG /= numSamples;
           avgB /= numSamples;
 
-          // Calculer la luminosité et ajuster l'opacité en fonction
           const brightness = (avgR + avgG + avgB) / 3;
           const opacity = getPixelMap({
             value: brightness,
@@ -109,12 +108,10 @@ const RopeArtFilterSimple: React.FC<RopeArtFilterSimpleProps> = ({
             stop2: maxOpacity
           });
 
-          // Appliquer un facteur de boost aux couleurs sombres
           avgR = Math.min(avgR * boostFactor, 255);
           avgG = Math.min(avgG * boostFactor, 255);
           avgB = Math.min(avgB * boostFactor, 255);
 
-          // Dessiner la ligne avec la couleur moyenne et l'opacité ajustée
           context.strokeStyle = `rgba(${avgR},${avgG},${avgB},${opacity})`;
           context.lineWidth = lineThickness;
           context.beginPath();
