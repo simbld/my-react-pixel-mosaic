@@ -429,3 +429,23 @@ export interface FilterOptionsProps {
   density: string | null;
   handleDensityChange: (newDensity: string) => void;
 }
+
+// web workers
+export interface WorkerData {
+  imageData?: ImageData;
+  numPoints?: number;
+  pointRadius?: number;
+  brightnessThreshold?: number;
+  drawWidth?: number;
+  drawHeight?: number;
+  offsetX?: number;
+  offsetY?: number;
+  lerpFactor?: number;
+}
+
+// Messages sent to main thread
+export interface WorkerResponse {
+  points: [number, number][];
+  cells: Array<[number, number][]>;
+  centroids: [number, number][];
+}

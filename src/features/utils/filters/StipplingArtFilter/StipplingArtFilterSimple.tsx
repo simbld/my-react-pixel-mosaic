@@ -1,17 +1,19 @@
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import * as d3 from "d3-delaunay";
 import type {
   RootStateProps,
   StipplingArtFilterSimpleProps
 } from "@interfaces/types";
 import { TARGET_WIDTH, TARGET_HEIGHT } from "@config/config";
 
-/**
- * Component for applying a simple stippling art filter on an image.
- * @param {StipplingArtFilterSimpleProps} props - Props of the component.
- * @returns {JSX.Element} - JSX Component.
- */
+// Importez le Web Worker
+const stipplingSimpleWorker = new Worker(
+  new URL("@workers/stipplingSimpleWorker.ts", import.meta.url),
+  {
+    type: "module"
+  }
+);
+
 const StipplingArtFilterSimple: React.FC<StipplingArtFilterSimpleProps> = ({
   imageSrc,
   canvasRef,
@@ -31,7 +33,7 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterSimpleProps> = ({
     (state: RootStateProps) => state.rangeSliders.stipplingSimple
   );
 
-  // props if exists, otherwise fallback on store Redux
+  // Utilisation des props ou fallback sur Redux
   const numPoints = propNumPoints || reduxNumPoints;
   const pointRadius = propPointRadius || reduxPointRadius;
   const brightnessThreshold =
@@ -77,79 +79,38 @@ const StipplingArtFilterSimple: React.FC<StipplingArtFilterSimpleProps> = ({
       tempContext.drawImage(image, 0, 0, drawWidth, drawHeight);
 
       const imageData = tempContext.getImageData(0, 0, drawWidth, drawHeight);
-      const points: [number, number][] = [];
 
-      // Generate points while avoiding bright areas
-      for (let i = 0; i < numPoints; i++) {
-        let x, y, brightness;
-        do {
-          x = Math.floor(Math.random() * drawWidth);
-          y = Math.floor(Math.random() * drawHeight);
-          const pixelIndex = (y * drawWidth + x) * 4;
-          const r = imageData.data[pixelIndex + 0];
-          const g = imageData.data[pixelIndex + 1];
-          const b = imageData.data[pixelIndex + 2];
-          brightness = (r + g + b) / 3 / 255;
-        } while (brightness > brightnessThreshold);
-        points.push([x + offsetX, y + offsetY]);
-      }
+      // Envoyer les données au Web Worker
+      stipplingSimpleWorker.postMessage({
+        imageData,
+        numPoints,
+        pointRadius,
+        brightnessThreshold,
+        drawWidth,
+        drawHeight,
+        offsetX,
+        offsetY
+      });
 
-      const delaunay = d3.Delaunay.from(points);
-      const voronoi = delaunay.voronoi([0, 0, canvas.width, canvas.height]);
+      stipplingSimpleWorker.onmessage = (e) => {
+        const { points } = e.data;
 
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = "white";
-      context.fillRect(0, 0, canvas.width, canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "white";
+        context.fillRect(0, 0, canvas.width, canvas.height);
 
-      const cells = Array.from(voronoi.cellPolygons());
-      const centroids = new Array(cells.length).fill(null).map(() => [0, 0]);
-      const weights = new Array(cells.length).fill(0);
-
-      let delaunayIndex = 0;
-      for (let i = 0; i < drawWidth; i++) {
-        for (let j = 0; j < drawHeight; j++) {
-          const pixelIndex = (i + j * drawWidth) * 4;
-          const r = imageData.data[pixelIndex + 0];
-          const g = imageData.data[pixelIndex + 1];
-          const b = imageData.data[pixelIndex + 2];
-          const bright = (r + g + b) / 3;
-          const weight = 1 - bright / 255;
-          delaunayIndex = delaunay.find(i, j, delaunayIndex);
-          if (centroids[delaunayIndex]) {
-            centroids[delaunayIndex][0] += i * weight;
-            centroids[delaunayIndex][1] += j * weight;
-            weights[delaunayIndex] += weight;
-          }
+        context.fillStyle = "black";
+        for (const point of points) {
+          context.beginPath();
+          context.arc(point[0], point[1], pointRadius, 0, 2 * Math.PI);
+          context.fill();
         }
-      }
 
-      for (let i = 0; i < centroids.length; i++) {
-        if (weights[i] > 0) {
-          centroids[i][0] /= weights[i];
-          centroids[i][1] /= weights[i];
-        } else {
-          centroids[i] = points[i];
+        if (onFilterComplete) {
+          onFilterComplete();
         }
-      }
-
-      for (let i = 0; i < points.length; i++) {
-        if (centroids[i]) {
-          points[i][0] = centroids[i][0];
-          points[i][1] = centroids[i][1];
-        }
-      }
-
-      context.fillStyle = "black";
-      for (const point of points) {
-        context.beginPath();
-        context.arc(point[0], point[1], pointRadius, 0, 2 * Math.PI);
-        context.fill();
-      }
-
-      onFilterComplete();
+      };
     };
-
-    imageRef.current = image;
   }, [
     imageSrc,
     canvasRef,

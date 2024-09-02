@@ -16,11 +16,16 @@ const initialState: RangeSliderStateProps = {
 
   // The states of simple, extended and block filters
   stipplingSimple: {
-    numPoints: 30000,
-    pointRadius: 2,
+    numPoints: 200000,
+    pointRadius: 1,
     brightnessThreshold: 0.5
   },
-  stipplingExtended: { gridSpacing: 10, maxPointSize: 5, brightnessScaling: 1 },
+  stipplingExtended: {
+    gridSpacing: 4,
+    maxPointSize: 80,
+    brightnessScaling: 99,
+    pointDensityScaling: 5
+  },
   stipplingBlock: {
     numPoints: 1000,
     pointRadius: 2,
