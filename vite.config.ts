@@ -27,7 +27,8 @@ export default defineConfig({
       "@reducers": path.resolve(__dirname, "src/features/reducers"),
       "@services": path.resolve(__dirname, "src/services"),
       "@styles": path.resolve(__dirname, "src/styles"),
-      "@utils": path.resolve(__dirname, "src/features/utils")
+      "@utils": path.resolve(__dirname, "src/features/utils"),
+      "@workers": path.resolve(__dirname, "src/workers")
     }
   },
   css: {
@@ -46,6 +47,14 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    sourcemap: true
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        format: "es"
+      }
+    }
+  },
+  worker: {
+    format: "es"
   }
 });
