@@ -24,7 +24,8 @@
       "@reducers/*": ["src/features/reducers/*"],
       "@services/*": ["src/services/*"],
       "@styles/*": ["src/styles/*"],
-      "@utils/*": ["src/features/utils/*"]
+      "@utils/*": ["src/features/utils/*"],
+      "@workers/*": ["src/workers/*"]
     },
     "module": "ESNext",
     "moduleResolution": "Node",
